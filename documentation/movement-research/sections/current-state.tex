@@ -12,8 +12,9 @@ This is obviously a dangerous oversight, and should be corrected ASAP.
 
 \subsection{Autonomous Movement}
 \todo{test autonomous movement}
+\clearpage
 
-\subsection{Wheels Of Misfortune}
+\subsection{Rear Wheels Issues}
 WTR is based of an old electric wheelchair/mobility scooter.
 While this does provide a solid base that can carry a good amount of weight, it was never intended to drive by itself.
 Steering is the biggest issue.
@@ -21,11 +22,13 @@ When WTR is simply driving in a straight line, (and the wheels are not being int
 The engines are mostly synchronised.
 Issues arise when WTR is attempting to drive in a straight line after a turn.
 Because the rear wheels are not motorized and turn on a pivot, they do not straighten themselves in any way, except for being dragged while driving straight.
-This issue is illustrated in figure \ref{fig::mvmnt}.
+This issue is illustrated in figure~\ref{fig::mvmnt}.
+
 \begin{figure}[H]
-\includegraphics[scale=10]{movementdiagram.png}
-\label{fig::mvmnt}{Rotary Encoders}
+
+\includegraphics[width=10cm]{movementdiagram.png}
 \caption{An approximation of the effect of the rear pivot wheels}
+\label{fig::mvmnt}
 \end{figure}
 After driving for a meter or so, the wheels do straighten out, but because of the rotation made in straightening, they throw WTR off course.
 As the wheels are not straightened while WTR is facing the desired direction, WTR when driving straight gets pulled to the side of the turn that was just made.
@@ -37,4 +40,5 @@ This can be compensated for in a few ways.
 \item [Single Wheel Bearing] Instead of having a rear wheel, a ball bearing which rolls along the ground and is attached to the frame by a fixture would completely remove all issues of getting the wheels stuck in a direction other than which WTR would need to move, but due to the weight of the frame WTR would have to carry this option is not realistic.
 \item [Rotary Encoders] By adding rotary encoders to both the front and rear wheels, it would become possible to track the orientation of the rear wheels and the amount of rotations made by the front wheels. If this is known to WTR, then it can compensate for those issues. When the turn is finished, it can check how the rear wheels are positioned, and if they are not straight, drive in an arc towards its target until the wheels are properly oriented again. 
 \end{labeling}
+
 \newpage

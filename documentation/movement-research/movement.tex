@@ -27,6 +27,8 @@
 %\usepackage{multirow}	% used for table multirow support
 %\usepackage{longtable} % Allows tables to roll over into a new page.
 \usepackage[nottoc,numbib]{tocbibind} % Adds bibliography / references to TOC and numbers that section.
+\usepackage{array}
+\usepackage{footnote}
 
 % ----- custom commands ----- %
 % Wrapper for paragraph command. Forces newline after paragraph title
@@ -38,6 +40,13 @@
 	\addtocontents{toc}{\protect\setcounter{tocdepth}{#1}}%
 	\setcounter{tocdepth}{#1}%
 }
+
+\newcolumntype{L}[1]{>{\raggedright\let\newline\\\arraybackslash\hspace{0pt}}m{#1}}
+\newcolumntype{C}[1]{>{\centering\let\newline\\\arraybackslash\hspace{0pt}}m{#1}}
+\newcolumntype{R}[1]{>{\raggedleft\let\newline\\\arraybackslash\hspace{0pt}}m{#1}}
+
+\makesavenoteenv{tabular}
+\makesavenoteenv{table}
 
 \setcounter{tocdepth}{2} % only part,chapters,sections, subsections appear in ToC
 
@@ -64,6 +73,7 @@
 % Sections
 \input{sections/introduction.tex}
 \input{sections/current-state.tex}
+\input{sections/closed-loop-control.tex}
 \appendix % all sections after this are appendices
 \input{sections/glossary.tex}
 % Bibliography:
