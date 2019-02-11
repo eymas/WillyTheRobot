@@ -2,7 +2,7 @@
 
 
 \subsection{What Is The Problem?}
-In its current iteration, Willy The Robot is capable of autonomous driving to some degree, but it is not yet capable of doing so fluently.
+In its current iteration, Willy The Robot (WTR) is capable of autonomous driving to some degree, but it is not yet capable of doing so fluently.
 If Windesheim intends to use it as an automatic greeter, this would need to be improved, as it could cause a public incident by bumping into furniture or people.
 The assignment of the current group is to find a way to correct the autonomous driving so that it can move around in safer manner.
 
@@ -11,7 +11,7 @@ So far, the estimated base cost Windesheim is incurring by not out-sourcing Will
 This does not include the cost of materials used for the production of Willy, which have already been invested.
 For the task the current group has been assigned, several physical improvements could be used to correct the driving.
 
-\begin{tabular}{|L{3cm}|L{6cm}|l|l|}
+\begin{tabular}{|L{3cm}|L{6cm}|l|c|}
 \hline
 Solution		  & Summary 															  & Cost 	&Required Effort \\ \hline
 Tank Steering & Replacing rear wheels with another set of wheels linked to main motors & High 	& High			\\ \hline
@@ -35,7 +35,7 @@ The turning circle, again, would not change, but the accuracy of the turns would
 
 Every one of the above options mean updating the movebase, as currently it does not compensate for the rear wheels.
 This can be done for free, essentially, as all it would take is the efforts of the group.
-
+\clearpage
 \subsection{The Benefits}
 Willy is more than just a bottomless pit where materials and resources can be used if they would otherwise be wasted.
 Other than being a good didactic project, it can also be used as a nice draw for students who are interested in robotics and user interaction in embedded systems.
@@ -48,7 +48,7 @@ WTR is also a valuable PR tool for Windesheim, as there have been several articl
 These help draw in new students and create a positive image for Windesheim.
 They also promote the HBO-ICT section as a educational facility that has a focus on innovative technologies, such as autonomous vehicles and human recognition.
 
-\begin{tabular}{|L{6cm}|L{6cm}|l|}
+\begin{tabular}{|L{6cm}|L{6cm}|c|}
 \hline
 Benefit & Summary & Quantified benefit \\ \hline
 Didactic Value & As a project that spans several years, it offers students the chance to work with a sub-optimal pre-existing set-up & High \\ \hline
@@ -61,12 +61,12 @@ Power management is an issue, as even the current "low-power" screen still needs
 The human recognition still tends to see card-board boxes as a human, which is not ideal.
 These issues fall outside of the scope of increasing the autonomic capabilities of WTR, however.
 
-
+\clearpage
 \subsection{The Risks}
 No project is ever free of risks, as Rob van der Star taught during Project Management.
 Even the smallest, least complicated project can still fail due to a variety of causes.
 
-\begin{tabular}{|L{6cm}|L{6cm}|l|l|}
+\begin{tabular}{|L{3cm}|L{6cm}|c|c|}
 \hline
 Risk			 	& Summary			& Likelihood 		& Effect \\ \hline
 Broken LIDAR 	& The LIDAR used is provided by SICK, clocking in at a neat \euro 1400. Should this break, it would mean replacing it with either an inferior version, or a \euro 1400 investment. & Low (new mount printed) & High \\ \hline
@@ -79,15 +79,16 @@ Car batteries cause fire hazard & While the car batteries are mounted quite well
 
 \end{tabular}
 
-Due to the previous groups' efforts, it is possible to run a virtual setup for WTR, meaning limited physical access to WTR is less of an issue than it could be\label{virtwilly}.
+Due to the previous groups' efforts, it is possible to run a virtual setup for WTR, meaning limited physical access to WTR is less of an issue than it could be\label{par::virtwilly}.
 While this would make it difficult to test how the hardware actually responds, as a quick way of testing it can still be useful.
 While it should not be allowed, it is possible to WTR via a VPN, through Skylabs.
 This was done because a group of part-time students worked on WTR before the current group did.
-Though this does increase the vulnerability of WTR to hacking, which should ideally be air-gapped\footnote{Meaning no connection with the internet/a broader network}, this does allow people to work on WTR remotely.
+While it does allow remote access to WTR, it also makes WTR easier to hack, since an access-point has been created.
+Ideally, WTR should be air-gapped\footnote{Meaning no connection with the internet/a broader network} as much as possible.
 
 Hardware failure is naturally an option, in which case a replacement or repair of the hardware would be necessary.
 Unfortunately, the LIDAR sensor used is so advanced a group of 3 students would take longer than the project allows to learn how exactly it works, let alone repair it.
-The only option left would be to replace it, which would use a cheaper sensor, with less accuracy, directly working against the goal of improving the accuracy of the autonomous driving.
+The only option left would be to replace it, which would mean using a cheaper sensor, with poorer accuracy, which goes against the goal of improving the accuracy of the autonomous driving.
 
 When it comes to the motors, it would really depend on how they failed.
 If the matter is as simple as a loose wire, the repair would be easy.
