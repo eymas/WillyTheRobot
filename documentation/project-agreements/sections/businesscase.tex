@@ -37,14 +37,76 @@ Every one of the above options mean updating the movebase, as currently it does 
 This can be done for free, essentially, as all it would take is the efforts of the group.
 
 \subsection{The Benefits}
-Willy is more than just a bottomless pit where materials and resources can be dropped if they would be wasted otherwise.
+Willy is more than just a bottomless pit where materials and resources can be used if they would otherwise be wasted.
 Other than being a good didactic project, it can also be used as a nice draw for students who are interested in robotics and user interaction in embedded systems.
 
 The robotics section can be focused on by showing the construction after it has been improved.
 Currently, a lot of the robot is held together with duct-tape and glue.
-If that is replaced with 3D-printed clamps and mounts, Willy can be used to showcase a focus on robotics and modern technologies.
+If that is replaced with 3D-printed clamps and mounts, Willy can be used to showcase a focus on modern production technologies with regards to prototyping and development.
+
+WTR is also a valuable PR tool for Windesheim, as there have been several articles such as this \cite{stentorwilly} written about it already.
+These help draw in new students and create a positive image for Windesheim.
+They also promote the HBO-ICT section as a educational facility that has a focus on innovative technologies, such as autonomous vehicles and human recognition.
+
+\begin{tabular}{|L{6cm}|L{6cm}|l|}
+\hline
+Benefit & Summary & Quantified benefit \\ \hline
+Didactic Value & As a project that spans several years, it offers students the chance to work with a sub-optimal pre-existing set-up & High \\ \hline
+Showcase a focus on future technologies and production methods & By using 3D-printed parts and technologies such as LIDAR to create path-finding solutions, Windesheim can showcase its focus on advanced and innovative solutions & Med (situational) \\ \hline
+Public Relations & Several articles have already been written, such as the example given earlier, which create a positive spotlight for Windesheim & High \\ \hline
+\end{tabular}
+
+Further explanation on the showcasing: WTR would need other improvements before it can be fully utilized.
+Power management is an issue, as even the current "low-power" screen still needs 99 watts, which 6 car batteries can only supply for a limited time.
+The human recognition still tends to see card-board boxes as a human, which is not ideal.
+These issues fall outside of the scope of increasing the autonomic capabilities of WTR, however.
+
 
 \subsection{The Risks}
+No project is ever free of risks, as Rob van der Star taught during Project Management.
+Even the smallest, least complicated project can still fail due to a variety of causes.
 
+\begin{tabular}{|L{6cm}|L{6cm}|l|l|}
+\hline
+Risk			 	& Summary			& Likelihood 		& Effect \\ \hline
+Broken LIDAR 	& The LIDAR used is provided by SICK, clocking in at a neat \euro 1400. Should this break, it would mean replacing it with either an inferior version, or a \euro 1400 investment. & Low (new mount printed) & High \\ \hline
+Broken motors 	& Should the motors break or stop functioning as intended, they will need to be replaced. & Low & High \\ \hline
+No physical access to WTR & Should WTR break completely, how can the project continue? Further explanation at \ref{par::virtwilly} & Low & low \\ \hline
+No access to Windesheim & Should train companies have issues (NS, for example) it can be difficult for some members to reach Windesheim & 
+High & Low \\ \hline
+WTR gets hacked  & Because a group of part-time students with limited access to Windesheim worked on this project, a VPN solution was set up to allow them to work on WTR remotely. This could be exploited by hackers to take control of WTR or upload malicious code. & Low  & High \\ \hline
+Car batteries cause fire hazard & While the car batteries are mounted quite well, they could cause an fire if anything were to short them, since they are quite powerful. & Low & High \\ \hline
+
+\end{tabular}
+
+Due to the previous groups' efforts, it is possible to run a virtual setup for WTR, meaning limited physical access to WTR is less of an issue than it could be\label{virtwilly}.
+While this would make it difficult to test how the hardware actually responds, as a quick way of testing it can still be useful.
+While it should not be allowed, it is possible to WTR via a VPN, through Skylabs.
+This was done because a group of part-time students worked on WTR before the current group did.
+Though this does increase the vulnerability of WTR to hacking, which should ideally be air-gapped\footnote{Meaning no connection with the internet/a broader network}, this does allow people to work on WTR remotely.
+
+Hardware failure is naturally an option, in which case a replacement or repair of the hardware would be necessary.
+Unfortunately, the LIDAR sensor used is so advanced a group of 3 students would take longer than the project allows to learn how exactly it works, let alone repair it.
+The only option left would be to replace it, which would use a cheaper sensor, with less accuracy, directly working against the goal of improving the accuracy of the autonomous driving.
+
+When it comes to the motors, it would really depend on how they failed.
+If the matter is as simple as a loose wire, the repair would be easy.
+However, if the motor gets burned out, a replacement would be the only option.
+Since the base used is a relatively older model, it would take a fair amount of time and effort to obtain a replacement.
+
+A similar story goes for the batteries.
+Old car batteries are used, and while they are competently mounted, they are exposed to the elements.
+By printing or fashioning some form of cap or lid, the risk of them shorting and creating issues could be reduced to almost nothing, especially if work on the internals is needed anyway.
+
+WTR could be better secured, but this does not fall within the scope of improving autonomous driving.
+As such, it will not be discussed further, but is a point worth mentioning for future improvements.
+
+\subsection{Final Analysis}
+The question for any project is "Do the benefits outweigh the risks?"
+In this project, the group is of the opinion that they do.
+While there are several issues that would have a major impact, they are all unlikely to occur, while any benefits are very good for Windesheim and any stakeholders.
+The cost should not be out of logical bounds either.
+At the time of writing \footnote{2019/02/11} the group is leaning towards using rotary encoders and compensating for the rear wheels through algorithms, rather than any expensive replacements.
+Since there are both an ESA student and a SE student, creating a newer movebase should be achievable within a full semester, and the Mechatronics student can focus on mechanical improvements to help WTR path-finding in another way, such as ensuring the wheels turn at the same speed and don't drag against the frame while turning.
 
 \newpage
