@@ -1,0 +1,50 @@
+\section{Business Case}
+
+
+\subsection{What Is The Problem?}
+In its current iteration, Willy The Robot is capable of autonomous driving to some degree, but it is not yet capable of doing so fluently.
+If Windesheim intends to use it as an automatic greeter, this would need to be improved, as it could cause a public incident by bumping into furniture or people.
+The assignment of the current group is to find a way to correct the autonomous driving so that it can move around in safer manner.
+
+\subsection{The Cost}
+So far, the estimated base cost Windesheim is incurring by not out-sourcing Willy is around 40 hours for the coach, equivalent to about \euro 4000.
+This does not include the cost of materials used for the production of Willy, which have already been invested.
+For the task the current group has been assigned, several physical improvements could be used to correct the driving.
+
+\begin{tabular}{|L{3cm}|L{6cm}|l|l|}
+\hline
+Solution		  & Summary 															  & Cost 	&Required Effort \\ \hline
+Tank Steering & Replacing rear wheels with another set of wheels linked to main motors & High 	& High			\\ \hline
+Single Rear Wheel & Replacing the two rear wheels with a single pivot wheel 		    	  & Low		& Low			\\ \hline
+Single Bearing ball & Replacing the two rear wheels with a single ball in a fixture   & High  	& High			\\ \hline
+Rotary Encoders on all wheels & Adding a small device to all wheels to count rotations & Med   	& Med			\\ \hline
+Updating ROS movebase used & Updating code to use either custom software or pre-made which takes current frame into account & Free & High \\ \hline
+\end{tabular}
+
+
+Not all of these solutions would have equal results.
+Tank steering, for example, would still mean that the ROS movebase\footnote{The movebase is the part of the code which translates instructions such as "turn right X degrees" into actual instructions for the motors} would need to be updated, but the end results would allow for a great range of movements, and a very small turning circle.
+A small turning circle would be ideal for a crowded indoor event, such as Winnovation.
+the single rear wheel solution would be cheap, as there are already wheels on the robot which could be re-purposed, but it would still require alterations to the frame of Willy, which would require materials as well.
+However, it would mean that the turning circle would not be any smaller than in the current situation.
+Alternatively, a single ball would remove most issues when it comes to miscalculating turns due to the rear wheels lagging behind, but would be impractical due to the weight of Willy, and it would cause issues when trying to move across small bumps.
+The turning circle would also be the same as the previous solutions.
+Rotary encoders can be found online quite cheaply, and would allow Willy to track the position of the wheels.
+If the position of every wheel is known, they can be compensated for.
+The turning circle, again, would not change, but the accuracy of the turns would be improved.
+
+Every one of the above options mean updating the movebase, as currently it does not compensate for the rear wheels.
+This can be done for free, essentially, as all it would take is the efforts of the group.
+
+\subsection{The Benefits}
+Willy is more than just a bottomless pit where materials and resources can be dropped if they would be wasted otherwise.
+Other than being a good didactic project, it can also be used as a nice draw for students who are interested in robotics and user interaction in embedded systems.
+
+The robotics section can be focused on by showing the construction after it has been improved.
+Currently, a lot of the robot is held together with duct-tape and glue.
+If that is replaced with 3D-printed clamps and mounts, Willy can be used to showcase a focus on robotics and modern technologies.
+
+\subsection{The Risks}
+
+
+\newpage
