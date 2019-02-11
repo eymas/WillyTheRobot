@@ -3,7 +3,7 @@
 
 \subsection{What Is The Problem?}
 In its current iteration, Willy The Robot (WTR) is capable of autonomous driving to some degree, but it is not yet capable of doing so fluently.
-If Windesheim intends to use it as an automatic greeter, this would need to be improved, as it could cause a public incident by bumping into furniture or people.
+If Windesheim intends to use it as an autonomous greeter and driving information kiosk, this would need to be improved, as it could cause a public incident by bumping into furniture or people.
 The assignment of the current group is to find a way to correct the autonomous driving so that it can move around in safer manner.
 
 \subsection{The Cost}
@@ -35,6 +35,9 @@ The turning circle, again, would not change, but the accuracy of the turns would
 
 Every one of the above options mean updating the movebase, as currently it does not compensate for the rear wheels.
 This can be done for free, essentially, as all it would take is the efforts of the group.
+
+The current estimate for a set of rotary encoders lies around \euro 30.
+The rear wheels could be ignored, since the front wheels are affected by the turn the rear wheels make, so the effect can be counteracted using only those two sensors.
 \clearpage
 \subsection{The Benefits}
 Willy is more than just a bottomless pit where materials and resources can be used if they would otherwise be wasted.
@@ -81,7 +84,7 @@ Car batteries cause fire hazard & While the car batteries are mounted quite well
 
 Due to the previous groups' efforts, it is possible to run a virtual setup for WTR, meaning limited physical access to WTR is less of an issue than it could be\label{par::virtwilly}.
 While this would make it difficult to test how the hardware actually responds, as a quick way of testing it can still be useful.
-While it should not be allowed, it is possible to WTR via a VPN, through Skylabs.
+While it should not be allowed, it is possible to access WTR via a VPN, through Skylabs.
 This was done because a group of part-time students worked on WTR before the current group did.
 While it does allow remote access to WTR, it also makes WTR easier to hack, since an access-point has been created.
 Ideally, WTR should be air-gapped\footnote{Meaning no connection with the internet/a broader network} as much as possible.

@@ -13,20 +13,30 @@
 \usepackage{caption}
 \usepackage{mathabx}
 \usepackage{wrapfig}
+\usepackage{siunitx}
 \usepackage[margin=1.0in]{geometry} % sets page margin, 2.0in is default.
 \usepackage{titlesec}
-\usepackage{hyperref}
+%\usepackage{hyperref}
+\usepackage{textcomp}
+\usepackage{listings}
 \usepackage[table,xcdraw]{xcolor}
 \usepackage{float}
 \usepackage[export]{adjustbox}
 \usepackage{todonotes}
+\usepackage{multirow}	% used for table multirow support
+\usepackage[nottoc,numbib]{tocbibind} % Adds bibliography / references to TOC and numbers that section.
+
 \usepackage{indentfirst}
 \usepackage{eurosym}
-%\usepackage{siunitx}
-%\usepackage{multirow}	% used for table multirow support
-%\usepackage{longtable} % Allows tables to roll over into a new page.
-\usepackage[nottoc,numbib]{tocbibind} % Adds bibliography / references to TOC and numbers that section.
+\usepackage{listings}
+
 \usepackage{array}
+\usepackage{comment}
+\usepackage{url}
+\usepackage{breakurl}
+\usepackage[breaklinks]{hyperref}
+
+\def\UrlBreaks{\do\/\do-}
 
 
 % ----- custom commands ----- %
@@ -40,11 +50,14 @@
 	\setcounter{tocdepth}{#1}%
 }
 
+
 \newcolumntype{L}[1]{>{\raggedright\let\newline\\\arraybackslash\hspace{0pt}}m{#1}}
 \newcolumntype{C}[1]{>{\centering\let\newline\\\arraybackslash\hspace{0pt}}m{#1}}
 \newcolumntype{R}[1]{>{\raggedleft\let\newline\\\arraybackslash\hspace{0pt}}m{#1}}
 
 \setcounter{tocdepth}{2} % only part,chapters,sections, subsections appear in ToC
+
+
 
 \DeclareCaptionFormat{cancaption}{#1#2#3\par} % Normal format actually
 \DeclareCaptionLabelFormat{cancaptionlabel}{#1}
@@ -75,7 +88,9 @@
 \input{sections/conventions}
 \input{sections/dod}
 % Bibliography:
+
 \newpage
+
 \bibliographystyle{ieeetr}
 \bibliography{references}
 
