@@ -18,25 +18,25 @@ Tank Steering & Replacing rear wheels with another set of wheels linked to main 
 Single Rear Wheel & Replacing the two rear wheels with a single pivot wheel 		    	  & Low		& Low			\\ \hline
 Single Bearing ball & Replacing the two rear wheels with a single ball in a fixture   & High  	& High			\\ \hline
 Rotary Encoders on all wheels & Adding a small device to all wheels to count rotations & Med   	& Med			\\ \hline
-Updating ROS movebase used & Updating code to use either custom software or pre-made which takes current frame into account & Free & High \\ \hline
+Updating ROS move\_ base used & Updating code to use either custom software or pre-made which takes current frame into account & Free & High \\ \hline
 \end{tabular}
 
 
 Not all of these solutions would have equal results.
-Tank steering, for example, would still mean that the ROS movebase\footnote{The movebase is the part of the code which translates instructions such as "turn right X degrees" into actual instructions for the motors} would need to be updated, but the end results would allow for a great range of movements, and a very small turning circle.
+Tank steering, for example, would still mean that the ROS move\_ base\footnote{The move\_ base is the part of the code which translates instructions such as "turn right X degrees" into actual instructions for the motors} would need to be updated, but the end results would allow for a great range of movements, and a very small turning circle.
 A small turning circle would be ideal for a crowded indoor event, such as Winnovation.
 the single rear wheel solution would be cheap, as there are already wheels on the robot which could be re-purposed, but it would still require alterations to the frame of Willy, which would require materials as well.
 However, it would mean that the turning circle would not be any smaller than in the current situation.
 Alternatively, a single ball would remove most issues when it comes to miscalculating turns due to the rear wheels lagging behind, but would be impractical due to the weight of Willy, and it would cause issues when trying to move across small bumps.
 The turning circle would also be the same as the previous solutions.
-Rotary encoders can be found online quite cheaply, and would allow Willy to track the position of the wheels.
+Rotary encoders can be found on-line quite cheaply, and would allow Willy to track the position of the wheels.
 If the position of every wheel is known, they can be compensated for.
 The turning circle, again, would not change, but the accuracy of the turns would be improved.
 
-Every one of the above options mean updating the movebase, as currently it does not compensate for the rear wheels.
+Every one of the above options mean updating the move\_ base, as currently it does not compensate for the rear wheels.
 This can be done for free, essentially, as all it would take is the efforts of the group.
 
-The current estimate for a set of rotary encoders lies around \euro 30.
+The current estimate for a set of rotary encoders lies around \euro 90 for two of them.
 The rear wheels could be ignored, since the front wheels are affected by the turn the rear wheels make, so the effect can be counteracted using only those two sensors.
 \clearpage
 \subsection{The Benefits}
@@ -82,7 +82,7 @@ Car batteries cause fire hazard & While the car batteries are mounted quite well
 
 \end{tabular}
 
-Due to the previous groups their efforts, it is possible to run a virtual setup for WTR, meaning limited physical access to WTR is less of an issue than it could be\label{par::virtwilly}.
+Due to the previous groups their efforts, it is possible to run a virtual set-up for WTR, meaning limited physical access to WTR is less of an issue than it could be\label{par::virtwilly}.
 While this would make it difficult to test how the hardware actually responds, as a quick way of testing it can still be useful.
 While it should not be allowed, it is possible to access WTR via a VPN, through Skylabs.
 This was done because a group of part-time students worked on WTR before the current group did.
@@ -111,6 +111,6 @@ In this project, the group is of the opinion that they do.
 While there are several issues that would have a major impact, they are all unlikely to occur, while any benefits are very good for Windesheim and any stakeholders.
 The cost should not be out of logical bounds either.
 At the time of writing \footnote{2019/02/11} the group is leaning towards using rotary encoders and compensating for the rear wheels through algorithms, rather than any expensive replacements.
-Since there are both an ESA student and a SE student, creating a newer movebase should be achievable within a full semester, and the Mechatronics student can focus on mechanical improvements to help WTR path-finding in another way, such as ensuring the wheels turn at the same speed and don't drag against the frame while turning.
+Since there are both an ESA student and a SE student in the group, creating a newer move\_ base should be achievable within a full semester, and the Mechatronics student can focus on mechanical improvements to help WTR path-finding in another way, such as ensuring the wheels turn at the same speed and don't drag against the frame while turning.
 
 \newpage

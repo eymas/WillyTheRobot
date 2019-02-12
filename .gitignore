@@ -5,3 +5,11 @@ documentation/project-agreements/sections/conditions.log
 documentation/project-agreements/project-plan.toc
 documentation/project-agreements/project-plan.log
 documentation/project-agreements/project-plan.aux
+*.log
+*.blg
+*.bbl
+*.toc
+*.gz
+*.pdf
+*.out
+*.aux
