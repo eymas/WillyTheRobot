@@ -1,0 +1,34 @@
+\section{Conventions}
+\subsection{Code Conventions}
+\label{app::codecon}
+Code conventions allow for more readable code.
+By having every member follow the same standard, it prevents confusion in parts such as naming schemes.
+The choice has been made to follow the Google C++ style conventions, which can be found at \href{https://google.github.io/styleguide/cppguide.html}{\cite{cppstyle}}.
+
+\subsection{Document Conventions}
+Conventions for \LaTeX documents are as follows:
+\begin{itemize}
+\item Since \code{\textbackslash\textbackslash} is used to end the current line, it is reasonable to do so in the source file as well, but use it only when needed.
+\item If referencing sources, create a BibTex entry in the .bib file (check \href{https://en.wikibooks.org/wiki/LaTeX/Bibliography_Management#A_few_additional_examples}{this link} for examples).
+\item When referencing an internal section or paragraph, use \textbackslash \code{label\{\}}, with a short abbreviation to note the type of section referenced. E.g. \code{\textbackslash label\{sec::conventions\}}.
+\item Citations are done in IEEE format, done automatically by \LaTeX.
+\item Labels are put under every image or figure for ease of reference.
+\item New sentences start on a new line.
+\item One root file will contain all sections as a final document.
+\item Section sources should be in the proper folder, \code{./sections}
+\item Images and figures should be placed in \code{./images}
+\item The root file (typesetting target) and the \code{.bib} file should be the only files in the root directory.
+\item Document names are not capitalized, and a hyphen is used rather than a space.
+\end{itemize}
+
+\subsection{Version Control Conventions}
+The following conventions are to be used when working with Git/GitHub.
+\begin{itemize}
+\item Branch names should follow this format: \code{subject/name-of-feature}, e.g. \code{doc/project-plan} or \code{code/motor-control}.
+\item \code{master} and \code{development} should be protected from pushes. Pull requests need to be reviewed by colleagues that did not work on functionality or branch as much as possible.
+\item \code{master} should only ever be updated by a pull request from \code{development}
+\item Commit messages should be clear in purpose and necessity.
+\item Commits should be kept neutral, no personal attacks or callouts.
+\item Code review must be kept equally neutral and impersonal, focus on the content, not the person who made it.
+\end{itemize}
+\newpage

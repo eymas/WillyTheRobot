@@ -1,0 +1,14 @@
+documentation/project-agreements/project-agreements.aux
+documentation/project-agreements/project-agreements.bbl
+documentation/project-agreements/project-agreements.blg
+*.log
+documentation/project-agreements/project-agreements.out
+*.pdf
+*.gz
+*.toc
+*.gitignore
+*.aux
+*.bbl
+*.out
+*.blg
+*.dvi
