@@ -11,7 +11,6 @@ Unfortunately, in the current state releasing select while having the joystick h
 This is obviously a dangerous oversight, and should be corrected ASAP.
 
 \subsection{Autonomous Movement}
-\todo{test autonomous movement}
 The autonomous driving is reasonably advanced.
 While there are some more technicalities, the core system can be divided into two aspects, navigation/localization planning and the execution of the planned instructions.
 
@@ -24,6 +23,12 @@ As such, these can be largely ignored if a solution is found for WTR to keep tra
 The current autonomous movement suffers from a lack of feedback.
 In the "Brain" node, it is assumed that every instruction is executed mostly without issue, while in reality, the pivoting rear wheels and the friction from the wheel rubbing against the frame caused some serious discrepancy.
 
+
+The navigation uses a map of the area based on data from the LIDAR.
+There are some issues with creating a new map, but those are being looked into.
+By manually driving WTR while running a special made program, it can store data on where obstacles are located.
+This map can then be manually edited to seal off certain areas where WTR should not be moving, such as between tables where it would barely fit.
+After this, WTR can be calibrated to a certain position, and then be set to drive autonomously to a chosen goal in the predesignated area.
 
 \subsubsection{Executing Instructions}
 Another issue with the autonomous driving is that the ROS move\_ base uses default recovery/emergency behaviours.
@@ -57,7 +62,7 @@ This issue is illustrated in figure~\ref{fig::mvmnt}.
 \label{fig::mvmnt}
 \end{figure}
 After driving for a meter or so, the wheels do straighten out, but because of the rotation made in straightening, they throw WTR off course.
-As the wheels are not straightened while WTR is facing the desired direction, WTR when driving straight gets pulled to the side of the turn that was just made.
+As the wheels are not straightened while WTR is facing the desired direction, when driving straight WTR gets thrown off course.
 This can be compensated for in a few ways.
 
 \begin{labeling}{Single Wheel Bearing}
