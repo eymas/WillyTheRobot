@@ -6,3 +6,14 @@
 *.toc
 *.gz
 *.pdf
+*.log
+*.blg
+*.bbl
+*.toc
+*.gz
+*.pdf
+*.out
+*.aux
+*.7z
+*.dvi
+*.bak

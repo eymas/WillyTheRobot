@@ -1,0 +1,120 @@
+\section{Business Case}
+
+
+\subsection{What Is The Problem?}
+In its current iteration, Willy The Robot (WTR) is capable of autonomous driving to some degree, but it is not yet capable of doing so fluently.
+If Windesheim intends to use it as an autonomous greeter and driving information kiosk, this would need to be improved, as it could cause a public incident by bumping into furniture or people.
+The assignment of the current group is to find a way to correct the autonomous driving so that it can move around in safer manner.
+
+\subsection{The Cost}
+So far, the estimated base cost Windesheim is incurring by not out-sourcing Willy is around 40 hours for the coach, equivalent to about \euro 4000.
+This does not include the cost of materials used for the production of Willy, which have already been invested.
+For the task the current group has been assigned, several physical improvements could be used to correct the driving.
+
+\begin{tabular}{|L{3cm}|L{6cm}|l|c|}
+\hline
+Solution		  & Summary 															  & Cost 	&Required Effort \\ \hline
+Tank Steering & Replacing rear wheels with another set of wheels linked to main motors & High 	& High			\\ \hline
+Single Rear Wheel & Replacing the two rear wheels with a single pivot wheel 		    	  & Low		& Low			\\ \hline
+Single Bearing ball & Replacing the two rear wheels with a single ball in a fixture   & High  	& High			\\ \hline
+Rotary Encoders on all wheels & Adding a small device to all wheels to count rotations & Med   	& Med			\\ \hline
+Updating ROS move\_ base used & Updating code to use either custom software or pre-made which takes current frame into account & Free & High \\ \hline
+\end{tabular}
+
+
+Not all of these solutions would have equal results.
+Tank steering, for example, would still mean that the ROS move\_ base\footnote{The move\_ base is the part of the code which translates instructions such as "turn right X degrees" into actual instructions for the motors} would need to be updated, but the end results would allow for a great range of movements, and a very small turning circle.
+A small turning circle would be ideal for a crowded indoor event, such as Winnovation.
+the single rear wheel solution would be cheap, as there are already wheels on the robot which could be re-purposed, but it would still require alterations to the frame of Willy, which would require materials as well.
+However, it would mean that the turning circle would not be any smaller than in the current situation.
+Alternatively, a single ball would remove most issues when it comes to miscalculating turns due to the rear wheels lagging behind, but would be impractical due to the weight of Willy, and it would cause issues when trying to move across small bumps.
+The turning circle would also be the same as the previous solutions.
+Rotary encoders can be found on-line quite cheaply, and would allow Willy to track the position of the wheels.
+If the position of every wheel is known, they can be compensated for.
+The turning circle, again, would not change, but the accuracy of the turns would be improved.
+
+Every one of the above options mean updating the move\_ base, as currently it does not compensate for the rear wheels.
+This can be done for free, essentially, as all it would take is the efforts of the group.
+
+The current estimate for a set of rotary encoders lies around \euro 90 for two of them.
+The rear wheels could be ignored, since the front wheels are affected by the turn the rear wheels make, so the effect can be counteracted using only those two sensors.
+\clearpage
+
+\subsection{The Benefits}
+Willy is more than just a bottomless pit where materials and resources can be used if they would otherwise be wasted.
+Other than being a good didactic project, it can also be used as a nice draw for students who are interested in robotics and user interaction in embedded systems.
+
+The robotics section can be focused on by showing the construction after it has been improved.
+Currently, a lot of the robot is held together with duct-tape and glue.
+If that is replaced with 3D-printed clamps and mounts, WTR can be used to showcase a focus on modern production technologies with regards to prototyping and development.
+This is very beneficial to Windesheim, since drawing in new students is one of the main goals of WTR.
+By purposefully leaving the internal components of WTR uncovered, potential new students can see how it works.
+This helps show students interested that they can work on projects like these if they study at Windesheim.
+
+WTR is also a valuable PR tool for Windesheim, as there have been several articles such as this \cite{stentorwilly} written about it already.
+These help draw in new students and create a positive image for Windesheim.
+They also promote the HBO-ICT section as a educational facility that has a focus on innovative technologies, such as autonomous vehicles and human recognition.
+
+\begin{tabular}{|L{6cm}|L{6cm}|c|}
+\hline
+Benefit & Summary & Quantified benefit \\ \hline
+Didactic Value & As a project that spans several years, it offers students the chance to work with a sub-optimal pre-existing set-up & High \\ \hline
+Showcase a focus on future technologies and production methods & By using 3D-printed parts and technologies such as LIDAR to create path-finding solutions, Windesheim can showcase its focus on advanced and innovative solutions & HIGH \\ \hline
+Public Relations & Several articles have already been written, such as the example given earlier, which create a positive spotlight for Windesheim & High \\ \hline
+\end{tabular}
+
+Further explanation on the showcasing: WTR would need other improvements before it can be fully utilized.
+Power management is an issue, as even the current "low-power" screen still needs 99 watts, which 6 car batteries can only supply for a limited time.
+The human recognition still tends to see card-board boxes as a human, which is not ideal.
+These issues fall outside of the scope of increasing the autonomic capabilities of WTR, however.
+
+\clearpage
+\subsection{The Risks}
+No project is ever free of risks, as Rob van der Star taught during Project Management.
+Even the smallest, least complicated project can still fail due to a variety of causes.
+
+\begin{tabular}{|L{3cm}|L{6cm}|c|c|}
+\hline
+Risk			 	& Summary			& Likelihood 		& Effect \\ \hline
+Broken LIDAR 	& The LIDAR used is provided by SICK, clocking in at a neat \euro 1400. Should this break, it would mean replacing it with either an inferior version, or a \euro 1400 investment. & Low (new mount printed) & High \\ \hline
+Broken motors 	& Should the motors break or stop functioning as intended, they will need to be replaced. & Low & High \\ \hline
+No physical access to WTR & Should WTR break completely, how can the project continue? Further explanation at \ref{par::virtwilly} & Low & low \\ \hline
+No access to Windesheim & Should train companies have issues (NS, for example) it can be difficult for some members to reach Windesheim & 
+High & Low \\ \hline
+WTR gets hacked  & Because a group of part-time students with limited access to Windesheim worked on this project, a VPN solution was set up to allow them to work on WTR remotely. This could be exploited by hackers to take control of WTR or upload malicious code. & Low  & High \\ \hline
+Car batteries cause fire hazard & While the car batteries are mounted quite well, they could cause a fire if anything were to short them, since they are quite powerful. & Low & High \\ \hline
+
+\end{tabular}
+
+Due to the previous groups their efforts, it is possible to run a virtual set-up for WTR, meaning limited physical access to WTR is less of an issue than it could be\label{par::virtwilly}.
+While this would make it difficult to test how the hardware actually responds, as a quick way of testing it can still be useful.
+While it should not be allowed, it is possible to access WTR via a VPN, through Skylabs.
+This was done because a group of part-time students worked on WTR before the current group did.
+While it does allow remote access to WTR, it also makes WTR easier to hack, since an access-point has been created.
+Ideally, WTR should be air-gapped\footnote{Meaning no connection with the internet/a broader network} as much as possible.
+
+Hardware failure is naturally an option, in which case a replacement or repair of the hardware would be necessary.
+Unfortunately, the LIDAR sensor used is so advanced a group of 3 students would take longer than the project allows to learn how exactly it works, let alone repair it.
+The only option left would be to replace it, which would mean using a cheaper sensor, with poorer accuracy, which goes against the goal of improving the accuracy of the autonomous driving.
+
+When it comes to the motors, it would really depend on how they failed.
+If the matter is as simple as a loose wire, the repair would be easy.
+However, if the motor gets burned out, a replacement would be the only option.
+Since the base used is a relatively older model, it would take a fair amount of time and effort to obtain a replacement.
+
+A similar story goes for the batteries.
+Old car batteries are used, and while they are competently mounted, they are exposed to the elements.
+By printing or fashioning some form of cap or lid, the risk of them shorting and creating issues could be reduced to almost nothing, especially if work on the internals is needed anyway.
+
+WTR could be better secured, but this does not fall within the scope of improving autonomous driving.
+As such, it will not be discussed further, but is a point worth mentioning for future improvements.
+
+\subsection{Final Analysis}
+The question for any project is "Do the benefits outweigh the risks?"
+In this project, the group is of the opinion that they do.
+While there are several issues that would have a major impact, they are all unlikely to occur, while any benefits are very good for Windesheim and any stakeholders.
+The cost should not be out of logical bounds either.
+At the time of writing \footnote{2019/02/11} the group is leaning towards using rotary encoders and compensating for the rear wheels through algorithms, rather than any expensive replacements.
+Since there are both an ESA student and a SE student in the group, creating a newer move\_ base should be achievable within a full semester, and the Mechatronics student can focus on mechanical improvements to help WTR path-finding in another way, such as ensuring the wheels turn at the same speed and don't drag against the frame while turning.
+
+\newpage
