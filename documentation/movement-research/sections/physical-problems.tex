@@ -1,12 +1,13 @@
 \section{Physical problems}
 WTR's problems are not limited to its rear wheels.
-The front wheels have their share of problems as well.
+There are some more issues that can be resolved in order to improve the stability of WTR.
 
 \subsection{Loose Batteries}
 Generally speaking, when something goes wrong electrically, it is because a wire has come loose.
-WTR has a different problem, which is illustrated in figure ~\ref{fig::batteries}.
+WTR has a different problem, which is illustrated in figure \ref{fig::batteries}.
 
 \begin{figure}[H]
+\centering
 \includegraphics[width=8cm]{batteries.jpg}
 \caption{As is slightly visible, the wooden plank is bending}
 \label{fig::batteries}
@@ -25,22 +26,43 @@ For the first issue, a metal L-joint around the center of the plank would reinfo
 
 The second issue can be resolved easily (though not very neatly) by simply wedging some wood or spare non-conductive material between the batteries to keep them from shifting around.
 The neater but more time and effort consuming method would be to create a frame that goes over the batteries keeping them in place.
+Either solution would suffice, but in order to increase the transferability/quality of the project, the second solution is recommended.
+
+\section{Power Converter Box}
+Not every component of WTR runs on the voltage levels the car batteries provide.
+An Arduino cannot be connected directly to a car battery, so a converter is necessary.
+One of the side effects of converting power between different voltages is that a fair bit of heat is produced during the process.
+Currently, the converter is located on the rear of WTR, in a plastic lunch box with a fan on it, as seen in figure \ref{fig::converter}
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=12cm]{converter.jpg}
+\caption{Willy's power converter}
+\label{fig::converter}
+\end{figure}
+
+One of the key issues with this set-up is that while air is being blown into the top of the box, there are no places where that air can escape.
+As a result, the air flow in the box is next to non-existent.
+While the electrical aspects of the converter are very well executed, this lack of air-flow could mean a reduction in efficiency and useful life-span of the set-up.
+By adding a few air-gaps in the side of the box, the air-flow could be improved, leading to a more stable set-up.
+
+It would also be better to have the fan blow in air from the side, so that the hot air can rise to the top more easily, rather than being blows into the box past every other heated object, reducing the efficiency of the cooling further.
 
 
 \subsection{After Effects of Collisions}
 WTR is getting along in its age.
 This is the 4th year of its life, and as such it has had to deal with a fair few knocks and scrapes.
 One such collision ended up knocking one of the front wheels so that it was stuck at an angle.
-As a result, the wheel kept scraping against the frame, and the effects can still be seen in figure ~\ref{fig::wheelclip}
+As a result, the wheel kept scraping against the frame, and the effects can still be seen in figure \ref{fig::wheelclip}
 
 \begin{figure}[H]
 \centering
 \includegraphics[width=12cm]{clippedwheel.jpg}
+\caption{The left side of the wheel shows the damage done by the frame}
 \label{fig::wheelclip}
-\caption{The left side of the wheel shows the damage done by the frame.}
 \end{figure}
 
-Another issue which can be seen on figure ~\ref{fig::wheelclip} is that the tread on the tires is being worn away.
+Another issue which can be seen on figure \ref{fig::wheelclip} is that the tread on the tires is being worn away.
 This results in the wheels slipping on the floors of Windesheim, which are mostly smooth, where they are not carpeted.
 Since the two wheels are at different levels of wear due to the aforementioned grinding of the tire against the frame, they slip different amounts.
 This unfortunately means that the accuracy of any soft-ware based solutions will be lessened.
@@ -57,7 +79,32 @@ The best solution therefore is to either lighten WTR, or attempt to reduce the i
 By adding rotary encoders, the amount of rotations made by both wheels can be tracked, so if one tire keeps slipping, the other can reduce its speed to compensate for the turn that would be caused by the different speeds of both sides of WTR.
 
 
+\subsection{Rear Wheels Issues}
+WTR is based of an old electric wheelchair/mobility scooter.
+While this does provide a solid base that can carry a good amount of weight, it was never intended to drive by itself.
+Steering is the biggest issue.
+When WTR is simply driving in a straight line, (and the wheels are not being interfered with by the frame) it will do so properly.
+The engines are mostly synchronised.
+Issues arise when WTR is attempting to drive in a straight line after a turn.
+Because the rear wheels are not motorized and turn on a pivot, they do not straighten themselves in any way, except for being dragged while driving straight.
+This issue is illustrated in figure~\ref{fig::mvmnt}.
 
+\begin{figure}[H]
 
+\includegraphics[width=10cm]{movementdiagram.png}
+\caption{An approximation of the effect of the rear pivot wheels}
+\label{fig::mvmnt}
+\end{figure}
+After driving for a meter or so, the wheels do straighten out, but because of the rotation made in straightening, they throw WTR off course.
+As the wheels are not straightened while WTR is facing the desired direction, when driving straight WTR gets thrown off course.
+This can be compensated for in a few ways.
+
+\begin{labeling}{Single Wheel Bearing}
+\item [Tank Controls] By having both the front and rear wheels linked to the motor, steering happens around the center of the wheels, rather than the midpoint between the two frontal wheels. The downside of this is that it would require a compete rework of how WTR is made.
+\item [Fixed Rear Wheels] By having the rear wheels have a fixed orientation, the issue of overshooting a turn becomes null, but it creates a new issue of necessitating a larger turning arc, which is counter-productive in a crowded environment.
+\item [Single Wheel Bearing] Instead of having a rear wheel, a ball bearing which rolls along the ground and is attached to the frame by a fixture would completely remove all issues of getting the wheels stuck in a direction other than which WTR would need to move, but due to the weight of the frame WTR would have to carry this option is not realistic.
+\item [Rotary Encoders] By adding rotary encoders to both the front and rear wheels, it would become possible to track the orientation of the rear wheels and the amount of rotations made by the front wheels. If this is known to WTR, then it can compensate for those issues. When the turn is finished, it can check how the rear wheels are positioned, and if they are not straight, drive in an arc towards its target until the wheels are properly oriented again. 
+\item [Front wheel encoders] By not adding rotary encoders to the rear wheels, the cost can be kept down. Since they influence how the front wheels turn through the friction of their pivoting, it is not necessary to know their exact positions.
+\end{labeling}
 
 \newpage
