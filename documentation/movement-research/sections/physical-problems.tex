@@ -15,7 +15,7 @@ WTR has a different problem, which is illustrated in figure \ref{fig::batteries}
 
 The wooden plank the batteries are resting on is bending, and the glue/tape which was used to attach that plank is letting go.
 While the current situation is not immediately concerning, if WTR were to hit a bump and the force of all the batteries were to hit the plank at once it could snap off of break in two.
-That would be a lot of clean-up and work for the group.
+That would be a lot of clean-up work for the group, not to mention a lot of work to repair.
 
 Another issue is that the batteries don't have a proper mount, so nothing really keeps them from sliding about.
 This means a shifting weight within WTR, which is detrimental to the accuracy of its driving.
@@ -81,10 +81,10 @@ By adding rotary encoders, the amount of rotations made by both wheels can be tr
 
 \subsection{Rear Wheels Issues}
 WTR is based of an old electric wheelchair/mobility scooter.
-While this does provide a solid base that can carry a good amount of weight, it was never intended to drive by itself.
+While this does provide a solid base that can carry a good amount of weight, it was never intended to drive autonomously.
 Steering is the biggest issue.
 When WTR is simply driving in a straight line, (and the wheels are not being interfered with by the frame) it will do so properly.
-The engines are mostly synchronised.
+The engines are mostly synchronised, but since they function independently, as there is no guarantee they move exactly at the same speed.
 Issues arise when WTR is attempting to drive in a straight line after a turn.
 Because the rear wheels are not motorized and turn on a pivot, they do not straighten themselves in any way, except for being dragged while driving straight.
 This issue is illustrated in figure~\ref{fig::mvmnt}.
@@ -111,6 +111,13 @@ Another issue that the pivot wheels cause is linked with how the ROS move\_ base
 This is a generalized system, meant to provide an easy solution to more general applications.
 Most of these general solutions are in a style similar to a Roomba \cite{roomba}.
 This is used as a general example, since they provide a good visual example.
+\begin{figure}[H]
+\centering
+\includegraphics[width=12cm]{roomba.jpg}\
+\caption{A Roomba}
+\label{fig::Roomba}
+\end{figure}
+
 A Roomba can turn around its exact centre, which means that no part ever truly sticks out during a turn.
 WTR is not that fortunate.
 
@@ -118,11 +125,11 @@ WTR is built in a rectangular shape, first of all.
 This means that corners have to be taken into account, necessitating a wider turn arc.
 Another issue that complicated matters is that it does not turn around its exact center.
 Instead, it turns on an axis located between the two front wheels, which means the rear side sticks out quite far when turning.
-The ROS move\_ base does not compensate for this, and RVIZ, the pathfinding tool used, does not allow for custom polygons that dictate the shape of the robot.
+The ROS move\_ base does not compensate for this, and RVIZ, the path-finding tool used, does not allow for custom polygons that dictate the shape of the robot.
 This means that its footprint in the calculations has to consider the largest WTR can be in any given direction to be the amount WTR extends from the turning point to the rear.
 
 The knock-on effect of this is that WTR considers itself much wider than it actually is during any given calculation.
-While this does mean that it will keep more distance from potential hazards, it also means that it will avoid a narrower area it could actually pass through, because it couldn't possibly turn there.
+While this does mean that it will keep more distance from potential hazards, it also means that it will avoid a narrower area it could actually pass through, because it could not possibly turn there.
 
 There are a few solutions to this issue.
 \begin{labeling}{Reworking the wheels}

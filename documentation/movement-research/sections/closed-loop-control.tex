@@ -13,15 +13,15 @@ The two powered wheels each have a separate electrical motor.
 This set-up is quite sensitive to small variations between the two motors, though it does allow for a good range of movements.
 
 \subsection{Current Setup}
-An Arduino Mega 2560 (based on the ATmega2560 \cite{ardMega} is used to receive input from the laptop used as core control unit, and then translates that into instructions for the motors from the mobility scooter.
+An Arduino Mega 2560 (based on the ATmega2560 \cite{ardMega} is used to receive input from the laptop or Raspberry Pi used as core control unit, and then translates that into instructions for the motors from the mobility scooter.
 The commands sent are translated into a corresponding power output of the wheels via the integrated motor controller of the scooter.
 Two commands can be sent, one for the speed of the motors and one for rotation.
 Both commands fall within a range of 100 to -100.
-Unfortunately, this set-up does not allow for independent control of both motors, but an appropriate model of the system could be used to approximate that level of control.
+Unfortunately, this set-up does not allow for independent control of both motors, but an appropriate model of the system could be used to approximate that level of control through careful control of the turn variables.
 
 \subsection{Improvements}
 Two sensors will be added to the axles of both wheels, which allow WTR to use the speed and rotation of the wheels as feedback.
-These sensors will be controlled via a micro-controller, likely a Arduino Uno \cite{ardUno}, since those are already available and simple to use.
+These sensors will be controlled via a micro-controller, likely an Arduino Uno \cite{ardUno}, since those are already available and simple to use.
 This set-up would allow for an integrated closed loop control system using negative feedback.
 An overview can be found in figure~\ref{fig::cllp}.
 \begin{figure}[H]
