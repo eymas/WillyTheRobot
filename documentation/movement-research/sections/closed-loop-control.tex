@@ -2,12 +2,13 @@
 \subsection{Introduction}
 WTR currently has an "open loop control system" \cite{openloop} that controls how it turns and drives.
 There are no sensors used to provide feedback, which could be used to control and adjust accordingly.
-This is a major drawback, because the robot is already quite difficult to control; While it does not move very quickly, the motors have a lot of power behind them.
-Should one of the wheels receive less power from the motor than the other, it will affect the trajectory of WTR, resulting in poor path-finding.
+This is a major drawback, because the robot is already quite difficult to control.
+While it does not move very quickly, the motors have a lot of power behind them.
+Should one of the wheels receive less power from the motor than the other, it will affect the trajectory of WTR, resulting in poor execution of the instructions, regardless of the accuracy of the path-finding.
 
 \subsection{System Description}
 \label{subs::SysDes}
-WTR consists of two powered wheels at the front and two wheels on pivot each at the rear.
+WTR's mobility scooter base consists of two powered wheels at the front and two wheels on pivot each at the rear.
 The two powered wheels each have a separate electrical motor.
 This set-up is quite sensitive to small variations between the two motors, though it does allow for a good range of movements.
 
@@ -96,7 +97,7 @@ By adding both errors and multiply it by $ \frac{1}{2} $ and by $C_d(s)$, a driv
 
 \subsection{Controller}
 \label{sec::controller}
-The speed will be controlled by a PI-controller \ref{trm::PIcontroller}, as shown in figure \ref{fig::picontrol}.
+The speed will be controlled by a PID-controller \ref{trm::PIcontroller}, as shown in figure \ref{fig::picontrol}.
 The initial gain will be controlled by the proportional factor $K_p$ and the long term error by the integrating action$K_i$. The $K_i$ action has to be limited in order to prevent integral wind-up, and the $K_p$ action has to be chosen so that it will not introduce too much overshoot and very little oscillation.
 
 \begin{figure}[H]

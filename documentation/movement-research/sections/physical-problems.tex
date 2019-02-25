@@ -107,4 +107,30 @@ This can be compensated for in a few ways.
 \item [Front wheel encoders] By not adding rotary encoders to the rear wheels, the cost can be kept down. Since they influence how the front wheels turn through the friction of their pivoting, it is not necessary to know their exact positions.
 \end{labeling}
 
+Another issue that the pivot wheels cause is linked with how the ROS move\_ base functions.
+This is a generalized system, meant to provide an easy solution to more general applications.
+Most of these general solutions are in a style similar to a Roomba \cite{roomba}.
+This is used as a general example, since they provide a good visual example.
+A Roomba can turn around its exact centre, which means that no part ever truly sticks out during a turn.
+WTR is not that fortunate.
+
+WTR is built in a rectangular shape, first of all.
+This means that corners have to be taken into account, necessitating a wider turn arc.
+Another issue that complicated matters is that it does not turn around its exact center.
+Instead, it turns on an axis located between the two front wheels, which means the rear side sticks out quite far when turning.
+The ROS move\_ base does not compensate for this, and RVIZ, the pathfinding tool used, does not allow for custom polygons that dictate the shape of the robot.
+This means that its footprint in the calculations has to consider the largest WTR can be in any given direction to be the amount WTR extends from the turning point to the rear.
+
+The knock-on effect of this is that WTR considers itself much wider than it actually is during any given calculation.
+While this does mean that it will keep more distance from potential hazards, it also means that it will avoid a narrower area it could actually pass through, because it couldn't possibly turn there.
+
+There are a few solutions to this issue.
+\begin{labeling}{Reworking the wheels}
+\item [Accepting it] While not desirable and lowering the efficiency of WTR movement patterns, simply accepting that this is the case would save a lot of time, and prevent a rework of the current system.
+\item [Changing Software] There are solutions for pathfinding which allow for custom polygons that do not require a central turning point to be in the exact centre of the robot, but applying this solution would take a lot of time and a major rework of existing solutions.
+\item [Reworking the wheels] If WTR were to be reworked physically, the rear wheels could be replaced by a set of wheels linked to the engines as well. That way, it could steer like a tank and pivot around the exact centre of the robot. Unfortunately, this would be a very time consuming process.
+\end{labeling}
+
+As the latter two solutions would require extensive reworking of either the software or the hardware, it seems that simply accepting that WTR is not going to be extremely efficient is the only course of action.
+
 \newpage
