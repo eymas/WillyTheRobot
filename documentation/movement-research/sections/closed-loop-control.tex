@@ -13,10 +13,10 @@ The two powered wheels each have a separate electrical motor.
 This set-up is quite sensitive to small variations between the two motors, though it does allow for a good range of movements.
 
 \subsection{Current Setup}
-An Arduino Mega 2560 (based on the ATmega2560 \cite{ardMega} is used to receive input from the laptop or Raspberry Pi used as core control unit, and then translates that into instructions for the motors from the mobility scooter.
+An Arduino Mega 2560 (based on the ATmega2560 \cite{ardMega}) is used to receive input from the laptop or Raspberry Pi used as core control unit, and then translates that into instructions for the motors from the mobility scooter.
 The commands sent are translated into a corresponding power output of the wheels via the integrated motor controller of the scooter.
 Two commands can be sent, one for the speed of the motors and one for rotation.
-Both commands fall within a range of 100 to -100.
+Both fall within a range of 100 to -100.
 Unfortunately, this set-up does not allow for independent control of both motors, but an appropriate model of the system could be used to approximate that level of control through careful control of the turn variables.
 
 \subsection{Improvements}
@@ -36,7 +36,7 @@ An overview can be found in figure~\ref{fig::cllp}.
 \subsubsection{Base}
 As explained in 'System Description' \ref{subs::SysDes}, the motors can only be controlled through two output variables.
 These two variables are \code{drive} output and \code{turn} output, both limited to values between 100 and -100.
-Originally, these input were sent directly from the Arduino Mega, which applied the limits to the received values.
+These input are sent directly from the Arduino Mega, which applied the limits to the received values.
 An overview can be found in table~\ref{tab::varoverview}
 \begin{figure}[H]
 \begin{tabular}{|l|l|c|c|l|l|}
@@ -55,10 +55,12 @@ An overview can be found in table~\ref{tab::varoverview}
 \subsubsection{Control Model}
 To be able to create a controller which can control the speed of the wheels depending on input based on both the drive and input values, a direction definition has to be set up first.
 The definition is:
+
 \begin{itemize}
 \item \code{Turning left will be a positive input value and a corresponding positive left wheel speed and a negative or lesser right wheel speed. Turning right will correspond with a negative input value and a positive right wheel speed and a negative or lesser left wheel speed}
 \item \code{Moving forward corresponds with a positive input value and wheel speed, while moving backwards corresponds with a negative input value and negative wheel speed}
 \end{itemize}
+
 This is illustrated in figure \ref{fig::controldiagram}.
 This system allows for a calculation of a separated reference speed per wheel, which is shown in table \ref{tab::closedoverview}, row 4.
 The total reference speed can be calculated as shown in table \ref{tab::closedoverview}, row 5.
@@ -97,7 +99,7 @@ By adding both errors and multiply it by $ \frac{1}{2} $ and by $C_d(s)$, a driv
 
 \subsection{Controller}
 \label{sec::controller}
-The speed will be controlled by a PID-controller \ref{trm::PIcontroller}, as shown in figure \ref{fig::picontrol}.
+The speed will be controlled by a PID-controller [\ref{trm::PIcontroller}], as shown in figure \ref{fig::picontrol}.
 The initial gain will be controlled by the proportional factor $K_p$ and the long term error by the integrating action$K_i$. The $K_i$ action has to be limited in order to prevent integral wind-up, and the $K_p$ action has to be chosen so that it will not introduce too much overshoot and very little oscillation.
 
 \begin{figure}[H]

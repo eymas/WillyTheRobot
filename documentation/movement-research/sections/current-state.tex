@@ -1,20 +1,19 @@
 \section{Current State}
-In its current state, WTR is capable of autonomous movement, but if the previous group is to be believed, the current driving behaviour is reminiscent of "a drunken Pole".
+In its current state, WTR is capable of autonomous movement, but if the previous group is to be believed, the current driving capabilities are reminiscent of "a drunken Pole".
 This is obviously undesirable, since WTR is meant to be a way of drawing in potential students with an interest in robotics and programming at Windesheim, or those with an interest in engineering.
-Having WTR be a danger to both the people around it and the walls, cupboards or any other furniture would be more likely to scare scare away potential students than get them to study at Windesheim.
+Having WTR be a danger to the people around it, the walls, cupboards or any other obstacles would be more likely to scare scare away potential students than get them to study at Windesheim.
 
 \subsection{Controlled Movement}
 Before getting WTR to drive autonomously, it should be moved to a safe location using the attached Dualshock PS3 controller \cite{dualshock}.
 While the \href{https://windesheim-willy.github.io/WillyWiki/components/joystick.html}{wiki} will claim that WTR can be controlled by holding the select button on the PS3 dualshock controller and moving the right joystick, that is incorrect.
 The left joystick is used to move the robot, assuming the controller is held with the joysticks at the bottom of the controller.
-Having to hold select means that the robot should essentially have a "dead-man's switch" \ref{trm::dms}.
+Having to hold select means that the robot should essentially have a "dead-man's switch" [\ref{trm::dms}].
 Unfortunately, in the current state releasing select while having the joystick held in any direction causes WTR to continually repeat said movement, so if it is turning and the controller is accidentally dropped it will continue to turn in the direction it was heading.
-This is obviously a dangerous oversight, and should be corrected ASAP \ref{trm::ASAP}.
+This is obviously a dangerous oversight, and should be corrected ASAP [\ref{trm::ASAP}].
 
 \subsection{Autonomous Movement}
 The autonomous driving is fairly advanced.
 While there are some more technicalities, the core system can be divided into two aspects, navigation/localization planning and the execution of the planned instructions.
-
 
 \subsubsection{Localization/Navigation}
 There was some confusion early on about the use of April tags, but after a meeting with the previous groups it turned out that those are only used for calibration and to use as convenient targets for WTR to drive to.
@@ -30,7 +29,7 @@ This map can then be manually edited to seal off certain areas where WTR should 
 After this, WTR can be calibrated to start in a certain position, and then be set to drive autonomously to a chosen goal in the predesignated area.
 
 \subsubsection{Executing Instructions}
-Another issue with the autonomous driving is that the ROS move\_ base uses default recovery/emergency behaviours \ref{trm::recpat}.
+Another issue with the autonomous driving is that the ROS move\_ base uses default recovery/emergency behaviours [\ref{trm::recpat}].
 These are based on robots which can move in a different manner from WTR.
 Most of them assume that the robot can rotate along a center axis which is located in the exact center of the robot, meaning that when it turns in a circle, no parts stick out in any direction more than the default state.
 WTR turns around on an axis located in between the two front wheels, meaning the rear sticks out further than expected, causing unwanted collisions.
@@ -41,7 +40,5 @@ This is an area of clear improvement, as they can be used to prevent collisions 
 Another factor that was revealed was that the odometry data is being spoofed to some degree to correct for any drifting in reference points.
 This is a major issue, since that would be mean that the longer WTR is driving around without rebooting/recalibrating, the worse the performance would become.
 Since at the time of writing this document WTR cannot drive forward in a straight line without entering recovery behaviour movement patterns, this means that eventually it would become stuck in a permanent loop of that behaviour.
-
-
 
 \newpage

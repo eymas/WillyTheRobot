@@ -1,5 +1,5 @@
 \section{Physical problems}
-WTR's problems are not limited to its rear wheels.
+The problems of WTR are not limited to its rear wheels.
 There are some more issues that can be resolved in order to improve the stability of WTR.
 
 \subsection{Loose Batteries}
@@ -20,7 +20,6 @@ That would be a lot of clean-up work for the group, not to mention a lot of work
 Another issue is that the batteries don't have a proper mount, so nothing really keeps them from sliding about.
 This means a shifting weight within WTR, which is detrimental to the accuracy of its driving.
 
-\subsubsection{solutions}
 These issues are easy enough to resolve.
 For the first issue, a metal L-joint around the center of the plank would reinforce the structure so that the bottom falling out would become much less likely.
 
@@ -28,7 +27,7 @@ The second issue can be resolved easily (though not very neatly) by simply wedgi
 The neater but more time and effort consuming method would be to create a frame that goes over the batteries keeping them in place.
 Either solution would suffice, but in order to increase the transferability/quality of the project, the second solution is recommended.
 
-\section{Power Converter Box}
+\subsection{Power Converter Box}
 Not every component of WTR runs on the voltage levels the car batteries provide.
 An Arduino cannot be connected directly to a car battery, so a converter is necessary.
 One of the side effects of converting power between different voltages is that a fair bit of heat is produced during the process.
@@ -67,7 +66,6 @@ This results in the wheels slipping on the floors of Windesheim, which are mostl
 Since the two wheels are at different levels of wear due to the aforementioned grinding of the tire against the frame, they slip different amounts.
 This unfortunately means that the accuracy of any soft-ware based solutions will be lessened.
 
-\subsubsection{Solutions}
 The effects mentioned above can be counteracted.
 When it comes to the clipping issue on the left front tire, it has already been resolved by straightening out the axle and increasing the rigidity of the suspension, causing WTR to stand a little taller and putting a bit of distance between the tire and the frame.
 
@@ -76,7 +74,7 @@ New tires would be a lot of trouble to acquire and replace, and would at best be
 Because WTR is so heavy, even without the cover, the tires would get worn down quickly anyway.
 The best solution therefore is to either lighten WTR, or attempt to reduce the impact of the slipping.
 
-By adding rotary encoders, the amount of rotations made by both wheels can be tracked, so if one tire keeps slipping, the other can reduce its speed to compensate for the turn that would be caused by the different speeds of both sides of WTR.
+By adding rotary encoders, the amount of rotations made by both wheels can be tracked, so if one tire keeps slipping, the other can alter its speed to compensate for the turn that would be caused by the different speeds of both sides of WTR.
 
 
 \subsection{Rear Wheels Issues}
@@ -95,8 +93,7 @@ This issue is illustrated in figure~\ref{fig::mvmnt}.
 \caption{An approximation of the effect of the rear pivot wheels}
 \label{fig::mvmnt}
 \end{figure}
-After driving for a meter or so, the wheels do straighten out, but because of the rotation made in straightening, they throw WTR off course.
-As the wheels are not straightened while WTR is facing the desired direction, when driving straight WTR gets thrown off course.
+As the wheels are not straightened while WTR is facing the desired direction, when driving straight after making a turn WTR gets thrown off course.
 This can be compensated for in a few ways.
 
 \begin{labeling}{Single Wheel Bearing}
@@ -119,10 +116,10 @@ This is used as a general example, since they provide a good visual example.
 \end{figure}
 
 A Roomba can turn around its exact centre, which means that no part ever truly sticks out during a turn.
-WTR is not that fortunate.
+WTR, unfortunately, has not been built in that manner.
 
 WTR is built in a rectangular shape, first of all.
-This means that corners have to be taken into account, necessitating a wider turn arc.
+This means that corners have to be taken into account, necessitating a wider turn arc, or it would risk hitting objects.
 Another issue that complicated matters is that it does not turn around its exact center.
 Instead, it turns on an axis located between the two front wheels, which means the rear side sticks out quite far when turning.
 The ROS move\_ base does not compensate for this, and RVIZ, the path-finding tool used, does not allow for custom polygons that dictate the shape of the robot.
