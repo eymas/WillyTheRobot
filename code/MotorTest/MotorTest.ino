@@ -3,12 +3,11 @@
 #include <ros.h>
 #include <geometry_msgs/Twist.h>
 #include <std_msgs/Bool.h>
-
 ros::NodeHandle nh;
 std_msgs::Bool emergency;
 
 int analogValue;
-int volatile irun, iturn;
+float volatile irun, iturn;
 unsigned char data[6];
 
 void messageCb(const geometry_msgs::Twist& twistMsg)
@@ -48,22 +47,6 @@ int pos = 0;
 int PIDTurn = 0;
 int PIDDrive = 0;
 
-void setup() {
-  nh.initNode();
-  nh.subscribe(sub);
-  nh.advertise(pub);
-  Serial1.begin(19200, SERIAL_8E1);
-  pinMode(LeftPulseInputA, INPUT);
-  pinMode(LeftPulseInputB, INPUT);
-  pinMode(RightPulseInputA, INPUT);
-  pinMode(RightPulseInputB, INPUT);
-
-  attachInterrupt(digitalPinToInterrupt(LeftPulseInputA), LeftPulsAChange, CHANGE);
-  attachInterrupt(digitalPinToInterrupt(LeftPulseInputB), LeftPulsBChange, CHANGE);
-  attachInterrupt(digitalPinToInterrupt(RightPulseInputA), RightPulsAChange, CHANGE);
-  attachInterrupt(digitalPinToInterrupt(RightPulseInputB), RightPulsBChange, CHANGE);
-}
-
 void LeftPulsAChange()
 {
   LeftWheel.AChange();
@@ -83,6 +66,24 @@ void RightPulsBChange()
 {
   RightWheel.BChange();
 }
+
+void setup() {
+  nh.initNode();
+  nh.subscribe(sub);
+  nh.advertise(pub);
+  Serial1.begin(19200, SERIAL_8E1);
+  pinMode(LeftPulseInputA, INPUT);
+  pinMode(LeftPulseInputB, INPUT);
+  pinMode(RightPulseInputA, INPUT);
+  pinMode(RightPulseInputB, INPUT);
+
+  attachInterrupt(digitalPinToInterrupt(LeftPulseInputA), LeftPulsAChange, CHANGE);
+  attachInterrupt(digitalPinToInterrupt(LeftPulseInputB), LeftPulsBChange, CHANGE);
+  attachInterrupt(digitalPinToInterrupt(RightPulseInputA), RightPulsAChange, CHANGE);
+  attachInterrupt(digitalPinToInterrupt(RightPulseInputB), RightPulsBChange, CHANGE);
+}
+
+
 
 void SendToMotor(int Setdrive, int Setturn)
 {
