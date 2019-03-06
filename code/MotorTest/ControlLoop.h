@@ -1,20 +1,23 @@
+/*  This class calculates the error on both wheels and calls in the PIDCalculation to get a control value back.
+ *  Revision 2
+ *  5-3-2019
+ */
+
 #include "PIDCalculation.h"
 
 class ControlLoop {
 
   private:
   
-    //REST
     float Diff_Factor = 0;
-    float Tot_Ref_L = 0;
-    float Tot_Ref_R = 0;
-
     float Error_R = 0;
     float Error_L = 0;
 
+    //include PID's for both inputs/outputs.
     PIDCalculation DriveController;
     PIDCalculation TurnController;
 
+    //Calculate the drive error.
     Drive(float Error_Right, float Error_Left)
     {
       //Calculate error
@@ -23,6 +26,7 @@ class ControlLoop {
       Drive_Output = DriveController.Get(Drive_Error);
     }
 
+    //Calculate the turn error.
     Turn(float Error_Right, float Error_Left)
     {
       //Calculate error
@@ -40,13 +44,14 @@ class ControlLoop {
     //CONSTRUCTOR
     ControlLoop::ControlLoop(float Kpt, float Kit, float Kdt, float Kpd, float Kid, float Kdd, float Diff)
     {
+      //initialize both controllers
       DriveController.Initialize(Kpd,Kid,Kdd);
       TurnController.Initialize(Kpt,Kit,Kdt);
       
       Diff_Factor = Diff;
     }
 
-    //Activate pids
+    //Function sets reference, calculates error, then activate the calculation of outputs by the turn and drive functions.
     SetInputRef(float Turn_Input, float Drive_Input, float Speed_Sensor_L, float Speed_Sensor_R)
     {
       if(Turn_Input == 0 && Drive_Input == 0)
