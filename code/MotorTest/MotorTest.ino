@@ -12,8 +12,8 @@ unsigned char data[6];
 
 void messageCb(const geometry_msgs::Twist& twistMsg)
 {
-  irun = twistMsg.linear.x * 6;
-  iturn = twistMsg.angular.z * 6;
+  irun = twistMsg.linear.x * 2;
+  iturn = twistMsg.angular.z * 2;
 }
 
 ros::Subscriber<geometry_msgs::Twist> sub("/cmd_vel", &messageCb);
@@ -22,7 +22,8 @@ ros::Publisher pub("emergency", &emergency);
 Encoder LeftWheel(20, 21, false);
 Encoder RightWheel(2, 3, true);
 
-ControlLoop Willy(20, 5, 0, 20, 5, 0, 1);
+//meaning of values: P-turn, i-turn, d-turn, p-drive, i-drive, d-drive for PID controllers, wheel factor(could be changed to 0.5 if poor control)
+ControlLoop Willy(5, 5, 0, 15, 5, 0, 1);
 
 const int LeftPulseInputA = 20;
 const int LeftPulseInputB = 21;
@@ -37,12 +38,7 @@ float SetD = 0;
 float SpeedLeft = 0;
 float SpeedRight = 0;
 
-int Udata[6];
-
-int incomingByte = 0;
 bool Received = true;
-int UserIn = 0;
-int pos = 0;
 
 int PIDTurn = 0;
 int PIDDrive = 0;
@@ -121,9 +117,7 @@ void SendToMotor(int Setdrive, int Setturn)
 
 void loop() {
   // put your main code here, to run repeatedly:
-  //GetUserInput(); --> getROSinput();
   SendToMotor(PIDDrive, PIDTurn);
-  //SendToMotor(UserIn,0);
 
   PIDTrig++;
 
@@ -131,9 +125,7 @@ void loop() {
   {
     SpeedLeft = LeftWheel.GetSpeed();
     SpeedRight = RightWheel.GetSpeed();
-    SetD = UserIn;
-    SetD = SetD / 100;
-    Willy.SetInputRef(irun, iturn, SpeedLeft, SpeedRight);
+    Willy.SetInputRef((-1*iturn), irun, SpeedLeft, SpeedRight);
 
     PIDTurn = (int)Willy.Turn_Output;
     PIDDrive = (int)Willy.Drive_Output;
