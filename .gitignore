@@ -20,3 +20,13 @@
 *.docx
 *.doc
 *.tex.bak
+*.xml
+*.d
+*.txt
+*.iml
+*.a
+*.hex
+*.eep
+*.cbp
+*.check_cache
+*.bin
