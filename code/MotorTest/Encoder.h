@@ -1,6 +1,8 @@
-/*
-  Able to decode a quadruature encoder
-*/
+/* This class is intended to decode a quadruature encoder in order to get a speed value in rad/s
+ * Revision 1
+ * 1-3-2019
+ */
+
 class Encoder {
   private:
 

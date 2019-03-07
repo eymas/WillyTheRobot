@@ -1,3 +1,8 @@
+/* This class converts an error into an control signal using PID variables.
+ * Revision 3
+ * 1-3-2019
+ */
+
 class PIDCalculation {
 
   private:
