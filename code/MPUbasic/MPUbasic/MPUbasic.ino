@@ -1,29 +1,3 @@
-/* MPU9250 Basic Example Code
-  by: Kris Winer
-  date: April 1, 2014
-  license: Beerware - Use this code however you'd like. If you
-  find it useful you can buy me a beer some time.
-  Modified by Brent Wilkins July 19, 2016
-
-  Demonstrate basic MPU-9250 functionality including parameterizing the register
-  addresses, initializing the sensor, getting properly scaled accelerometer,
-  gyroscope, and magnetometer data out. Added display functions to allow display
-  to on breadboard monitor. Addition of 9 DoF sensor fusion using open source
-  Madgwick and Mahony filter algorithms. Sketch runs on the 3.3 V 8 MHz Pro Mini
-  and the Teensy 3.1.
-
-  SDA and SCL should have external pull-up resistors (to 3.3V).
-  10k resistors are on the EMSENSR-9250 breakout board.
-
-  Hardware setup:
-  MPU9250 Breakout --------- Arduino
-  VDD ---------------------- 3.3V
-  VDDI --------------------- 3.3V
-  SDA ----------------------- A4
-  SCL ----------------------- A5
-  GND ---------------------- GND
-*/
-
 #include "quaternionFilters.h"
 #include "MPU9250.h"
 
@@ -46,7 +20,7 @@ void setup()
 {
   Wire.begin();
   // TWBR = 12;  // 400 kbit/sec I2C speed
-  Serial.begin(38400);
+  Serial.begin(115200);
 
   while (!Serial) {};
 
@@ -58,9 +32,9 @@ void setup()
 
 
   // Read the WHO_AM_I register, this is a good test of communication
-  byte c = myIMU.readByte(MPU9250_ADDRESS, WHO_AM_I_MPU9250);
+  byte whoami = myIMU.readByte(MPU9250_ADDRESS, WHO_AM_I_MPU9250);
 
-  if (c == 0x73) // WHO_AM_I should always be 0x71
+  if (whoami == 0x73)
   {
     Serial.println(F("MPU9250 is online..."));
 
@@ -84,9 +58,9 @@ void setup()
 
     // Read the WHO_AM_I register of the magnetometer, this is a good test of
     // communication
-    byte d = myIMU.readByte(AK8963_ADDRESS, WHO_AM_I_AK8963);
+    byte whoisthat = myIMU.readByte(AK8963_ADDRESS, WHO_AM_I_AK8963);
 
-    if (d != 0x48)
+    if (whoisthat != 0x48)
     {
       // Communication failed, stop here
       Serial.println(F("Communication failed, abort!"));
@@ -115,7 +89,7 @@ void setup()
     Serial.println(myIMU.magScale[1]);
     Serial.println(myIMU.magScale[2]);
     //    delay(2000); // Add delay to see results before serial spew of data
-  } // if (c == 0x71)
+  } // if (whoami == 0x73)
   else
   {
     Serial.print("Could not connect to MPU9250: 0x");
@@ -127,9 +101,11 @@ void setup()
     abort();
   }
 }
-
+ // this is the array that will be sent to the pi.
+int8_t collected_data[33] = {'$', 0x03, 0,0, 0,0, 0,0, 0,0, 0,0, 0,0 0,0, 0,0, 0,0, 0,0, 0,0, 0,0, 0,0 0, 0,0 '\r', '\n'};
 void loop()
 {
+ 
   // If intPin goes high, all data registers have new data
   // On interrupt, check if data ready interrupt
   if (myIMU.readByte(MPU9250_ADDRESS, INT_STATUS) & 0x01)
@@ -141,7 +117,6 @@ void loop()
     myIMU.ax = (float)myIMU.accelCount[0] * myIMU.aRes; // - myIMU.accelBias[0];
     myIMU.ay = (float)myIMU.accelCount[1] * myIMU.aRes; // - myIMU.accelBias[1];
     myIMU.az = (float)myIMU.accelCount[2] * myIMU.aRes; // - myIMU.accelBias[2];
-
     myIMU.readGyroData(myIMU.gyroCount);  // Read the x/y/z adc values
 
     // Calculate the gyro value into actual degrees per second
@@ -251,5 +226,4 @@ void loop()
   myIMU.count = millis();
   myIMU.sumCount = 0;
   myIMU.sum = 0;
-  //delay(500);
 }
