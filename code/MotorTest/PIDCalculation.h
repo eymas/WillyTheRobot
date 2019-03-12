@@ -24,6 +24,9 @@ class PIDCalculation {
 
     float Get(float Error)
     {
+      float Output = Error * K_P;
+      return Output;
+      /*
       //Calculate Output with PID in velocity form.
       float Output = 0;
       Output = Output_1 + K_P * (Error - Error_1);
@@ -36,6 +39,7 @@ class PIDCalculation {
       Error_1 = Error;
             
       return Output;
+      */
     }
 
     void Reset()
