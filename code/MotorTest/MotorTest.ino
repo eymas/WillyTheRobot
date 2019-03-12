@@ -162,7 +162,7 @@ void SendToMotor(int Setdrive, int Setturn)
   Serial2.write('\n');
 }
 
-void writeString(String stringData) { // Used to serially push out a String with Serial.write()
+void writeString(String stringData) { // Used to serially push out a String with Serial2.write()
 
   for (int i = 0; i < stringData.length(); i++)
   {
@@ -203,6 +203,6 @@ void loop() {
   pub.publish(&emergency);
 
   nh.spinOnce();
-
+  Serial.flush();
   delay(20);
 }
