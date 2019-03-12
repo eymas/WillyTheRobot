@@ -89,6 +89,10 @@ void setup() {
   //serial communication to motorcontroller
   Serial1.begin(19200, SERIAL_8E1);
 
+  //Serial3.begin(9600);
+
+  //Serial3.println("Online!!!");
+
   //Set up interrupts for encoders
   pinMode(LeftPulseInputA, INPUT);
   pinMode(LeftPulseInputB, INPUT);
@@ -138,6 +142,12 @@ void SendToMotor(int Setdrive, int Setturn)
   {
     Serial1.write(data[i]);                                  
   }
+
+  
+  //Serial2.println("Drive:   Turn:");
+  //Serial2.println(drive);
+  //Serial2.print("\t");
+  //Serial2.print(turn);
 }
 
 /*  Activate PID
