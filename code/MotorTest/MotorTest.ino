@@ -88,7 +88,7 @@ void setup() {
 
   //serial communication to motorcontroller
   Serial1.begin(19200, SERIAL_8E1);
-
+  Serial2.begin(115200, SERIAL_8E1);
   //Set up interrupts for encoders
   pinMode(LeftPulseInputA, INPUT);
   pinMode(LeftPulseInputB, INPUT);
@@ -136,9 +136,34 @@ void SendToMotor(int Setdrive, int Setturn)
   // Writing the data to the motorcontroller
   for (unsigned char i = 0; i < 6; i++)
   {
-    Serial1.write(data[i]);                                  
+    Serial1.write(data[i]);                                 
   }
+  String turn_string = String(turn);
+  String drive_string = String(drive);
+  String iturn_string = String(iturn, 5);
+  String irun_string = String (irun, 5);
+  Serial2.write("From PC");
+  writeString(iturn_string);
+  Serial2.write('\t');
+  writeString(irun_string);
+  Serial2.write('\r');
+  Serial2.write('\n');
+  Serial2.write("to motor");
+  writeString(turn_string);
+  Serial2.write('\t');
+  writeString(drive_string);
+  Serial2.write('\r');
+  Serial2.write('\n');
 }
+
+void writeString(String stringData) { // Used to serially push out a String with Serial.write()
+
+  for (int i = 0; i < stringData.length(); i++)
+  {
+    Serial2.write(stringData[i]);   // Push each char 1 by 1 on each loop pass
+  }
+
+}// end writeString
 
 /*  Activate PID
  *  Read out sensors
