@@ -39,6 +39,9 @@ int myLed  = 13;  // Set up pin 13 led for toggling
 #define MPU9250_ADDRESS MPU9250_ADDRESS_AD0   // Use either this line or the next to select which I2C address your device is using
 //#define MPU9250_ADDRESS MPU9250_ADDRESS_AD1
 
+uint8_t buffer_to_pi[50]; //change size to fit amount of data later for optimization.
+
+
 MPU9250 myIMU(MPU9250_ADDRESS, I2Cport, I2Cclock);
 
 void setup()
@@ -59,18 +62,12 @@ void setup()
   // Read the WHO_AM_I register, this is a good test of communication
   byte c = myIMU.readByte(MPU9250_ADDRESS, WHO_AM_I_MPU9250);
 
-  if (c == 0x73) // WHO_AM_I should always be 0x71
+  if (c == 0x73) // WHO_AM_I should always be 0x71, but the chip used could be a knockoff - TODO document issues.
   {
-    Serial.println(F("MPU9250 is online..."));
+    //Serial.println(F("MPU9250 is online..."));
 
-    // Start by performing self test and reporting values
+    // Start by performing self test
     myIMU.MPU9250SelfTest(myIMU.selfTest);
-    Serial.print(myIMU.selfTest[0], 1);
-    Serial.print(myIMU.selfTest[1], 1);
-    Serial.print(myIMU.selfTest[2], 1);
-    Serial.print(myIMU.selfTest[3], 1);
-    Serial.print(myIMU.selfTest[4], 1);
-    Serial.print(myIMU.selfTest[5], 1);
 
     // Calibrate gyro and accelerometers, load biases in bias registers
     myIMU.calibrateMPU9250(myIMU.gyroBias, myIMU.accelBias);
@@ -79,7 +76,6 @@ void setup()
     myIMU.initMPU9250();
     // Initialize device for active mode read of acclerometer, gyroscope, and
     // temperature
-    Serial.println("MPU9250 initialized for active data mode....");
 
     // Read the WHO_AM_I register of the magnetometer, this is a good test of
     // communication
@@ -103,18 +99,9 @@ void setup()
 
     // The next call delays for 4 seconds, and then records about 15 seconds of
     // data to calculate bias and scale.
-    //    myIMU.magCalMPU9250(myIMU.magBias, myIMU.magScale);
-    Serial.println("AK8963 mag biases (mG)");
-    Serial.println(myIMU.magBias[0]);
-    Serial.println(myIMU.magBias[1]);
-    Serial.println(myIMU.magBias[2]);
-
-    Serial.println("AK8963 mag scale (mG)");
-    Serial.println(myIMU.magScale[0]);
-    Serial.println(myIMU.magScale[1]);
-    Serial.println(myIMU.magScale[2]);
-    //    delay(2000); // Add delay to see results before serial spew of data
-  } // if (c == 0x71)
+    myIMU.magCalMPU9250(myIMU.magBias, myIMU.magScale);
+    delay(2000); // Add delay to see results before serial spew of data
+  } // if (c == 0x73)
   else
   {
     Serial.print("Could not connect to MPU9250: 0x");
@@ -135,21 +122,22 @@ void loop()
   {
     
     myIMU.readAccelData(myIMU.accelCount);  // Read the x/y/z adc values
-
+/*
     // Now we'll calculate the accleration value into actual g's
     // This depends on scale being set
     myIMU.ax = (float)myIMU.accelCount[0] * myIMU.aRes; // - myIMU.accelBias[0];
     myIMU.ay = (float)myIMU.accelCount[1] * myIMU.aRes; // - myIMU.accelBias[1];
     myIMU.az = (float)myIMU.accelCount[2] * myIMU.aRes; // - myIMU.accelBias[2];
-
+*/
+    
     myIMU.readGyroData(myIMU.gyroCount);  // Read the x/y/z adc values
-
+/*
     // Calculate the gyro value into actual degrees per second
     // This depends on scale being set
     myIMU.gx = (float)myIMU.gyroCount[0] * myIMU.gRes;
     myIMU.gy = (float)myIMU.gyroCount[1] * myIMU.gRes;
     myIMU.gz = (float)myIMU.gyroCount[2] * myIMU.gRes;
-
+*/
     myIMU.readMagData(myIMU.magCount);  // Read the x/y/z adc values
 
     // Calculate the magnetometer values in milliGauss
@@ -183,30 +171,36 @@ void loop()
   //                       myIMU.mx, myIMU.mz, myIMU.deltat);
 
   myIMU.count = millis();
-  digitalWrite(myLed, !digitalRead(myLed));  // toggle led
+  digitalWrite(myLed, !digitalRead(myLed));  // toggle led - kept in to make it easier to check whether or not the arduino has crashed.
 
-/*
-  Serial.print("ax = ");  Serial.print((int)1000 * myIMU.ax);
-  Serial.print(" ay = "); Serial.print((int)1000 * myIMU.ay);
-  Serial.print(" az = "); Serial.print((int)1000 * myIMU.az);
-  Serial.println(" mg");
+// print startbytes
+    Serial.print('$');
+    Serial.print(0x03, HEX);
+// print quaternion values, order  = Qw, Qx, Qy, Qz - important to have this match on the receiving end!
+  for(int i = 0;i<=3;i++) {
+    Serial.print(*getQ() + i);
+  }
+// print accelerometer values
+    Serial.print(myIMU.ax);
+    Serial.print(myIMU.ay);
+    Serial.print(myIMU.az);
+// print gyro values
+    Serial.print(myIMU.gx);
+    Serial.print(myIMU.gy);
+    Serial.print(myIMU.gz);
+//print magnetometer values
+    Serial.print(myIMU.mx);
+    Serial.print(myIMU.my);
+    Serial.print(myIMU.mz);
+//print temperature after turning it into degrees celcius.
+    myIMU.temperature = ((float) myIMU.tempCount) / 333.87 + 21.0;
+    Serial.print(myIMU.temperature);
 
-  Serial.print("gx = ");  Serial.print(myIMU.gx, 2);
-  Serial.print(" gy = "); Serial.print(myIMU.gy, 2);
-  Serial.print(" gz = "); Serial.print(myIMU.gz, 2);
-  Serial.println(" deg/s");
 
-  Serial.print("mx = ");  Serial.print((int)myIMU.mx);
-  Serial.print(" my = "); Serial.print((int)myIMU.my);
-  Serial.print(" mz = "); Serial.print((int)myIMU.mz);
-  Serial.println(" mG");
 
-  Serial.print("q0 = ");  Serial.print(*getQ());
-  Serial.print(" qx = "); Serial.print(*(getQ() + 1));
-  Serial.print(" qy = "); Serial.print(*(getQ() + 2));
-  Serial.print(" qz = "); Serial.println(*(getQ() + 3));
-*/
 
+  //Roll, Yaw and Pitch are not used by ROS, but have been left in in case it could be useful to include in the project at a future date
+  //============================================================================
   // Define output variables from updated quaternion---these are Tait-Bryan
   // angles, commonly used in aircraft orientation. In this coordinate system,
   // the positive z-axis is down toward Earth. Yaw is the angle between Sensor
@@ -223,39 +217,27 @@ void loop()
   // For more see
   // http://en.wikipedia.org/wiki/Conversion_between_quaternions_and_Euler_angles
   // which has additional links.
-  myIMU.yaw   = atan2(2.0f * (*(getQ() + 1) * *(getQ() + 2) + *getQ()
-                              * *(getQ() + 3)), *getQ() * *getQ() + * (getQ() + 1)
-                      * *(getQ() + 1) - * (getQ() + 2) * *(getQ() + 2) - * (getQ() + 3)
-                      * *(getQ() + 3));
-  myIMU.pitch = -asin(2.0f * (*(getQ() + 1) * *(getQ() + 3) - *getQ()
-                              * *(getQ() + 2)));
-  myIMU.roll  = atan2(2.0f * (*getQ() * *(getQ() + 1) + * (getQ() + 2)
-                              * *(getQ() + 3)), *getQ() * *getQ() - * (getQ() + 1)
-                      * *(getQ() + 1) - * (getQ() + 2) * *(getQ() + 2) + * (getQ() + 3)
-                      * *(getQ() + 3));
-  myIMU.pitch *= RAD_TO_DEG;
-  myIMU.yaw   *= RAD_TO_DEG;
+  //============================================================================
+//  myIMU.yaw   = atan2(2.0f * (*(getQ() + 1) * *(getQ() + 2) + *getQ()
+//                              * *(getQ() + 3)), *getQ() * *getQ() + * (getQ() + 1)
+//                      * *(getQ() + 1) - * (getQ() + 2) * *(getQ() + 2) - * (getQ() + 3)
+//                      * *(getQ() + 3));
+//  myIMU.pitch = -asin(2.0f * (*(getQ() + 1) * *(getQ() + 3) - *getQ()
+//                              * *(getQ() + 2)));
+//  myIMU.roll  = atan2(2.0f * (*getQ() * *(getQ() + 1) + * (getQ() + 2)
+//                              * *(getQ() + 3)), *getQ() * *getQ() - * (getQ() + 1)
+//                      * *(getQ() + 1) - * (getQ() + 2) * *(getQ() + 2) + * (getQ() + 3)
+//                      * *(getQ() + 3));
+//  myIMU.pitch *= RAD_TO_DEG;
+//  myIMU.yaw   *= RAD_TO_DEG;
+//============================================================================
 
-  // Declination of SparkFun Electronics (40°05'26.6"N 105°11'05.9"W) is
-  // 	8° 30' E  ± 0° 21' (or 8.5°) on 2016-07-19
+  // again, not used in the project ATM, but if it is going to be used, remember to check the value once per year and update it, or find some way to have WTR do it automatically
   // - http://www.ngdc.noaa.gov/geomag-web/#declination
-  myIMU.yaw  -= 8.5;
-  myIMU.roll *= RAD_TO_DEG;
-
-  //Serial.print("Yaw, Pitch, Roll: ");
-
-  //char s[10] = (myIMU.yaw);
-  //Serial.println(s);
-  Serial.print(myIMU.roll, 0);
-  Serial.print(",");
-  Serial.print(myIMU.yaw, 0);
-  Serial.print(",");
-  Serial.println(myIMU.pitch, 0);
-
-  //Serial.print("rate = ");
-  //Serial.print((float)myIMU.sumCount / myIMU.sum, 2);
-  //Serial.println(" Hz");
-
+  // - check the longitude and latitude for windesheim - should be 2.45 +- 0.37 for every year since 2019-03-19
+  //myIMU.yaw  -= 2.45;
+  //myIMU.roll *= RAD_TO_DEG;
+//============================================================================
   myIMU.count = millis();
   myIMU.sumCount = 0;
   myIMU.sum = 0;
