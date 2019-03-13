@@ -1,0 +1,63 @@
+\section{IMU}
+The previous odometry measuring device, the MPU6250 \cite{mpu6250} was broken, which is why a new, updated version is currently being used.
+Another reason a new version is used is that the MPU9250 \cite{MPU9250} also contains an AK8963, which is a 3-axis magnetometer.
+This allow WTR to more accurately track orientation, since it can use the magnetometer to find its position relative to the north.
+The data is collected as explained in this section \ref{sec::collect}, and then transmitted to a Raspberry Pi which deals with all the sensors.
+After that has processed the data into a ROS standard message, it sends the data on to the topic, where it can then be used by planners.
+
+\subsection{Collecting data} \label{sec::collect}
+The main controller for collecting the data is an Arduino Uno, which uses I$^{2}$C for communication with the MPU9250.
+This happens at a rate of \todo{find rate}.
+The Arduino takes the raw data, and uses \href{https://github.com/sparkfun/SparkFun_MPU-9250_Breakout_Arduino_Library}{this library} to process the data.
+This is needed because the MPU does not output quaternions by default.
+This library allows the Arduino to calculate those automatically, and then send them on to the Pi.
+
+\subsection{Arduino to Pi protocol}
+The order in which the data is sent is naturally important.
+The raspberry Pi expects the data packet to start with "\$ 0x03", and then the data of the quaternion, the gyroscope, the accelerometer, the temperature and lastly the magnetometer. 
+
+\begin{figure}[H]
+    \begin{lstlisting}[language=c++,firstnumber=0]
+        [ start byte ]
+        [ start byte ]
+        [ high byte quaternion W ]
+        [ low byte quaternion W ]
+        [ high byte quaternion X ]
+        [ low byte quaternion X ]
+        [ high byte quaternion Y ]
+        [ low byte quaternion Y ]
+        [ high byte quaternion Z ]
+        [ low byte quaternion Z ]
+        [ high byte gyroscope X ]
+        [ low byte gyroscope X ]
+        [ high byte gyroscope Y ]
+        [ low byte gyroscope Y ]
+        [ high byte gyroscope Z ]
+        [ low byte gyroscope Z ]
+        [ high byte accelerometer X ]
+        [ low byte accelerometer X ]
+        [ high byte accelerometer y ]
+        [ low byte accelerometer y ]
+        [ high byte accelerometer Z ]
+        [ low byte accelerometer Z ]
+        [ high byte temperature ]
+        [ low byte temperature ]
+        [ Unused ]
+        [ high byte magnetometer X ]
+        [ low byte magnetometer X ]
+        [ high byte magnetometer Y ]
+        [ low byte magnetometer Y ]
+        [ high byte magnetometer Z ]
+        [ low byte magnetometer Z ]
+        [ message count ]
+    \end{lstlisting}
+\caption{The order the Pi expects the data it receives to have}
+\label{fig::dataformat}
+\end{figure}
+
+An example would be \code{"\$ 0x03 0xFF 0xFF 0xFF 0xFF 0xFF 0xFF 0xFF 0xFF 0xFF 0xFF 0xFF 0xFF 0xFF 0xFF 0xFF 0xFF 0xFF 0xFF 0xFF 0xFF 0xFF 0xFF 0xFF 0xFF 0xFF 0xFF 0xFF 0xFF 0xFF"} 
+Keep in mind that the quaternion values can be negative values as well, and that every set of 2 bytes creates a single 16 bit piece of data, such as the temperature.
+
+        
+        
+        
