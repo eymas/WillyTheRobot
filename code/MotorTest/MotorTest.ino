@@ -155,7 +155,7 @@ void SendToMotor(int Setdrive, int Setturn)
   Serial2.write('\t');
   Serial2.write("turn");
   writeString(turn_string);
-  Serial2.write("   ");
+  Serial2.write('\t');
   Serial2.write("drive");
   writeString(drive_string);
   Serial2.write('\r');
