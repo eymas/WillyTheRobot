@@ -217,7 +217,7 @@ void loop()
   }
   Serial.print(message_count);
   Serial.print("\r\n"); // terminating characters for the raspberry Pi
-  if(message_count == 255) { //message count loops on 255
+  if(message_count >= 255) { //message count loops on 255
     message_count = 0;
   } else {
     message_count++;
