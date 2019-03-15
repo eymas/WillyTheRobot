@@ -87,12 +87,13 @@ class Encoder {
       {
         Speed = 0;
       }
-      else
-      {
-        return Speed;
-      }
 
-      
+      //if(CheckBadConnection())
+      //{
+      //  Speed = 5;
+      //}
+
+      return Speed;
     }
 
     //Determine the direction
@@ -124,4 +125,31 @@ class Encoder {
         CCW = false;
       }
     }
+
+/*
+    bool CheckBadConnection()
+    {
+        int A = analogRead(PulseInputA);
+
+      
+        bool A = digitalRead(PulseInputA); //1
+        bool B = digitalRead(PulseInputB);
+      
+        digitalWrite(PulseInputA, !A); //a is 0 als kapot
+        digitalWrite(PulseInputB, !B);
+
+        //G 1     1
+        //F 1     0
+        if (A != digitalRead(PulseInputA));
+        {
+          return true;
+        }
+        if (B != digitalRead(PulseInputB));
+        {
+          return true;
+        }
+      
+        return false;
+    }
+    */
 };

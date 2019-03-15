@@ -86,6 +86,7 @@ void setup() {
   nh.subscribe(sub);
   nh.advertise(pub);
 
+  //Serial.begin(9600);
   //serial communication to motorcontroller
   Serial1.begin(19200, SERIAL_8E1);
   Serial2.begin(115200, SERIAL_8E1);
@@ -179,6 +180,13 @@ void ActivatePID()
 {
     Willy.SetInputRef(iturn, irun, LeftWheel.GetSpeed(), RightWheel.GetSpeed());
 
+    /*
+    Serial.println("\nLeft: \t \t Right:");
+    Serial.print(LeftWheel.GetSpeed(), 4);
+    Serial.print("\t \t");
+    Serial.print(RightWheel.GetSpeed(), 4);
+    Serial.println();
+    */
 
     PIDTurn = (int)Willy.Turn_Output;
     PIDDrive = (int)Willy.Drive_Output;
