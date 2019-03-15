@@ -2,7 +2,6 @@
 #include <ros/ros.h>
 #include <serial/serial.h>
 #include <sensor_msgs/Imu.h>
-//#include <sensor_msgs/Temperature.h>
 #include <sensor_msgs/MagneticField.h>
 #include <std_msgs/String.h>
 #include <std_srvs/Empty.h>
@@ -205,13 +204,14 @@ int main(int argc, char** argv)
                 magfield.magnetic_field.y = my;
                 magfield.magnetic_field.z = my;
 
-                imu_pub.publish(imu);
-                mag_pub.publihs(magfield);
 
-                // publish temperature message
-                temperature_msg.header.stamp = measurement_time;
-                temperature_msg.header.frame_id = frame_id;
-                temperature_msg.temperature = temperature_in_C;
+                //magnetic covariance is unknown, so a 0 is sent in accordance with the MagneticField message documentation.
+                for(uint8_t i = 0; i <= 9; i++) {
+                    magfield.magnetic_field_covariance[i] = 0;
+                }
+
+                imu_pub.publish(imu);
+                mag_pub.publish(magfield);
 
                 imu_temperature_pub.publish(temperature_msg);
 
