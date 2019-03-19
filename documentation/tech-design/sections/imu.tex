@@ -7,10 +7,39 @@ After that has processed the data into a ROS standard message, it sends the data
 
 \subsection{Collecting data} \label{sec::collect}
 The main controller for collecting the data is an Arduino Uno, which uses I$^{2}$C for communication with the MPU9250.
-This happens at a rate of \todo{find rate}.
+The clock is set at 400000, and the address uses the \code{MPU9250\_ADDRESS\_AD0}, a macro which determines the supposed address.
+In section \ref{sec::setup}, the curiosities of the address are further explained.
 The Arduino takes the raw data, and uses \href{https://github.com/sparkfun/SparkFun_MPU-9250_Breakout_Arduino_Library}{this library} to process the data.
 This is needed because the MPU does not output quaternions by default.
-This library allows the Arduino to calculate those automatically, and then send them on to the Pi.
+This library allows the Arduino to calculate those, and then send them on to the Pi.
+
+
+\subsubsection{The Setup} \label{sec::setup}
+After checking the address of the MPU9250, it will first do a self-test, where it determines the biases and stores them in its registers, through the \code{MPU9250SelfTest()} and \code{calibrateMPU9250()} functions.
+The address of the MPU should be 0x71 according to the library, but since a slightly different model is used from the one the demo code is written for, the address is 0x73.
+After that, it calibrates itself and stores those values as well.
+Following that, it is fully initialized using the \code{initMPU9250} function.
+
+After that, it checks what the adress of the AK8693 (the magnetometer), and if that is not 0x48, it cancels the entire system.
+Thankfully, this address does match the default in the library provided.
+The AK8963 is initialized, and the resolutions of the 3 different sensors are fetched using \code{getAres(), getGres(), and getMres()}.
+This concludes the setup.
+
+
+\subsubsection{The Loop}
+The core concept of the loop is relatively simple, were it not for some of the quaternion calculations.
+First it reads the data gathered by the IMU, and stores it in 3 arrays, one per sensor.
+This data is then transformed, though differently per sensor.
+The accelerometer data is changed to acceleration in $m/s^2$, and the gyroscopic data is calculated into degrees per second.
+The magnetometer data does not get changed much, except for the compensation for the biases.
+
+This data is then calculated into a quaternion, using the Madgwick calculation.
+This is very complicated, and better to be considered as a black box.
+Should you wish to learn about them anyway, consider checking out \href{http://www.ijcee.org/vol10/974-T4004.pdf}{this link}.
+This does require an understanding of imaginary numbers, complex numbers, and matrix calculations.
+A good source of information on those can be found \href{https://www.3dgep.com/understanding-quaternions/#The_Complex_Plane}{here.}
+
+Of course, all the collected data in the world does not do any good if it is not transmitted, and the details on that are explained in the next section.
 
 \subsection{Arduino to Pi protocol}
 The order in which the data is sent is naturally important.
@@ -64,7 +93,15 @@ These two integers are then spliced back into a signed 16-bit integer once the P
 \label{fig::dataformat}
 \end{figure}
 
+\subsection{Reception on the Pi}
+Naturally, the data has to be sent somewhere.
+In this case, the sensor Pi is responsible for handling this data.
+After receiving all the data, it sends the messages to the appropriate ROS topics.
 
-        
-        
-        
+First, it creates node handles and message objects that will be used to transmit the relevant data.
+The ROS communication rate is set at 200Hz, which is more than sufficient.
+The covariances are set, though for the magnetometer they are as of yet unknown.
+ROS uses 0.01 as a default value, 
+
+
+\newpage

@@ -80,9 +80,6 @@ void setup()
 
     if (d != 0x48)
     {
-      // Communication failed, stop here
-      Serial.println(F("Communication failed, abort!"));
-      Serial.flush();
       abort();
     }
 
@@ -97,12 +94,6 @@ void setup()
   } // if (c == 0x73)
   else
   {
-    Serial.print("Could not connect to MPU9250: 0x");
-    Serial.println(c, HEX);
-
-    // Communication failed, stop here
-    Serial.println(F("Communication failed, abort!"));
-    Serial.flush();
     abort();
   }
 }
