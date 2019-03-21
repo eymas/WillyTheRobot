@@ -139,28 +139,28 @@ void SendToMotor(int Setdrive, int Setturn)
   {
     Serial1.write(data[i]);                                 
   }
-  String turn_string = String(turn);
-  String drive_string = String(drive);
-  String iturn_string = String(iturn, 5);
-  String irun_string = String (irun, 5);
-  Serial2.write("From PC");
-  Serial2.write("           ");
-  Serial2.write("to motor");
-  Serial2.write('\r');
-  Serial2.write('\n');
-  Serial2.write("iturn");
-  writeString(iturn_string);
-  Serial2.write("   ");
-  Serial2.write("irun");
-  writeString(irun_string);
-  Serial2.write('\t');
-  Serial2.write("turn");
-  writeString(turn_string);
-  Serial2.write("   ");
-  Serial2.write("drive");
-  writeString(drive_string);
-  Serial2.write('\r');
-  Serial2.write('\n');
+//  String turn_string = String(turn);
+//  String drive_string = String(drive);
+//  String iturn_string = String(iturn, 5);
+//  String irun_string = String (irun, 5);
+//  Serial2.write("From PC");
+//  Serial2.write("           ");
+//  Serial2.write("to motor");
+//  Serial2.write('\r');
+//  Serial2.write('\n');
+//  Serial2.write("iturn");
+//  writeString(iturn_string);
+//  Serial2.write("   ");
+//  Serial2.write("irun");
+//  writeString(irun_string);
+//  Serial2.write('\t');
+//  Serial2.write("turn");
+//  writeString(turn_string);
+//  Serial2.write('\t');
+//  Serial2.write("drive");
+//  writeString(drive_string);
+//  Serial2.write('\r');
+//  Serial2.write('\n');
 }
 
 void writeString(String stringData) { // Used to serially push out a String with Serial2.write()
