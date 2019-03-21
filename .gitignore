@@ -20,3 +20,5 @@
 *.docx
 *.doc
 *.tex.bak
+*.txt
+*.xml
