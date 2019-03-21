@@ -41,7 +41,6 @@ ros::Publisher pub("emergency", &emergency);
 Encoder LeftWheel(20, 21, false);
 Encoder RightWheel(2, 3, true);
 
-//Interrupt pin numbers for encoders left and right.
 const int LeftPulseInputA = 20;
 const int LeftPulseInputB = 21;
 const int RightPulseInputA = 2;
@@ -50,6 +49,7 @@ const int RightPulseInputB = 3;
 //Controlloop with 2 PID. One for turning and one for driving.
 //Values represent: turn Kp, turn Ki, turn Kd, drive Kp, drive Ki, drive Kd, Diff (Diff is used to change the reference speed for turning if needed)
 ControlLoop Willy(40, 0, 0, 40, 0, 0, 0.5);
+
 
 //used to lower the frequency of the PID loop.
 int PIDTrig = 0;                
@@ -89,9 +89,7 @@ void setup() {
   //serial communication to motorcontroller
   Serial1.begin(19200, SERIAL_8E1);
 
-  //Serial3.begin(9600);
-
-  //Serial3.println("Online!!!");
+  Serial2.begin(115200, SERIAL_8E1);
 
   //Set up interrupts for encoders
   pinMode(LeftPulseInputA, INPUT);
@@ -140,15 +138,42 @@ void SendToMotor(int Setdrive, int Setturn)
   // Writing the data to the motorcontroller
   for (unsigned char i = 0; i < 6; i++)
   {
-    Serial1.write(data[i]);                                  
+    Serial1.write(data[i]);                                 
   }
 
-  
-  //Serial2.println("Drive:   Turn:");
-  //Serial2.println(drive);
-  //Serial2.print("\t");
-  //Serial2.print(turn);
+//  String turn_string = String(turn);
+//  String drive_string = String(drive);
+//  String iturn_string = String(iturn, 5);
+//  String irun_string = String (irun, 5);
+//  Serial2.write("From PC");
+//  Serial2.write("           ");
+//  Serial2.write("to motor");
+//  Serial2.write('\r');
+//  Serial2.write('\n');
+//  Serial2.write("iturn");
+//  writeString(iturn_string);
+//  Serial2.write("   ");
+//  Serial2.write("irun");
+//  writeString(irun_string);
+//  Serial2.write('\t');
+//  Serial2.write("turn");
+//  writeString(turn_string);
+//  Serial2.write('\t');
+//  Serial2.write("drive");
+//  writeString(drive_string);
+//  Serial2.write('\r');
+//  Serial2.write('\n');
+
 }
+
+void writeString(String stringData) { // Used to serially push out a String with Serial2.write()
+
+  for (int i = 0; i < stringData.length(); i++)
+  {
+    Serial2.write(stringData[i]);   // Push each char 1 by 1 on each loop pass
+  }
+
+}// end writeString
 
 /*  Activate PID
  *  Read out sensors
@@ -157,6 +182,7 @@ void SendToMotor(int Setdrive, int Setturn)
 void ActivatePID()
 {
     Willy.SetInputRef(iturn, irun, LeftWheel.GetSpeed(), RightWheel.GetSpeed());
+
 
     PIDTurn = (int)Willy.Turn_Output;
     PIDDrive = (int)Willy.Drive_Output;
@@ -181,6 +207,6 @@ void loop() {
   pub.publish(&emergency);
 
   nh.spinOnce();
-
+  Serial.flush();
   delay(20);
 }

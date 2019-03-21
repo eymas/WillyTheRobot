@@ -20,6 +20,7 @@
 *.docx
 *.doc
 *.tex.bak
+<<<<<<< HEAD
 *.xml
 *.d
 *.txt
@@ -30,3 +31,6 @@
 *.cbp
 *.check_cache
 *.bin
+*.txt
+*.xml
+
