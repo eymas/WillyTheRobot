@@ -213,7 +213,7 @@ int main(int argc, char** argv)
                 imu_pub.publish(imu);
                 mag_pub.publish(magfield);
 
-                imu_temperature_pub.publish(temperature_msg);
+                //imu_temperature_pub.publish(temperature_msg);
 
                 // publish tf transform
                 if (broadcast_tf)
