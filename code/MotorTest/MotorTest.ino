@@ -24,6 +24,7 @@ std_msgs::Bool emergency;
 //Data used for controlling the motorcontroller.
 int analogValue;
 float volatile irun, iturn;
+unsigned long time_stamp;
 unsigned char data[6];
 
 /*  Turn and drive variables are read out from ros and stored in irun and idrive.
@@ -32,6 +33,8 @@ void messageCb(const geometry_msgs::Twist& twistMsg)
 {
   irun = twistMsg.linear.x * 6;
   iturn = twistMsg.angular.z * -6;
+  time_stamp = millis();    // store time at which message was received so old instructions are not repeated.
+  
 }
 
 ros::Subscriber<geometry_msgs::Twist> sub("/cmd_vel", &messageCb);
@@ -198,19 +201,21 @@ void ActivatePID()
  * Run at 50Hz.
  */
 void loop() {
-  PIDTrig++;
+  if((millis() - time_stamp) < 500) {
+    PIDTrig++;
 
-  //Run only at 10Hz.
-  if (PIDTrig > 5)
-  {
-    ActivatePID();
+    //Run only at 10Hz.
+    if (PIDTrig > 5)
+    {
+     ActivatePID();
+    }
+
+    SendToMotor(PIDDrive, PIDTurn);
+
+    pub.publish(&emergency);
+  
+    nh.spinOnce();
+    Serial.flush();
+    delay(20);
   }
-
-  SendToMotor(PIDDrive, PIDTurn);
-
-  pub.publish(&emergency);
-
-  nh.spinOnce();
-  Serial.flush();
-  delay(20);
 }
