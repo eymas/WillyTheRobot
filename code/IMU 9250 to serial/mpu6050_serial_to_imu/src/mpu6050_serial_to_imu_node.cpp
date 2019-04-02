@@ -12,7 +12,7 @@
 
 
 bool zero_orientation_set = false;
-const uint8_t kBytesToReceive = 26;
+const uint8_t kBytesToReceive = 27;
 
 bool set_zero_orientation(std_srvs::Empty::Request&,
                           std_srvs::Empty::Response&)
@@ -97,7 +97,6 @@ int main(int argc, char** argv)
         if(ser.available())
         {
           read = ser.read(ser.available());
-          std::cout << read;
           input += read;
           ROS_DEBUG("read %i new characters from serial port, adding to %i characters of old input.", (int)read.size(), (int)input.size());
           std::cout << "\nread new chars: " << (int)read.size() << ", " << (int)input.size() <<"\n";
@@ -110,7 +109,7 @@ int main(int argc, char** argv)
             {
               ROS_DEBUG("found possible start of data packet at position %d", data_packet_start);
               std::cout << "Found start of data packet\n";
-              if ((input.length() >= data_packet_start + kBytesToReceive) && (input.compare(data_packet_start + kBytesToReceive-1, 2, "\r\n") == 0))  //check if positions 26,27 exist, then test values
+              if ((input.length() >= (data_packet_start + kBytesToReceive)) && (input.compare(data_packet_start + kBytesToReceive-1, 2, "\r\n") == 0))  //check if positions 26,27 exist, then test values
               {
                 ROS_DEBUG("seems to be a real data package: long enough and found end characters");
                 std::cout << "Seems to be real data\n";
