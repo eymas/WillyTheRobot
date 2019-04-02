@@ -99,17 +99,24 @@ int main(int argc, char** argv)
           read = ser.read(ser.available());
           input += read;
           ROS_DEBUG("read %i new characters from serial port, adding to %i characters of old input.", (int)read.size(), (int)input.size());
-          std::cout << "\nread new chars: " << (int)read.size() << ", " << (int)input.size() <<"\n";
+          //std::cout << "\nread new chars: " << (int)read.size() << ", " << (int)input.size() <<"\n";
           while (input.length() >= kBytesToReceive) // while there might be a complete package in input
           {
-              std::cout << "yup, is bigger\n";
+             // std::cout << "yup, is bigger\n";
             //parse for data packets
             data_packet_start = input.find("$3");
+            std::cout << data_packet_start << "\n";
             if (data_packet_start != std::string::npos)
             {
               ROS_DEBUG("found possible start of data packet at position %d", data_packet_start);
               std::cout << "Found start of data packet\n";
-              int test = input.compare("\r\n");
+              int test = input.find("\r\n");
+              std::cout << (int)input[test];
+              if(input[test] - (kBytesToReceive-1) == '$') {
+                  std::cout << "yep\n";
+              }else{
+                  std::cout << "nope\n";
+              }
               std::cout << test << "\n";
               if ((input.length() >= (data_packet_start + kBytesToReceive)) && (input.compare(data_packet_start + kBytesToReceive-1, 2, "\r\n") == 0))  //check if positions 26,27 exist, then test values
               {
