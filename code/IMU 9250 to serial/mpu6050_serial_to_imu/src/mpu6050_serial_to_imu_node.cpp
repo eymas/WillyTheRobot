@@ -12,7 +12,7 @@
 
 
 bool zero_orientation_set = false;
-const uint8_t kBytesToReceive = 27;
+const uint8_t kBytesToReceive = 26;
 
 bool set_zero_orientation(std_srvs::Empty::Request&,
                           std_srvs::Empty::Response&)

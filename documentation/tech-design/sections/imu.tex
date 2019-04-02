@@ -45,7 +45,7 @@ Of course, all the collected data in the world does not do any good if it is not
 The order in which the data is sent is naturally important.
 The raspberry Pi expects the data packet to start with "\$ 0x03", and then the data of the quaternion, the gyroscope, the accelerometer, the temperature and lastly the magnetometer. 
 
-Most of the program used to interface with the MPU9250 is based on a program by sparkfun, \cite{sparkfunMPU}, which is in turn based on the code by KrisWiner on Github \cite{kriswiner}.
+Most of the program used to interface with the MPU9250 is based on a program by sparkfun, \cite{sparkfunMPU9250}, which is in turn based on the code by KrisWiner on Github \cite{kriswiner}.
 Several parts have been stripped out, since no LCD is used.
 Additionally, any debug messages have been removed after confirming that the code runs consistently.
 
@@ -58,7 +58,7 @@ It is worthwhile to study, since they form an integral part of the message to RO
 
 As serial communications are used, the data cannot be transmitted as is.
 In order to combat this, the data is split into two parts, with the quaternion again being an exception.
-The two 8-bit unsigned integers are then transmitted, with the 8 bits representing the MSB \ref{trm::MSB} first and the LSB \ref{LSB} last.
+The two 8-bit unsigned integers are then transmitted, with the 8 bits representing the MSB \ref{trm::MSB} first and the LSB \ref{trm::LSB} last.
 These two integers are then spliced back into a signed 16-bit integer once the Pi has received them.
 
 
@@ -67,10 +67,10 @@ These two integers are then spliced back into a signed 16-bit integer once the P
         [ start byte ] = '$'
         [ start byte ] = 0x03
         [ quaternion value W ] = quaternion value from -1 to +1, multiplied by 100
-        [ quaternion value X ] = See above
-        [ quaternion value Y ] = See above
-        [ quaternion value Z ] = See above
-        [ accelerometer X raw data high byte \footnote{as in, the actual unprocessed data from the register of the MPU9250, not in m/s^{2}} ]
+        [ quaternion value X ]
+        [ quaternion value Y ]
+        [ quaternion value Z ]
+        [ accelerometer X raw data high byte ]
         [ accelerometer X raw data low byte ]
         [ accelerometer Y raw data high byte ]
         [ accelerometer Y raw data low byte ]
@@ -88,6 +88,8 @@ These two integers are then spliced back into a signed 16-bit integer once the P
         [ magnetometer Y raw data low byte ]
         [ magnetometer Z raw data high byte ]
         [ magnetometer Z raw data low byte ]
+        [ '\r' ] 
+        [ '\n' ] 
     \end{lstlisting} 
 \caption{The order the Pi expects the data it receives to have}
 \label{fig::dataformat}
