@@ -102,7 +102,7 @@ int main(int argc, char** argv)
           std::cout << "read new chars: " << (int)read.size() << ", " << (int)input.size() <<"\n";
           while (input.length() >= kBytesToReceive) // while there might be a complete package in input
           {
-              std::cout << "yup, is bigger\n"
+              std::cout << "yup, is bigger\n";
             //parse for data packets
             data_packet_start = input.find("$\x03");
             if (data_packet_start != std::string::npos)
