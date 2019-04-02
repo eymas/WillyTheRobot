@@ -111,8 +111,8 @@ int main(int argc, char** argv)
               ROS_DEBUG("found possible start of data packet at position %d", data_packet_start);
               std::cout << "Found start of data packet\n";
               int test = input.find("\r\n");
-              std::cout << (int)input[test];
-              if(input[test] - (kBytesToReceive-1) == '$') {
+              std::cout << (test;
+              if(input[test - (kBytesToReceive-1)] == '$') {
                   std::cout << "yep\n";
               }else{
                   std::cout << "nope\n";
