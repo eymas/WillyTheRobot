@@ -105,7 +105,7 @@ int main(int argc, char** argv)
           {
               std::cout << "yup, is bigger\n";
             //parse for data packets
-            data_packet_start = input.find("$\x03");
+            data_packet_start = input.find("$3");
             if (data_packet_start != std::string::npos)
             {
               ROS_DEBUG("found possible start of data packet at position %d", data_packet_start);
