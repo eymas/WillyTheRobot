@@ -8,6 +8,8 @@
 #include <string>
 #include <tf/transform_broadcaster.h>
 #include <tf/transform_datatypes.h>
+#include <iostream>
+
 
 bool zero_orientation_set = false;
 const uint8_t kBytesToReceive = 27;
@@ -96,6 +98,7 @@ int main(int argc, char** argv)
         {
           read = ser.read(ser.available());
           ROS_DEBUG("read %i new characters from serial port, adding to %i characters of old input.", (int)read.size(), (int)input.size());
+          std::cout << "read new chars\n";
           input += read;
           while (input.length() >= kBytesToReceive) // while there might be a complete package in input
           {
@@ -104,9 +107,11 @@ int main(int argc, char** argv)
             if (data_packet_start != std::string::npos)
             {
               ROS_DEBUG("found possible start of data packet at position %d", data_packet_start);
+              std::cout << "Found start of data packet\n";
               if ((input.length() >= data_packet_start + kBytesToReceive) && (input.compare(data_packet_start + kBytesToReceive-1, 2, "\r\n") == 0))  //check if positions 26,27 exist, then test values
               {
                 ROS_DEBUG("seems to be a real data package: long enough and found end characters");
+                std::cout << "Seems to be real data\n";
                 // get quaternion values
                 int8_t w = input[data_packet_start + 2];
                 int8_t x = input[data_packet_start + 3];
@@ -161,10 +166,15 @@ int main(int argc, char** argv)
 
                 uint8_t received_message_number = input[data_packet_start + 24];
                 ROS_DEBUG("received buffer:  Quaternions: %lf, %lf, %lf, %lf\n",wf, xf, yf, zf);
+                std::cout << "received buffer " <<wf<<","<<xf<<","<<yf<<","<<zf<<"\n";
                 ROS_DEBUG("received buffer:  Accel: %i, %i, %i\n", ax, ay, az);
+                std::cout << "received buffer " <<ax<<","<<ay<<","<<az<<"\n";
                 ROS_DEBUG("received buffer:  Gyro: %i, %i, %i\n", gx, gy, gz);
+                std::cout << "received buffer " <<gx<<","<<gy<<","<<gz<<"\n";
                 ROS_DEBUG("received buffer:  Magneto: %i, %i, %i\n", mx, my, mz);
+                  std::cout << "received buffer " <<mx<<","<<my<<","<<mz<<"\n";
                 ROS_DEBUG("received message number: %i", received_message_number);
+                std::cout << "received message number: "<<received_message_number;
 
                 if (received_message) // can only check for continuous numbers if already received at least one packet
                 {
