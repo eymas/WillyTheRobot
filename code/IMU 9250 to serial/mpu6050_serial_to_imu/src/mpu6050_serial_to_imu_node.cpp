@@ -97,6 +97,7 @@ int main(int argc, char** argv)
         if(ser.available())
         {
           read = ser.read(ser.available());
+          std::cout << read;
           input += read;
           ROS_DEBUG("read %i new characters from serial port, adding to %i characters of old input.", (int)read.size(), (int)input.size());
           std::cout << "read new chars: " << (int)read.size() << ", " << (int)input.size() <<"\n";
