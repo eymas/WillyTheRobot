@@ -109,6 +109,8 @@ int main(int argc, char** argv)
             {
               ROS_DEBUG("found possible start of data packet at position %d", data_packet_start);
               std::cout << "Found start of data packet\n";
+              int test = input.compare(data_packet_start, 2, "\r\n");
+              std::cout << test << "\n";
               if ((input.length() >= (data_packet_start + kBytesToReceive)) && (input.compare(data_packet_start + kBytesToReceive-1, 2, "\r\n") == 0))  //check if positions 26,27 exist, then test values
               {
                 ROS_DEBUG("seems to be a real data package: long enough and found end characters");
