@@ -97,11 +97,12 @@ int main(int argc, char** argv)
         if(ser.available())
         {
           read = ser.read(ser.available());
-          ROS_DEBUG("read %i new characters from serial port, adding to %i characters of old input.", (int)read.size(), (int)input.size());
-          std::cout << "read new chars: " << read.size() << ", " << input.size();
           input += read;
+          ROS_DEBUG("read %i new characters from serial port, adding to %i characters of old input.", (int)read.size(), (int)input.size());
+          std::cout << "read new chars: " << (int)read.size() << ", " << (int)input.size() <<"\n";
           while (input.length() >= kBytesToReceive) // while there might be a complete package in input
           {
+              std::cout << "yup, is bigger\n"
             //parse for data packets
             data_packet_start = input.find("$\x03");
             if (data_packet_start != std::string::npos)
