@@ -100,7 +100,7 @@ int main(int argc, char** argv)
           std::cout << read;
           input += read;
           ROS_DEBUG("read %i new characters from serial port, adding to %i characters of old input.", (int)read.size(), (int)input.size());
-          std::cout << "read new chars: " << (int)read.size() << ", " << (int)input.size() <<"\n";
+          std::cout << "\nread new chars: " << (int)read.size() << ", " << (int)input.size() <<"\n";
           while (input.length() >= kBytesToReceive) // while there might be a complete package in input
           {
               std::cout << "yup, is bigger\n";
