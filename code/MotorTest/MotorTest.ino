@@ -201,8 +201,14 @@ void ActivatePID()
  * Run at 50Hz.
  */
 void loop() {
-  if((millis() - time_stamp) < 500) {
-    PIDTrig++;
+  if((millis() - time_stamp) > 500) {
+    irun = 0;
+    iturn = 0;
+    SendToMotor(0, 0);
+  }
+  
+
+  PIDTrig++;
 
     //Run only at 10Hz.
     if (PIDTrig > 5)
@@ -217,5 +223,5 @@ void loop() {
     nh.spinOnce();
     Serial.flush();
     delay(20);
-  }
+  
 }
