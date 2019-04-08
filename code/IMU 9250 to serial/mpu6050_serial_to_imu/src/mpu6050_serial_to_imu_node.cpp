@@ -99,25 +99,14 @@ int main(int argc, char** argv)
           read = ser.read(ser.available());
           input += read;
           ROS_DEBUG("read %i new characters from serial port, adding to %i characters of old input.", (int)read.size(), (int)input.size());
-          //std::cout << "\nread new chars: " << (int)read.size() << ", " << (int)input.size() <<"\n";
-          while (input.length() >= kBytesToReceive) // while there might be a complete package in input
-          {
-             // std::cout << "yup, is bigger\n";
-            //parse for data packets
+          while (input.length() >= kBytesToReceive)
+          { // while there might be a complete package in input
+            // parse for data packets
             data_packet_start = input.find("$3");
-            std::cout << data_packet_start << "\n";
             if (data_packet_start != std::string::npos)
             {
               ROS_DEBUG("found possible start of data packet at position %d", data_packet_start);
               std::cout << "Found start of data packet\n";
-              int test = input.find("\r\n");
-              std::cout << test;
-              if(input[test - (kBytesToReceive-1)] == '$') {
-                  std::cout << "yep\n";
-              }else{
-                  std::cout << "nope\n";
-              }
-              std::cout << test << "\n";
               if ((input.length() >= (data_packet_start + kBytesToReceive)) && (input.compare(data_packet_start + kBytesToReceive-1, 2, "\r\n") == 0))  //check if positions 26,27 exist, then test values
               {
                 ROS_DEBUG("seems to be a real data package: long enough and found end characters");
@@ -145,19 +134,19 @@ int main(int argc, char** argv)
                 tf::Quaternion differential_rotation;
                 differential_rotation = zero_orientation.inverse() * orientation;
                 // get accelerometer values
-                int16_t ax = (((0xff &(char)input[data_packet_start + 6]) << 8) | 0xff &(char)input[data_packet_start] + 7);
-                int16_t ay = (((0xff &(char)input[data_packet_start + 8]) << 8) | 0xff &(char)input[data_packet_start] + 9);
-                int16_t az = (((0xff &(char)input[data_packet_start + 10]) << 8) | 0xff &(char)input[data_packet_start] + 11);
+                int16_t ax = (((char)input[data_packet_start + 6] << 8)  | (char)input[data_packet_start] + 7);
+                int16_t ay = (((char)input[data_packet_start + 8] << 8)  | (char)input[data_packet_start] + 9);
+                int16_t az = (((char)input[data_packet_start + 10] << 8) | (char)input[data_packet_start] + 11);
 
                 // get gyro values
-                int16_t gx = (((0xff &(char)input[data_packet_start + 12]) << 8) | 0xff &(char)input[data_packet_start] + 13);
-                int16_t gy = (((0xff &(char)input[data_packet_start + 14]) << 8) | 0xff &(char)input[data_packet_start] + 15);
-                int16_t gz = (((0xff &(char)input[data_packet_start + 16]) << 8) | 0xff &(char)input[data_packet_start] + 17);
+                int16_t gx = (((char)input[data_packet_start + 12] << 8) | (char)input[data_packet_start] + 13);
+                int16_t gy = (((char)input[data_packet_start + 14] << 8) | (char)input[data_packet_start] + 15);
+                int16_t gz = (((char)input[data_packet_start + 16] << 8) | (char)input[data_packet_start] + 17);
 
                 // get magnetometer values
-                int16_t mx = (((0xff &(char)input[data_packet_start + 18]) << 8) | 0xff &(char)input[data_packet_start] + 19);
-                int16_t my = (((0xff &(char)input[data_packet_start + 20]) << 8) | 0xff &(char)input[data_packet_start] + 21);
-                int16_t mz = (((0xff &(char)input[data_packet_start + 22]) << 8) | 0xff &(char)input[data_packet_start] + 23);
+                int16_t mx = (((char)input[data_packet_start + 18] << 8) | (char)input[data_packet_start] + 19);
+                int16_t my = (((char)input[data_packet_start + 20] << 8) | (char)input[data_packet_start] + 21);
+                int16_t mz = (((char)input[data_packet_start + 22] << 8) | (char)input[data_packet_start] + 23);
 
                 // calculate rotational velocities in rad/s
                 // without the last factor the velocities were too small
