@@ -106,20 +106,16 @@ int main(int argc, char** argv)
             if (data_packet_start != std::string::npos)
             {
               ROS_DEBUG("found possible start of data packet at position %d", data_packet_start);
-              std::cout << "Found start of data packet\n";
+
               if ((input.length() >= (data_packet_start + kBytesToReceive)) && (input.compare(data_packet_start + kBytesToReceive-1, 2, "\r\n") >= 0))  //check if positions 26,27 exist, then test values
               {
                 ROS_DEBUG("seems to be a real data package: long enough and found end characters");
-                std::cout << "Seems to be real data\n";
+
                 // get quaternion values
                 int8_t w = input[data_packet_start + 2];
-                    std::cout << input[data_packet_start+2] << "\n";
                 int8_t x = input[data_packet_start + 3];
-                  std::cout << input[data_packet_start+3] << "\n";
                 int8_t y = input[data_packet_start + 4];
-                  std::cout << input[data_packet_start+4] << "\n";
                 int8_t z = input[data_packet_start + 5];
-                  std::cout << input[data_packet_start+5] << "\n";
 
                 double wf = w;
                   wf = wf/100;
@@ -143,8 +139,11 @@ int main(int argc, char** argv)
                 differential_rotation = zero_orientation.inverse() * orientation;
                 // get accelerometer values
                 int16_t ax = ((input[data_packet_start + 6] << 8)  | input[data_packet_start] + 7);
+                    std::cout << ax << "\n";
                 int16_t ay = ((input[data_packet_start + 8] << 8)  | input[data_packet_start] + 9);
+                    std::cout << ay << "\n";
                 int16_t az = ((input[data_packet_start + 10] << 8) | input[data_packet_start] + 11);
+                    std::cout << az << "\n";
 
                 // get gyro values
                 int16_t gx = ((input[data_packet_start + 12] << 8) | input[data_packet_start] + 13);
