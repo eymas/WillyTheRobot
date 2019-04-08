@@ -124,7 +124,7 @@ int main(int argc, char** argv)
                 double wf = w;
                   wf = wf/100;
                 double xf = x;
-                  xg = xf/100;
+                  xf = xf/100;
                 double yf = y;
                   yf = yf/100;
                 double zf = z;
