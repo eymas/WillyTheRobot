@@ -121,10 +121,14 @@ int main(int argc, char** argv)
                 int8_t z = input[data_packet_start + 5];
                   std::cout << input[data_packet_start+5] << "\n";
 
-                double wf = w/100;
-                double xf = x/100;
-                double yf = y/100;
-                double zf = z/100;
+                double wf = w;
+                  wf = wf/100;
+                double xf = x;
+                  xg = xf/100;
+                double yf = y;
+                  yf = yf/100;
+                double zf = z;
+                  zf = zf/100;
 
                 tf::Quaternion orientation(xf, yf, zf, wf);
 
@@ -142,7 +146,7 @@ int main(int argc, char** argv)
                 int16_t ay = ((input[data_packet_start + 8] << 8)  | input[data_packet_start] + 9);
                 int16_t az = ((input[data_packet_start + 10] << 8) | input[data_packet_start] + 11);
 
-                // get gyro valuess
+                // get gyro values
                 int16_t gx = ((input[data_packet_start + 12] << 8) | input[data_packet_start] + 13);
                 int16_t gy = ((input[data_packet_start + 14] << 8) | input[data_packet_start] + 15);
                 int16_t gz = ((input[data_packet_start + 16] << 8) | input[data_packet_start] + 17);
