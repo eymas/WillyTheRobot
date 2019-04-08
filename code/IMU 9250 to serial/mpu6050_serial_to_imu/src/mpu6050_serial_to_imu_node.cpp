@@ -113,9 +113,13 @@ int main(int argc, char** argv)
                 std::cout << "Seems to be real data\n";
                 // get quaternion values
                 int8_t w = input[data_packet_start + 2];
+                    std::cout << input[data_packet_start+2] << "\n";
                 int8_t x = input[data_packet_start + 3];
+                  std::cout << input[data_packet_start+3] << "\n";
                 int8_t y = input[data_packet_start + 4];
+                  std::cout << input[data_packet_start+4] << "\n";
                 int8_t z = input[data_packet_start + 5];
+                  std::cout << input[data_packet_start+5] << "\n";
 
                 double wf = w/100;
                 double xf = x/100;
