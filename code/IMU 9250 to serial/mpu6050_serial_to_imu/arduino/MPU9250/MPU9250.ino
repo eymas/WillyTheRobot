@@ -169,7 +169,7 @@ void loop()
   Serial.print('$');
   Serial.print(0x03);
   // transmit quaternion bytes
-  // rather than transmit floats, which take a lot of bytes (4 each) instead they are multiplied by 100 (ignoring evrything more than 2 decimal places behind the 0
+  // rather than transmit floats, which take a lot of bytes (4 each) instead they are multiplied by 100 (ignoring everything more than 2 decimal places behind the 0
   // This allows for them to be transmitted as integers, without significant impact.
   // Kind of a workaround, there is probably a neater method out there.
   for(uint8_t i = 0; i < 4; i++) {
