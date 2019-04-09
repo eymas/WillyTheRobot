@@ -216,4 +216,5 @@ void loop()
   myIMU.count = millis();
   myIMU.sumCount = 0;
   myIMU.sum = 0;
+  delay(5);
 }

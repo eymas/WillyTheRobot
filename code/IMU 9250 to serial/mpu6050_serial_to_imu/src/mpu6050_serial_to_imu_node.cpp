@@ -141,14 +141,8 @@ int main(int argc, char** argv)
                 differential_rotation = zero_orientation.inverse() * orientation;
                 // get accelerometer values
                 int16_t ax = ((input[data_packet_start + 6] << 8)  | input[data_packet_start + 7]);
-                    std::cout << input[data_packet_start + 6] << ":::::" << input[data_packet_start+7] << '\n';
-                    std::cout << ax << "\n";
                 int16_t ay = ((input[data_packet_start + 8] << 8)  | input[data_packet_start + 9]);
-                    std::cout << input[data_packet_start + 8] << ":::::" << input[data_packet_start+9] << '\n';
-                    std::cout << ay << "\n";
                 int16_t az = ((input[data_packet_start + 10] << 8) | input[data_packet_start + 11]);
-                    std::cout << input[data_packet_start + 10] << ":::::" << input[data_packet_start+11] << '\n';
-                    std::cout << az << "\n";
 
                 // get gyro values
                 int16_t gx = ((input[data_packet_start + 12] << 8) | input[data_packet_start + 13] );
@@ -175,17 +169,8 @@ int main(int argc, char** argv)
                 double ayf = ay * (8.0 / 65536.0) * 9.81;
                 double azf = az * (8.0 / 65536.0) * 9.81;
 
+                std::cout << (int)input[data_packet_start+24];
                 uint8_t received_message_number = input[data_packet_start + 24];
-                ROS_DEBUG("received buffer:  Quaternions: %lf, %lf, %lf, %lf\n",wf, xf, yf, zf);
-                std::cout << "received buffer " <<wf<<","<<xf<<","<<yf<<","<<zf<<"\n";
-                ROS_DEBUG("received buffer:  Accel: %i, %i, %i\n", ax, ay, az);
-                std::cout << "received buffer " <<ax<<","<<ay<<","<<az<<"\n";
-                ROS_DEBUG("received buffer:  Gyro: %i, %i, %i\n", gx, gy, gz);
-                std::cout << "received buffer " <<gx<<","<<gy<<","<<gz<<"\n";
-                ROS_DEBUG("received buffer:  Magneto: %i, %i, %i\n", mx, my, mz);
-                  std::cout << "received buffer " <<mx<<","<<my<<","<<mz<<"\n";
-                ROS_DEBUG("received message number: %i", received_message_number);
-                std::cout << "received message number: "<<received_message_number;
 
                 if (received_message) // can only check for continuous numbers if already received at least one packet
                 {
@@ -223,7 +208,7 @@ int main(int argc, char** argv)
 
                 magfield.magnetic_field.x = mx;
                 magfield.magnetic_field.y = my;
-                magfield.magnetic_field.z = my;
+                magfield.magnetic_field.z = mz;
 
 
                 //magnetic covariance is unknown, so a 0 is sent in accordance with the MagneticField message documentation.
