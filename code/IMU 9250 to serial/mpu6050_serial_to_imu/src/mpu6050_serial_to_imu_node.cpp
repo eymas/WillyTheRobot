@@ -144,10 +144,10 @@ int main(int argc, char** argv)
                     std::cout << input[data_packet_start + 6] << ":::::" << input[data_packet_start+7] << '\n';
                     std::cout << *ax << "\n";
                 int16_t ay = ((input[data_packet_start + 8] << 8)  | input[data_packet_start] + 9);
-                    std::cout << input[data_packet_start + 6] << ":::::" << input[data_packet_start+7] << '\n';
+                    std::cout << input[data_packet_start + 8] << ":::::" << input[data_packet_start+9] << '\n';
                     std::cout << *ay << "\n";
                 int16_t az = ((input[data_packet_start + 10] << 8) | input[data_packet_start] + 11);
-                    std::cout << input[data_packet_start + 6] << ":::::" << input[data_packet_start+7] << '\n';
+                    std::cout << input[data_packet_start + 10] << ":::::" << input[data_packet_start+11] << '\n';
                     std::cout << *az << "\n";
 
                 // get gyro values
