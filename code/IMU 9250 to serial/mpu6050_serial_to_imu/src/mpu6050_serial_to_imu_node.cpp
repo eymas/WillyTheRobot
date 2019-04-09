@@ -140,25 +140,25 @@ int main(int argc, char** argv)
                 tf::Quaternion differential_rotation;
                 differential_rotation = zero_orientation.inverse() * orientation;
                 // get accelerometer values
-                int16_t ax = ((input[data_packet_start + 6] << 8)  | input[data_packet_start] + 7);
+                int16_t ax = ((input[data_packet_start + 6] << 8)  | input[data_packet_start + 7]);
                     std::cout << input[data_packet_start + 6] << ":::::" << input[data_packet_start+7] << '\n';
                     std::cout << ax << "\n";
-                int16_t ay = ((input[data_packet_start + 8] << 8)  | input[data_packet_start] + 9);
+                int16_t ay = ((input[data_packet_start + 8] << 8)  | input[data_packet_start + 9]);
                     std::cout << input[data_packet_start + 8] << ":::::" << input[data_packet_start+9] << '\n';
                     std::cout << ay << "\n";
-                int16_t az = ((input[data_packet_start + 10] << 8) | input[data_packet_start] + 11);
+                int16_t az = ((input[data_packet_start + 10] << 8) | input[data_packet_start + 11]);
                     std::cout << input[data_packet_start + 10] << ":::::" << input[data_packet_start+11] << '\n';
                     std::cout << az << "\n";
 
                 // get gyro values
-                int16_t gx = ((input[data_packet_start + 12] << 8) | input[data_packet_start] + 13);
-                int16_t gy = ((input[data_packet_start + 14] << 8) | input[data_packet_start] + 15);
-                int16_t gz = ((input[data_packet_start + 16] << 8) | input[data_packet_start] + 17);
+                int16_t gx = ((input[data_packet_start + 12] << 8) | input[data_packet_start + 13] );
+                int16_t gy = ((input[data_packet_start + 14] << 8) | input[data_packet_start + 15] );
+                int16_t gz = ((input[data_packet_start + 16] << 8) | input[data_packet_start + 17] );
 
                 // get magnetometer values
-                int16_t mx = ((input[data_packet_start + 18] << 8) | input[data_packet_start] + 19);
-                int16_t my = ((input[data_packet_start + 20] << 8) | input[data_packet_start] + 21);
-                int16_t mz = ((input[data_packet_start + 22] << 8) | input[data_packet_start] + 23);
+                int16_t mx = ((input[data_packet_start + 18] << 8) | input[data_packet_start + 19]);
+                int16_t my = ((input[data_packet_start + 20] << 8) | input[data_packet_start + 21]);
+                int16_t mz = ((input[data_packet_start + 22] << 8) | input[data_packet_start + 23]);
 
                 // calculate rotational velocities in rad/s
                 // without the last factor the velocities were too small
