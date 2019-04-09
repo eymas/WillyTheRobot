@@ -1,3 +1,7 @@
+#include <Ethernet.h>
+
+#include <SpacebrewYun.h>
+
 /*  This is the main file in the arduino Mega controlling the motorcontroller.
  *  
  *  Tasks:
@@ -31,8 +35,8 @@ unsigned char data[6];
  */
 void messageCb(const geometry_msgs::Twist& twistMsg)
 {
-  irun = twistMsg.linear.x * 6;
-  iturn = twistMsg.angular.z * -6;
+  irun = twistMsg.linear.x;
+  iturn = twistMsg.angular.z;
   time_stamp = millis();    // store time at which message was received so old instructions are not repeated.
   
 }
@@ -51,7 +55,7 @@ const int RightPulseInputB = 3;
 
 //Controlloop with 2 PID. One for turning and one for driving.
 //Values represent: turn Kp, turn Ki, turn Kd, drive Kp, drive Ki, drive Kd, Diff (Diff is used to change the reference speed for turning if needed)
-ControlLoop Willy(40, 0, 0, 40, 0, 0, 0.5);
+ControlLoop Willy(60, 3, 0, 120, 6, 0);
 
 
 //used to lower the frequency of the PID loop.
@@ -88,11 +92,13 @@ void setup() {
   nh.initNode();
   nh.subscribe(sub);
   nh.advertise(pub);
-
-  //Serial.begin(9600);
-  //serial communication to motorcontroller
+  
+  //Serial communication to motorcontroller
   Serial1.begin(19200, SERIAL_8E1);
-  Serial2.begin(115200, SERIAL_8E1);
+
+  //Serial communication to external laptop for testing and tuning purposes
+  Serial2.begin(9600);
+  
   //Set up interrupts for encoders
   pinMode(LeftPulseInputA, INPUT);
   pinMode(LeftPulseInputB, INPUT);
@@ -142,28 +148,6 @@ void SendToMotor(int Setdrive, int Setturn)
   {
     Serial1.write(data[i]);                                 
   }
-//  String turn_string = String(turn);
-//  String drive_string = String(drive);
-//  String iturn_string = String(iturn, 5);
-//  String irun_string = String (irun, 5);
-//  Serial2.write("From PC");
-//  Serial2.write("           ");
-//  Serial2.write("to motor");
-//  Serial2.write('\r');
-//  Serial2.write('\n');
-//  Serial2.write("iturn");
-//  writeString(iturn_string);
-//  Serial2.write("   ");
-//  Serial2.write("irun");
-//  writeString(irun_string);
-//  Serial2.write('\t');
-//  Serial2.write("turn");
-//  writeString(turn_string);
-//  Serial2.write('\t');
-//  Serial2.write("drive");
-//  writeString(drive_string);
-//  Serial2.write('\r');
-//  Serial2.write('\n');
 }
 
 void writeString(String stringData) { // Used to serially push out a String with Serial2.write()
@@ -183,25 +167,32 @@ void ActivatePID()
 {
     Willy.SetInputRef(iturn, irun, LeftWheel.GetSpeed(), RightWheel.GetSpeed());
 
-    /*
-    Serial.println("\nLeft: \t \t Right:");
-    Serial.print(LeftWheel.GetSpeed(), 4);
-    Serial.print("\t \t");
-    Serial.print(RightWheel.GetSpeed(), 4);
-    Serial.println();
-    */
-
     PIDTurn = (int)Willy.Turn_Output;
     PIDDrive = (int)Willy.Drive_Output;
 
     PIDTrig = 0;
 }
 
+void SendSerial()
+{
+    String TI = String(iturn,5);   //Turn input
+    String DI = String(irun,5);    //Drive input
+
+    String TS = String(Willy.Turn_Speed,5);  //Turn speed
+    String DS = String(Willy.Drive_Speed,5);  //Drive speed
+
+    String TO = String(Willy.Turn_Output,5);  //Turn output
+    String DO = String(Willy.Drive_Output,5);  //Drive output
+    
+    Serial2.println(TI + ";" + DI + ";" + TS + ";" + DS + ";" + TO + ";" + DO);
+}
+
 /* Main loop 
  * Run at 50Hz.
  */
 void loop() {
-  if((millis() - time_stamp) > 500) {
+  
+  if((millis() - time_stamp) > 750) {
     irun = 0;
     iturn = 0;
     SendToMotor(0, 0);
@@ -214,6 +205,7 @@ void loop() {
     if (PIDTrig > 5)
     {
      ActivatePID();
+     SendSerial();
     }
 
     SendToMotor(PIDDrive, PIDTurn);
@@ -221,7 +213,7 @@ void loop() {
     pub.publish(&emergency);
   
     nh.spinOnce();
-    Serial.flush();
+    //Serial.flush();
     delay(20);
   
 }

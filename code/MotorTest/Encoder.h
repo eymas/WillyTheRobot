@@ -8,6 +8,7 @@ class Encoder {
 
     const float Pi = 3.14159265359;               //Pi
     const float pulsesPerRotation = 1024;          //amount of pulses per rotation
+    const float WheelRadius = 0.16;
 
     bool Inverse = false;
 
@@ -25,11 +26,12 @@ class Encoder {
     float SpeedCalculation()
     {
       float Speed = 0;
-      Speed = LastpulseTrainPeriod;                      //period in microseconds
+      Speed = LastpulseTrainPeriod;                     //period in microseconds
       Speed = Speed / 1000000;                          //period in seconds
       Speed = 1 / Speed;                                //frequenty in hz
       Speed = Speed / (pulsesPerRotation / counts);     //Rotations per second
-      Speed = Speed * 2 * Pi;                         //Radians per second
+      Speed = Speed * 2 * Pi;                           //Radians per second
+      Speed = Speed * 0.3;                              //m/s
       return Speed;
     }
 
@@ -88,11 +90,6 @@ class Encoder {
         Speed = 0;
       }
 
-      //if(CheckBadConnection())
-      //{
-      //  Speed = 5;
-      //}
-
       return Speed;
     }
 
@@ -125,31 +122,4 @@ class Encoder {
         CCW = false;
       }
     }
-
-/*
-    bool CheckBadConnection()
-    {
-        int A = analogRead(pulseInputA);
-
-      
-        bool A = digitalRead(pulseInputA); //1
-        bool B = digitalRead(pulseInputB);
-      
-        digitalWrite(pulseInputA, !A); //a is 0 als kapot
-        digitalWrite(pulseInputB, !B);
-
-        //G 1     1
-        //F 1     0
-        if (A != digitalRead(pulseInputA));
-        {
-          return true;
-        }
-        if (B != digitalRead(pulseInputB));
-        {
-          return true;
-        }
-      
-        return false;
-    }
-    */
 };
