@@ -192,7 +192,7 @@ int main(int argc, char** argv)
                   uint8_t message_distance = received_message_number - last_received_message_number;
                   if ( message_distance > 1 )
                   {
-                    ROS_WARN_STREAM("Missed " << message_distance - 1 << " MPU6050 data packets from arduino.");
+                    ROS_WARN_STREAM("Missed " << message_distance - 1 << " MPU9250 data packets from arduino.");
                   }
                 }
                 else
@@ -227,7 +227,7 @@ int main(int argc, char** argv)
 
 
                 //magnetic covariance is unknown, so a 0 is sent in accordance with the MagneticField message documentation.
-                for(uint8_t i = 0; i <= 9; i++) {
+                for(uint8_t i = 0; i < 9; i++) {
                     magfield.magnetic_field_covariance[i] = 0;
                 }
 
