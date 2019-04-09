@@ -105,6 +105,9 @@ int main(int argc, char** argv)
             data_packet_start = input.find("$3");
             if (data_packet_start != std::string::npos)
             {
+                for(uint8_t i = 0; i<=kBytesToReceive; i++) {
+                    std::cout << i << "." << input[data_packet_start+i] << "\r\n";
+                }
               ROS_DEBUG("found possible start of data packet at position %d", data_packet_start);
 
               if ((input.length() >= (data_packet_start + kBytesToReceive)) && (input.compare(data_packet_start + kBytesToReceive-1, 2, "\r\n") >= 0))  //check if positions 26,27 exist, then test values

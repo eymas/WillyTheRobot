@@ -166,8 +166,8 @@ void loop()
   myIMU.count = millis();
   digitalWrite(myLed, !digitalRead(myLed));  // toggle led - kept in to make it easier to check whether or not the arduino has crashed.
 
-  Serial.print('$');
-  Serial.print(0x03);
+ Serial.print('$');
+ Serial.print(0x03);
   // transmit quaternion bytes
   // rather than transmit floats, which take a lot of bytes (4 each) instead they are multiplied by 100 (ignoring everything more than 2 decimal places behind the 0
   // This allows for them to be transmitted as integers, without significant impact.
@@ -197,7 +197,7 @@ void loop()
     uint8_t gyro_high = (0xff & (gyro_data[i] >> 8));
     uint8_t gyro_low = (0xff & gyro_data[i]);
     Serial.print(gyro_high);
-    Serial.print(gyro_low);
+   Serial.print(gyro_low);
   }
   // transmit magnetometer data
   for(uint8_t i = 0; i < 3; i++) {
