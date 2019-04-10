@@ -106,7 +106,7 @@ int main(int argc, char** argv)
             if (data_packet_start != std::string::npos)
             {
                 for(uint8_t i = 0; i<=kBytesToReceive; i++) {
-                    std::cout << i << "." << stoi(input[data_packet_start+i]) << "\r\n";
+                    std::cout << (int)i << "." << stoi(input[data_packet_start+i]) << "\r\n";
                 }
               ROS_DEBUG("found possible start of data packet at position %d", data_packet_start);
 
