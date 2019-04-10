@@ -105,9 +105,6 @@ int main(int argc, char** argv)
             data_packet_start = input.find("$3");
             if (data_packet_start != std::string::npos)
             {
-                for(uint8_t i = 0; i<=kBytesToReceive; i++) {
-                    std::cout << (int)i << "." << std::stoi(input[data_packet_start+i]) << "\r\n";
-                }
               ROS_DEBUG("found possible start of data packet at position %d", data_packet_start);
 
               if ((input.length() >= (data_packet_start + kBytesToReceive)) && (input.compare(data_packet_start + kBytesToReceive-1, 2, "\r\n") >= 0))  //check if positions 26,27 exist, then test values
@@ -171,8 +168,8 @@ int main(int argc, char** argv)
                 double ayf = ay * (8.0 / 65536.0) * 9.81;
                 double azf = az * (8.0 / 65536.0) * 9.81;
 
-                std::cout << (int)input[data_packet_start+24];
-                uint8_t received_message_number = input[data_packet_start + 24];
+                std::cout << unsigned(input[data_packet_start+24]) << "\r\n";
+                uint8_t received_message_number = (uint8_t)input[data_packet_start + 24];
 
                 if (received_message) // can only check for continuous numbers if already received at least one packet
                 {
