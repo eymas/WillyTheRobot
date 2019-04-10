@@ -98,7 +98,6 @@ int main(int argc, char** argv)
         {
           read = ser.read(ser.available());
           input += read;
-          std::cout << "read:" << read << "\r\n"
           ROS_DEBUG("read %i new characters from serial port, adding to %i characters of old input.", (int)read.size(), (int)input.size());
           while (input.length() >= kBytesToReceive)
           { // while there might be a complete package in input
@@ -108,15 +107,15 @@ int main(int argc, char** argv)
             {
               ROS_DEBUG("found possible start of data packet at position %d", data_packet_start);
 
-              if ((input.length() >= (data_packet_start + kBytesToReceive)) && (input.compare(data_packet_start + kBytesToReceive-1, 2, "\r\n") >= 0))  //check if positions 26,27 exist, then test values
+              if ((input.length() >= (data_packet_start + kBytesToReceive)) && (input.compare((data_packet_start + kBytesToReceive-1), 2, "\r\n") >= 0))  //check if positions 26,27 exist, then test values
               {
                 ROS_DEBUG("seems to be a real data package: long enough and found end characters");
 
                 // get quaternion values
-                int8_t w = input[data_packet_start + 2];
-                int8_t x = input[data_packet_start + 3];
-                int8_t y = input[data_packet_start + 4];
-                int8_t z = input[data_packet_start + 5];
+                int8_t w = (char)input[data_packet_start + 2];
+                int8_t x = (char)input[data_packet_start + 3];
+                int8_t y = (char)input[data_packet_start + 4];
+                int8_t z = (char)input[data_packet_start + 5];
 
                 double wf = w;
                   wf = wf/100;
@@ -141,19 +140,19 @@ int main(int argc, char** argv)
                 tf::Quaternion differential_rotation;
                 differential_rotation = zero_orientation.inverse() * orientation;
                 // get accelerometer values
-                int16_t ax = ((input[data_packet_start + 6]  << 8) | input[data_packet_start + 7]);
-                int16_t ay = ((input[data_packet_start + 8]  << 8) | input[data_packet_start + 9]);
-                int16_t az = ((input[data_packet_start + 10] << 8) | input[data_packet_start + 11]);
+                int16_t ax = (((char)input[data_packet_start + 6]  << 8) | (char)input[data_packet_start + 7]);
+                int16_t ay = (((char)input[data_packet_start + 8]  << 8) | (char)input[data_packet_start + 9]);
+                int16_t az = (((char)input[data_packet_start + 10] << 8) | (char)input[data_packet_start + 11]);
 
                 // get gyro values
-                int16_t gx = ((input[data_packet_start + 12] << 8) | input[data_packet_start + 13] );
-                int16_t gy = ((input[data_packet_start + 14] << 8) | input[data_packet_start + 15] );
-                int16_t gz = ((input[data_packet_start + 16] << 8) | input[data_packet_start + 17] );
+                int16_t gx = (((char)input[data_packet_start + 12] << 8) | (char)input[data_packet_start + 13] );
+                int16_t gy = (((char)input[data_packet_start + 14] << 8) | (char)input[data_packet_start + 15] );
+                int16_t gz = (((char)input[data_packet_start + 16] << 8) | (char)input[data_packet_start + 17] );
 
                 // get magnetometer values
-                int16_t mx = ((input[data_packet_start + 18] << 8) | input[data_packet_start + 19]);
-                int16_t my = ((input[data_packet_start + 20] << 8) | input[data_packet_start + 21]);
-                int16_t mz = ((input[data_packet_start + 22] << 8) | input[data_packet_start + 23]);
+                int16_t mx = (((char)input[data_packet_start + 18] << 8) | (char)input[data_packet_start + 19]);
+                int16_t my = (((char)input[data_packet_start + 20] << 8) | (char)input[data_packet_start + 21]);
+                int16_t mz = (((char)input[data_packet_start + 22] << 8) | (char)input[data_packet_start + 23]);
 
                 // calculate rotational velocities in rad/s
                 // http://www.i2cdevlib.com/forums/topic/106-get-angular-velocity-from-mpu-6050/
