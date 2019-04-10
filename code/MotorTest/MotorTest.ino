@@ -55,7 +55,7 @@ const int RightPulseInputB = 3;
 
 //Controlloop with 2 PID. One for turning and one for driving.
 //Values represent: turn Kp, turn Ki, turn Kd, drive Kp, drive Ki, drive Kd, Diff (Diff is used to change the reference speed for turning if needed)
-ControlLoop Willy(60, 3, 0, 120, 6, 0);
+ControlLoop Willy(80, 10, 0, 150, 15, 0);
 
 
 //used to lower the frequency of the PID loop.

@@ -31,7 +31,7 @@ class Encoder {
       Speed = 1 / Speed;                                //frequenty in hz
       Speed = Speed / (pulsesPerRotation / counts);     //Rotations per second
       Speed = Speed * 2 * Pi;                           //Radians per second
-      Speed = Speed * 0.3;                              //m/s
+      Speed = Speed * WheelRadius;                      //m/s
       return Speed;
     }
 
