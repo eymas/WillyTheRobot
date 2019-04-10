@@ -98,6 +98,7 @@ int main(int argc, char** argv)
         {
           read = ser.read(ser.available());
           input += read;
+          std::cout << "read:" << read << "\r\n"
           ROS_DEBUG("read %i new characters from serial port, adding to %i characters of old input.", (int)read.size(), (int)input.size());
           while (input.length() >= kBytesToReceive)
           { // while there might be a complete package in input
@@ -140,8 +141,8 @@ int main(int argc, char** argv)
                 tf::Quaternion differential_rotation;
                 differential_rotation = zero_orientation.inverse() * orientation;
                 // get accelerometer values
-                int16_t ax = ((input[data_packet_start + 6] << 8)  | input[data_packet_start + 7]);
-                int16_t ay = ((input[data_packet_start + 8] << 8)  | input[data_packet_start + 9]);
+                int16_t ax = ((input[data_packet_start + 6]  << 8) | input[data_packet_start + 7]);
+                int16_t ay = ((input[data_packet_start + 8]  << 8) | input[data_packet_start + 9]);
                 int16_t az = ((input[data_packet_start + 10] << 8) | input[data_packet_start + 11]);
 
                 // get gyro values
@@ -157,7 +158,6 @@ int main(int argc, char** argv)
                 // calculate rotational velocities in rad/s
                 // http://www.i2cdevlib.com/forums/topic/106-get-angular-velocity-from-mpu-6050/
                 // FIFO frequency 100 Hz -> factor 10 ?
-                // seems 25 is the right factor
                 //TODO: check / test if rotational velocities are correct
                 double gxf = gx * (4000.0/65536.0) * (M_PI/180.0);
                 double gyf = gy * (4000.0/65536.0) * (M_PI/180.0);
@@ -168,7 +168,7 @@ int main(int argc, char** argv)
                 double ayf = ay * (8.0 / 65536.0) * 9.81;
                 double azf = az * (8.0 / 65536.0) * 9.81;
 
-                std::cout << unsigned(input[data_packet_start+24]) << "\r\n";
+                std::cout << "package no. " <<(int)input[data_packet_start+24] << "\r\n";
                 uint8_t received_message_number = (uint8_t)input[data_packet_start + 24];
 
                 if (received_message) // can only check for continuous numbers if already received at least one packet

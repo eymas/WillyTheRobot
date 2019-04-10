@@ -197,7 +197,7 @@ void loop()
     uint8_t gyro_high = (0xff & (gyro_data[i] >> 8));
     uint8_t gyro_low = (0xff & gyro_data[i]);
     Serial.print(gyro_high);
-   Serial.print(gyro_low);
+    Serial.print(gyro_low);
   }
   // transmit magnetometer data
   for(uint8_t i = 0; i < 3; i++) {
@@ -208,11 +208,8 @@ void loop()
   }
   Serial.print(message_count);
   Serial.print("\r\n"); // terminating characters for the raspberry Pi
-  if(message_count >= 255) { //message count loops on 255
-    message_count = 0;
-  } else {
-    message_count++;
-  }
+  message_count++;
+  
   myIMU.count = millis();
   myIMU.sumCount = 0;
   myIMU.sum = 0;
