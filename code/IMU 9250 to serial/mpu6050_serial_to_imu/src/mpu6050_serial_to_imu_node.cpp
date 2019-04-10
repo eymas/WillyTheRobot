@@ -158,14 +158,13 @@ int main(int argc, char** argv)
                 int16_t mz = ((input[data_packet_start + 22] << 8) | input[data_packet_start + 23]);
 
                 // calculate rotational velocities in rad/s
-                // without the last factor the velocities were too small
                 // http://www.i2cdevlib.com/forums/topic/106-get-angular-velocity-from-mpu-6050/
                 // FIFO frequency 100 Hz -> factor 10 ?
                 // seems 25 is the right factor
                 //TODO: check / test if rotational velocities are correct
-                double gxf = gx * (4000.0/65536.0) * (M_PI/180.0) * 25.0;
-                double gyf = gy * (4000.0/65536.0) * (M_PI/180.0) * 25.0;
-                double gzf = gz * (4000.0/65536.0) * (M_PI/180.0) * 25.0;
+                double gxf = gx * (4000.0/65536.0) * (M_PI/180.0);
+                double gyf = gy * (4000.0/65536.0) * (M_PI/180.0);
+                double gzf = gz * (4000.0/65536.0) * (M_PI/180.0);
 
                 // calculate accelerations in m/s²
                 double axf = ax * (8.0 / 65536.0) * 9.81;
