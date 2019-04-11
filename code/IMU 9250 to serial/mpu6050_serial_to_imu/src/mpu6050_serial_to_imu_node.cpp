@@ -90,7 +90,7 @@ int main(int argc, char** argv)
   std::string input;
   uint8_t storage[kStorageSize];
   uint8_t storage_index = 0;
-  char read;
+  std::string read;
 
   while(ros::ok())
   {
@@ -104,17 +104,17 @@ int main(int argc, char** argv)
           read = ser.read(ser.available());
           input+= read;
 
-          if(read == '$') {
+          if(read == "$") {
               allow_store = true;
               allow_read = false;
           }
           if(allow_store) {
-              storage[storage_index] = read;
+              storage[storage_index] = std::atoi(read);
               storage_index++;
               if(storage_index >= kStorageSize) {
                   storage_index = 0;
               }
-              if(read == '\n') {
+              if(read == "\n") {
                   allow_store = false;
                   allow_read = true;
                   storage_index = 0;
