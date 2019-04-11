@@ -114,7 +114,7 @@ int main(int argc, char** argv)
               if(storage_index >= kStorageSize) {
                   storage_index = 0;
               }
-              if(read == '\n') {
+              if(read == "\n") {
                   allow_store = false;
                   allow_read = true;
                   storage_index = 0;
