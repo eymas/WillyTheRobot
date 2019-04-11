@@ -13,6 +13,7 @@
 
 bool zero_orientation_set = false;
 const uint8_t kBytesToReceive = 27;
+const uint8_t kStorageSize = 100;
 
 bool set_zero_orientation(std_srvs::Empty::Request&,
                           std_srvs::Empty::Response&)
@@ -85,6 +86,8 @@ int main(int argc, char** argv)
   transform.setOrigin(tf::Vector3(0,0,0));
 
   std::string input;
+  uint8_t storage[kStorageSize];
+  uint8_t storage_index = 0;
   std::string read;
 
   while(ros::ok())
@@ -98,6 +101,13 @@ int main(int argc, char** argv)
         {
           read = ser.read(ser.available());
           input += read;
+          if(read.contains("$")) {
+              storage[storage_index] = read;
+              storage_index++;
+              if(storage_index >= kStorageSize) {
+                  storage_index = 0;
+              }
+          }
           ROS_DEBUG("read %i new characters from serial port, adding to %i characters of old input.", (int)read.size(), (int)input.size());
           while (input.length() >= kBytesToReceive)
           { // while there might be a complete package in input
@@ -110,7 +120,9 @@ int main(int argc, char** argv)
               if ((input.length() >= (data_packet_start + kBytesToReceive)) && (input.compare((data_packet_start + kBytesToReceive-1), 2, "\r\n") >= 0))  //check if positions 26,27 exist, then test values
               {
                 ROS_DEBUG("seems to be a real data package: long enough and found end characters");
-
+                for(uint8_t i = 0; i <= kStorageSize; i++) {
+                    std::cout << "bytes: " << storage[i];
+                }
                 // get quaternion values
                 int8_t w = (char)input[data_packet_start + 2];
                 int8_t x = (char)input[data_packet_start + 3];
