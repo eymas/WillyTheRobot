@@ -109,7 +109,7 @@ int main(int argc, char** argv)
               allow_read = false;
           }
           if(allow_store) {
-              storage[storage_index] = std::atoi(read);
+              storage[storage_index] = read[0];
               storage_index++;
               if(storage_index >= kStorageSize) {
                   storage_index = 0;
