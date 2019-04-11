@@ -103,7 +103,7 @@ int main(int argc, char** argv)
         {
           read = ser.read(ser.available());
           input+= read;
-
+          std::cout << read;
           if(read == "$") {
               allow_store = true;
               allow_read = false;
