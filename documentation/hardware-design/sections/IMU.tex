@@ -1,0 +1,49 @@
+\section{IMU}
+The IMU \ref{trm::imu} that was present on WTR before, the MPU6250, was broken when the current group started work on the project.
+As such, a replacement had to be chosen.
+Rather than go with a 6-axis IMU like the MPU6250, a 9-axis IMU seemed like the better option, so an analysis was done to determine the best device.
+
+The demands were as follows:
+\begin{enumerate}
+\item Device must have an accelerometer, gyroscope and magnetometer
+\item Device must be Arduino/Pi compatible
+\item Device must be affordable within the budget given by the product owner
+\item Device must be accurate enough to contribute to the solution
+\end{enumerate}
+
+The following devices were selected as potentially viable options:
+\begin{enumerate}
+\item \href{https://www.sparkfun.com/products/13762}{MPU9250}- Sparkfun breakout
+\item \href{https://store.arduino.cc/9-axis-motion-shield}{BNO055} - Arduino motionshield
+\item \href{https://learn.adafruit.com/nxp-precision-9dof-breakout/overview}{NXP} - Adafruit breakout
+\end{enumerate}
+
+Each device has it's features outlined in the following table:
+
+\begin{table}[h]
+    \begin{tabular}{|c|c|c|c|c|c|}
+    \hline
+    \textbf{device} & \textbf{cost} & \textbf{operating voltage $V$} & \textbf{angular scale $^O /sec$} & \textbf{acceleration scale $G$}  & \textbf{format} \\ \hline
+    MPU9250 & \$ 14,95 & 2.4 - 3.6 & 250 - 2000 & 2 - 16 & breakout board \\ \hline
+    BNO055  & \$ 23,95 & 2.4 - 3.6 & 250 - 2000 & 2 - 16 & Arduino Shield \\ \hline
+    NXP     & \$ 14,95 & 2 - 3.6   & 250 - 2000 & 2 - 8   & breakout board \\ \hline
+    \end{tabular}
+\caption{comparison of features of the three selected 9-axis IMU's}
+\label{tbl::IMUcomp}
+\end{table}
+
+The three sensors here are fairly similar, though there are a few critical differences.
+The MPU9250 and the NXP are very similar, and even have the same price.
+Out of those 2, the MPU has a slightly higher range in the acceleration scale category, which for no added price, meaning it knocks out the NXP.
+The MPU9250 and the BNO055 have the same sensitivity, but the price of the BNO055 is significantly higher than the MPU9250.
+Therefore, the logical conclusion is that the MPU9250 should be used.
+
+Figures were obtained from the following places:
+\begin{itemize}
+\item MPU9250 - \cite{mpu}
+\item BNO055  - \cite{bno}
+\item NXP - \cite{nxp1} , \cite{nxp2}
+\end{itemize}
+
+\newpage    
+    
