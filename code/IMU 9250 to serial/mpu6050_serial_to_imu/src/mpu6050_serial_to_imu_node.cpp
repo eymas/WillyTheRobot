@@ -102,7 +102,7 @@ int main(int argc, char** argv)
         if(ser.available())
         {
           read = ser.read(ser.available());
-          input.append(read);
+          input+= read;
 
           if(read == "$") {
               allow_store = true;
