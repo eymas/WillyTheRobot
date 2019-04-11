@@ -15,6 +15,7 @@ bool zero_orientation_set = false;
 const uint8_t kBytesToReceive = 27;
 const uint8_t kStorageSize = 100;
 bool allow_store = false;
+bool allow_read = false;
 
 bool set_zero_orientation(std_srvs::Empty::Request&,
                           std_srvs::Empty::Response&)
@@ -103,8 +104,9 @@ int main(int argc, char** argv)
           read = ser.read(ser.available());
           input += read;
 
-          if(read.contains("$")) {
+          if(read == "$") {
               allow_store = true;
+              allow_read = false;
           }
           if(allow_store) {
               storage[storage_index] = read;
@@ -114,10 +116,12 @@ int main(int argc, char** argv)
               }
               if(read == '\n') {
                   allow_store = false;
+                  allow_read = true;
+                  storage_index = 0;
               }
           }
           ROS_DEBUG("read %i new characters from serial port, adding to %i characters of old input.", (int)read.size(), (int)input.size());
-          while (input.length() >= kBytesToReceive)
+          while ((input.length() >= kBytesToReceive) && allow_read)
           { // while there might be a complete package in input
             // parse for data packets
             data_packet_start = input.find("$3");
