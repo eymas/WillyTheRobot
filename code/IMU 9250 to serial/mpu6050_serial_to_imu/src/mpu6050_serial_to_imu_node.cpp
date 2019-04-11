@@ -109,7 +109,7 @@ int main(int argc, char** argv)
               allow_read = false;
           }
           if(allow_store) {
-              storage[storage_index] = read;
+              storage[storage_index] = (char)read;
               storage_index++;
               if(storage_index >= kStorageSize) {
                   storage_index = 0;
