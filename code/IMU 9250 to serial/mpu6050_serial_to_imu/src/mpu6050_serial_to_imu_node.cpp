@@ -107,14 +107,17 @@ int main(int argc, char** argv)
           if(read == "$") {
               allow_store = true;
               allow_read = false;
+              std::cout << "$ received";
           }
           if(allow_store) {
+              std::cout << "storing data " << read;
               storage[storage_index] = read[0];
               storage_index++;
               if(storage_index >= kStorageSize) {
                   storage_index = 0;
               }
               if(read == "\n") {
+                  std::cout << "slash n received";
                   allow_store = false;
                   allow_read = true;
                   storage_index = 0;
