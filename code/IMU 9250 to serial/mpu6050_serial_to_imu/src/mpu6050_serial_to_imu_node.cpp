@@ -14,6 +14,7 @@
 bool zero_orientation_set = false;
 const uint8_t kBytesToReceive = 27;
 const uint8_t kStorageSize = 100;
+bool allow_store = false;
 
 bool set_zero_orientation(std_srvs::Empty::Request&,
                           std_srvs::Empty::Response&)
@@ -101,11 +102,18 @@ int main(int argc, char** argv)
         {
           read = ser.read(ser.available());
           input += read;
+
           if(read.contains("$")) {
+              allow_store = true;
+          }
+          if(allow_store) {
               storage[storage_index] = read;
               storage_index++;
               if(storage_index >= kStorageSize) {
                   storage_index = 0;
+              }
+              if(read == '\n') {
+                  allow_store = false;
               }
           }
           ROS_DEBUG("read %i new characters from serial port, adding to %i characters of old input.", (int)read.size(), (int)input.size());
