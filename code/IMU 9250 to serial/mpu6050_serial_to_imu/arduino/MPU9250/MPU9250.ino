@@ -29,6 +29,7 @@
 
 #define AHRS false         // Set to false for basic data read
 const int kQuaternionMultFact = 100;
+const int kBytesToSend = 27;
 
 // Pin definitions
 int intPin = 12;  // These can be changed, 2 and 3 are the Arduinos ext int pins
@@ -90,7 +91,7 @@ void setup()
     myIMU.getAres();
     myIMU.getGres();
     myIMU.getMres();
-    
+
   } // if (c == 0x73)
   else
   {
@@ -103,7 +104,7 @@ void loop()
   int16_t accel_data[3];
   int16_t gyro_data[3];
   int16_t mag_data[3];
-  for(uint8_t i = 0; i < 3; i++) {
+  for (uint8_t i = 0; i < 3; i++) {
     accel_data[i] = myIMU.accelCount[i];
     gyro_data[i] = myIMU.gyroCount[i];
     mag_data[i] = myIMU.magCount[i];
@@ -112,25 +113,25 @@ void loop()
   // On interrupt, check if data ready interrupt
   if (myIMU.readByte(MPU9250_ADDRESS, INT_STATUS) & 0x01)
   {
-    
+
     myIMU.readAccelData(myIMU.accelCount);  // Read the x/y/z adc values
-    
+
     myIMU.readGyroData(myIMU.gyroCount);  // Read the x/y/z adc values
 
     myIMU.readMagData(myIMU.magCount);  // Read the x/y/z adc values
-    
+
     // Now we'll calculate the accleration value into actual g's
     // This depends on scale being set
     myIMU.ax = (float)accel_data[0] * myIMU.aRes; // - myIMU.accelBias[0];
     myIMU.ay = (float)accel_data[1] * myIMU.aRes; // - myIMU.accelBias[1];
     myIMU.az = (float)accel_data[2] * myIMU.aRes; // - myIMU.accelBias[2];
-    
+
     // Calculate the gyro value into actual degrees per second
     // This depends on scale being set
     myIMU.gx = (float)gyro_data[0] * myIMU.gRes;
     myIMU.gy = (float)gyro_data[1] * myIMU.gRes;
     myIMU.gz = (float)gyro_data[2] * myIMU.gRes;
-    
+
     // Calculate the magnetometer values in milliGauss
     // Include factory calibration per data sheet and user environmental
     // corrections
@@ -157,59 +158,68 @@ void loop()
   //madgwick is more intensive, but more accurate. If the arduino cannot deal with the amount of calculations
   //switch to Mahony.
   MadgwickQuaternionUpdate(myIMU.ax, myIMU.ay, myIMU.az, myIMU.gx * DEG_TO_RAD,
-                         myIMU.gy * DEG_TO_RAD, myIMU.gz * DEG_TO_RAD, myIMU.my,
-                         myIMU.mx, myIMU.mz, myIMU.deltat);
+                           myIMU.gy * DEG_TO_RAD, myIMU.gz * DEG_TO_RAD, myIMU.my,
+                           myIMU.mx, myIMU.mz, myIMU.deltat);
   //MahonyQuaternionUpdate(myIMU.ax, myIMU.ay, myIMU.az, myIMU.gx * DEG_TO_RAD,
   //                       myIMU.gy * DEG_TO_RAD, myIMU.gz * DEG_TO_RAD, myIMU.my,
   //                       myIMU.mx, myIMU.mz, myIMU.deltat);
 
   myIMU.count = millis();
   digitalWrite(myLed, !digitalRead(myLed));  // toggle led - kept in to make it easier to check whether or not the arduino has crashed.
-
- Serial.print('$');
- Serial.print(0x03);
-  // transmit quaternion bytes
-  // rather than transmit floats, which take a lot of bytes (4 each) instead they are multiplied by 100 (ignoring everything more than 2 decimal places behind the 0
-  // This allows for them to be transmitted as integers, without significant impact.
-  // Kind of a workaround, there is probably a neater method out there.
-  for(uint8_t i = 0; i < 4; i++) {
+  uint8_t transmit_buffer[kBytesToSend];
+  transmit_buffer[0] = '$';
+  transmit_buffer[1] = 0x03;
+  /* transmit quaternion bytes
+   * rather than transmit floats, which take a lot of bytes (4 each) instead they are multiplied by 100 (ignoring everything more than 2 decimal places behind the 0
+   * This allows for them to be transmitted as integers, without significant impact.
+   * Kind of a workaround, there is probably a neater method out there.
+   */
+  for (uint8_t i = 0; i < 4; i++) {
     int8_t quaternion_value = (*(getQ() + i)) * kQuaternionMultFact;
-    Serial.write(quaternion_value);
+    transmit_buffer[2 + i] = quaternion_value;
   }
   // transmit accelerometer data
   /*
-   * The data here is split into two bytes.
-   * This is done because serial communication was previously done from a FIFO buffer which was just copied into another buffer
-   * In order to minimize the amount of work needed on the receiving end, this format is expanded with the magnetometer values.
-   * The Pi expects a high and low byte for every bit of data, so that is what it will receive.
-   * All of the sensor readings are in reality 16 bit integers, split into two 8-bit integers for the sake of transmission
-   * The bytes are labeled "xxx_high" and "xxx_low" for the sake of clarity.
-   * these are then transmitted separately.
+   *  The data here is split into two bytes.
+   *  This is done because serial communication was previously done from a FIFO buffer which was just copied into another buffer
+   *  In order to minimize the amount of work needed on the receiving end, this format is expanded with the magnetometer values.
+   *  The Pi expects a high and low byte for every bit of data, so that is what it will receive.
+   *  All of the sensor readings are in reality 16 bit integers, split into two 8-bit integers for the sake of transmission
+   *  The bytes are labeled "xxx_high" and "xxx_low" for the sake of clarity.
+   *  these are then transmitted separately.
    */
+  for (uint8_t i = 0; i < 3; i++) {
+    uint8_t accel_high = (0xff & (accel_data[i] >> 8));
+    transmit_buffer[6 + i] = accel_high;
+  }
   for(uint8_t i = 0; i < 3; i++) {
-    uint8_t accel_high = (0xff & (accel_data[i] >> 8));     
-    uint8_t accel_low = (0xff & accel_data[i]);
-    Serial.write(accel_high);
-    Serial.write(accel_low);
+  uint8_t accel_low = (0xff & accel_data[i]);
+    transmit_buffer[9 + i] = accel_low;
   }
   // transmit gyroscope data
-  for(uint8_t i = 0; i < 3; i++) {
+  for (uint8_t i = 0; i < 3; i++) {
     uint8_t gyro_high = (0xff & (gyro_data[i] >> 8));
+    transmit_buffer[12 + i] = gyro_high;
+  }
+  for (uint8_t i = 0; i < 3; i++) {
     uint8_t gyro_low = (0xff & gyro_data[i]);
-    Serial.write(gyro_high);
-    Serial.write(gyro_low);
+    transmit_buffer[15 + i] = gyro_low;
   }
   // transmit magnetometer data
-  for(uint8_t i = 0; i < 3; i++) {
+  for (uint8_t i = 0; i < 3; i++) {
     uint8_t mag_high = (0xff & (mag_data[i] >> 8));
-    uint8_t mag_low = (0xff & mag_data[i]);
-    Serial.write(mag_high);
-    Serial.write(mag_low);
+    transmit_buffer[18+i] = mag_high;
   }
-  Serial.write(message_count);
-  Serial.print("\r\n"); // terminating characters for the raspberry Pi
+  for(uint8_t i = 0; i < 3; i++) {
+    uint8_t mag_low = (0xff & mag_data[i]);
+    transmit_buffer[21+i] = mag_low;
+  }
+  transmit_buffer[24] = message_count;
+  transmit_buffer[25] = '\r';
+  transmit_buffer[26] = '\n';  // terminating characters for the raspberry Pi
+  Serial.write(transmit_buffer, kBytesToSend);
   message_count++;
-  
+
   myIMU.count = millis();
   myIMU.sumCount = 0;
   myIMU.sum = 0;

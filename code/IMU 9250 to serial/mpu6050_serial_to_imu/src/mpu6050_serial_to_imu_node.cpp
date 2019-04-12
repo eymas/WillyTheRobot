@@ -12,8 +12,8 @@
 
 
 bool zero_orientation_set = false;
-const uint8_t kBytesToReceive = 27;
-const uint8_t kStorageSize = 100;
+//const uint8_t kBytesToReceive = 27;
+//const uint8_t kStorageSize = 100;
 bool allow_store = false;
 bool allow_read = false;
 
@@ -88,8 +88,8 @@ int main(int argc, char** argv)
   transform.setOrigin(tf::Vector3(0,0,0));
 
   std::string input;
-  uint8_t storage[kStorageSize];
-  uint8_t storage_index = 0;
+ // uint8_t storage[kStorageSize];
+ // uint8_t storage_index = 0;
   std::string read;
 
   while(ros::ok())
@@ -103,34 +103,34 @@ int main(int argc, char** argv)
         {
           read = ser.read(ser.available());
           input+= read;
-          uint8_t value_of_read =  static_cast<int>(read[0]);
-          if(value_of_read == '$') {
-              allow_store = true;
-              allow_read = false;
-              std::cout << "$ received";
-          }
-          if(allow_store) {
-              std::cout << "storing data";
-              int i = 0;
-              while(read[i] != '/0') {
-                  std::cout << i;
-                  storage[storage_index] = static_cast<int>(read[i]);
-                  storage_index++;
-                  if (storage_index >= kStorageSize-1) {
-                      storage_index = 0;
-                  }
-                  if (read[i] == '\n') {
-                      std::cout << "slash n received";
-                      allow_store = false;
-                      allow_read = true;
-                      storage_index = 0;
-                      break;
-                  }
-                  i++;
-              }
-          }
+//          uint8_t value_of_read =  static_cast<int>(read[0]);
+//          if(value_of_read == '$') {
+//              allow_store = true;
+//              allow_read = false;
+//              std::cout << "$ received";
+//          }
+//          if(allow_store) {
+//              std::cout << "storing data";
+//              int i = 0;
+//              while(read[i] != '/0') {
+//                  std::cout << i;
+//                  storage[storage_index] = static_cast<int>(read[i]);
+//                  storage_index++;
+//                  if (storage_index >= kStorageSize-1) {
+//                      storage_index = 0;
+//                  }
+//                  if (read[i] == '\n') {
+//                      std::cout << "slash n received";
+//                      allow_store = false;
+//                      allow_read = true;
+//                      storage_index = 0;
+//                      break;
+//                  }
+//                  i++;
+//              }
+//          }
           ROS_DEBUG("read %i new characters from serial port, adding to %i characters of old input.", (int)read.size(), (int)input.size());
-          while ((input.length() >= kBytesToReceive) && allow_read)
+          while ((input.length() >= kBytesToReceive)/* && allow_read*/)
           { // while there might be a complete package in input
             // parse for data packets
             std::cout << "reached while allow_read";
@@ -176,19 +176,19 @@ int main(int argc, char** argv)
                 tf::Quaternion differential_rotation;
                 differential_rotation = zero_orientation.inverse() * orientation;
                 // get accelerometer values
-                int16_t ax = ((storage[data_packet_start + 6]  << 8) | storage[data_packet_start + 7]);
-                int16_t ay = ((storage[data_packet_start + 8]  << 8) | storage[data_packet_start + 9]);
-                int16_t az = ((storage[data_packet_start + 10] << 8) | storage[data_packet_start + 11]);
+                int16_t ax = ((storage[data_packet_start + 6]  << 8) | storage[data_packet_start + 9]);
+                int16_t ay = ((storage[data_packet_start + 7]  << 8) | storage[data_packet_start + 10]);
+                int16_t az = ((storage[data_packet_start + 8] << 8)  | storage[data_packet_start + 11]);
 
                 // get gyro values
-                int16_t gx = ((storage[data_packet_start + 12] << 8) | storage[data_packet_start + 13] );
-                int16_t gy = ((storage[data_packet_start + 14] << 8) | storage[data_packet_start + 15] );
-                int16_t gz = ((storage[data_packet_start + 16] << 8) | storage[data_packet_start + 17] );
+                int16_t gx = ((storage[data_packet_start + 12] << 8) | storage[data_packet_start + 15] );
+                int16_t gy = ((storage[data_packet_start + 13] << 8) | storage[data_packet_start + 16] );
+                int16_t gz = ((storage[data_packet_start + 14] << 8) | storage[data_packet_start + 17] );
 
                 // get magnetometer values
-                int16_t mx = ((storage[data_packet_start + 18] << 8) | storage[data_packet_start + 19]);
-                int16_t my = ((storage[data_packet_start + 20] << 8) | storage[data_packet_start + 21]);
-                int16_t mz = ((storage[data_packet_start + 22] << 8) | storage[data_packet_start + 23]);
+                int16_t mx = ((storage[data_packet_start + 18] << 8) | storage[data_packet_start + 21]);
+                int16_t my = ((storage[data_packet_start + 19] << 8) | storage[data_packet_start + 22]);
+                int16_t mz = ((storage[data_packet_start + 20] << 8) | storage[data_packet_start + 23]);
 
                 // calculate rotational velocities in rad/s
                 // http://www.i2cdevlib.com/forums/topic/106-get-angular-velocity-from-mpu-6050/
