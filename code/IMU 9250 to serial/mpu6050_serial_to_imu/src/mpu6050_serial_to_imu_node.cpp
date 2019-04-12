@@ -12,7 +12,7 @@
 
 
 bool zero_orientation_set = false;
-//const uint8_t kBytesToReceive = 27;
+const uint8_t kBytesToReceive = 27;
 //const uint8_t kStorageSize = 100;
 bool allow_store = false;
 bool allow_read = false;
@@ -144,14 +144,11 @@ int main(int argc, char** argv)
               {
                 std::cout << "reached processing stage";
                 ROS_DEBUG("seems to be a real data package: long enough and found end characters");
-                for(uint8_t i = 0; i <= kStorageSize; i++) {
-                    std::cout << "bytes: " << storage[i];
-                }
                 // get quaternion values
-                int8_t w = storage[data_packet_start + 2];
-                int8_t x = storage[data_packet_start + 3];
-                int8_t y = storage[data_packet_start + 4];
-                int8_t z = storage[data_packet_start + 5];
+                int8_t w = (char)input[data_packet_start + 2];
+                int8_t x = (char)input[data_packet_start + 3];
+                int8_t y = (char)input[data_packet_start + 4];
+                int8_t z = (char)input[data_packet_start + 5];
 
                 double wf = w;
                   wf = wf/100;
@@ -176,19 +173,19 @@ int main(int argc, char** argv)
                 tf::Quaternion differential_rotation;
                 differential_rotation = zero_orientation.inverse() * orientation;
                 // get accelerometer values
-                int16_t ax = ((storage[data_packet_start + 6]  << 8) | storage[data_packet_start + 9]);
-                int16_t ay = ((storage[data_packet_start + 7]  << 8) | storage[data_packet_start + 10]);
-                int16_t az = ((storage[data_packet_start + 8] << 8)  | storage[data_packet_start + 11]);
+                int16_t ax = (((char)input[data_packet_start + 6]  << 8) | (char)input[data_packet_start + 9]);
+                int16_t ay = (((char)input[data_packet_start + 7]  << 8) | (char)input[data_packet_start + 10]);
+                int16_t az = (((char)input[data_packet_start + 8] << 8)  | (char)input[data_packet_start + 11]);
 
                 // get gyro values
-                int16_t gx = ((storage[data_packet_start + 12] << 8) | storage[data_packet_start + 15] );
-                int16_t gy = ((storage[data_packet_start + 13] << 8) | storage[data_packet_start + 16] );
-                int16_t gz = ((storage[data_packet_start + 14] << 8) | storage[data_packet_start + 17] );
+                int16_t gx = (((char)input[data_packet_start + 12] << 8) | (char)input[data_packet_start + 15] );
+                int16_t gy = (((char)input[data_packet_start + 13] << 8) | (char)input[data_packet_start + 16] );
+                int16_t gz = (((char)input[data_packet_start + 14] << 8) | (char)input[data_packet_start + 17] );
 
                 // get magnetometer values
-                int16_t mx = ((storage[data_packet_start + 18] << 8) | storage[data_packet_start + 21]);
-                int16_t my = ((storage[data_packet_start + 19] << 8) | storage[data_packet_start + 22]);
-                int16_t mz = ((storage[data_packet_start + 20] << 8) | storage[data_packet_start + 23]);
+                int16_t mx = (((char)input[data_packet_start + 18] << 8) | (char)input[data_packet_start + 21]);
+                int16_t my = (((char)input[data_packet_start + 19] << 8) | (char)input[data_packet_start + 22]);
+                int16_t mz = (((char)input[data_packet_start + 20] << 8) | (char)input[data_packet_start + 23]);
 
                 // calculate rotational velocities in rad/s
                 // http://www.i2cdevlib.com/forums/topic/106-get-angular-velocity-from-mpu-6050/
@@ -203,8 +200,8 @@ int main(int argc, char** argv)
                 double ayf = ay * (8.0 / 65536.0) * 9.81;
                 double azf = az * (8.0 / 65536.0) * 9.81;
 
-                std::cout << "package no. " << storage[data_packet_start+24] << "\r\n";
-                uint8_t received_message_number = storage[data_packet_start + 24];
+                std::cout << "package no. " << (char)input[data_packet_start+24] << "\r\n";
+                uint8_t received_message_number = (char)input[data_packet_start + 24];
 
                 if (received_message) // can only check for continuous numbers if already received at least one packet
                 {
