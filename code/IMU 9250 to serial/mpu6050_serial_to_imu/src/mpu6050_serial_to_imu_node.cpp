@@ -113,6 +113,7 @@ int main(int argc, char** argv)
               std::cout << "storing data";
               int i = 0;
               while(read[i] != '/0') {
+                  std::cout << i;
                   storage[storage_index] = static_cast<int>(read[i]);
                   storage_index++;
                   if (storage_index >= kStorageSize-1) {
@@ -123,6 +124,7 @@ int main(int argc, char** argv)
                       allow_store = false;
                       allow_read = true;
                       storage_index = 0;
+                      break;
                   }
                   i++;
               }
