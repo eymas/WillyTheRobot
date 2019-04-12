@@ -110,17 +110,21 @@ int main(int argc, char** argv)
               std::cout << "$ received";
           }
           if(allow_store) {
-              std::cout << "storing data " << read;
-              storage[storage_index] = read[0];
-              storage_index++;
-              if(storage_index >= kStorageSize) {
-                  storage_index = 0;
-              }
-              if(read == "\n") {
-                  std::cout << "slash n received";
-                  allow_store = false;
-                  allow_read = true;
-                  storage_index = 0;
+              std::cout << "storing data";
+              int i = 0;
+              while(read[i] != '/0') {
+                  storage[storage_index] = static_cast<int>(read[i]);
+                  storage_index++;
+                  if (storage_index >= kStorageSize) {
+                      storage_index = 0;
+                  }
+                  if (read[i] == '\n') {
+                      std::cout << "slash n received";
+                      allow_store = false;
+                      allow_read = true;
+                      storage_index = 0;
+                  }
+                  i++;
               }
           }
           ROS_DEBUG("read %i new characters from serial port, adding to %i characters of old input.", (int)read.size(), (int)input.size());
