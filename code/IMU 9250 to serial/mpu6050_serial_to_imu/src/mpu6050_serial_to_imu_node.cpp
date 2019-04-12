@@ -131,13 +131,16 @@ int main(int argc, char** argv)
           while ((input.length() >= kBytesToReceive) && allow_read)
           { // while there might be a complete package in input
             // parse for data packets
+            std::cout << "reached while allow_read";
             data_packet_start = input.find("$3");
             if (data_packet_start != std::string::npos)
             {
+                std::cout << "found start of data packet";
               ROS_DEBUG("found possible start of data packet at position %d", data_packet_start);
 
               if ((input.length() >= (data_packet_start + kBytesToReceive)) && (input.compare((data_packet_start + kBytesToReceive-1), 2, "\r\n") >= 0))  //check if positions 26,27 exist, then test values
               {
+                std::cout << "reached processing stage";
                 ROS_DEBUG("seems to be a real data package: long enough and found end characters");
                 for(uint8_t i = 0; i <= kStorageSize; i++) {
                     std::cout << "bytes: " << storage[i];
