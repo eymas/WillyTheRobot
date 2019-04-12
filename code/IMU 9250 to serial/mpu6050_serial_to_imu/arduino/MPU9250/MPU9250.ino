@@ -174,7 +174,7 @@ void loop()
   // Kind of a workaround, there is probably a neater method out there.
   for(uint8_t i = 0; i < 4; i++) {
     int8_t quaternion_value = (*(getQ() + i)) * kQuaternionMultFact;
-    Serial.print(quaternion_value);
+    Serial.write(quaternion_value);
   }
   // transmit accelerometer data
   /*
@@ -189,24 +189,24 @@ void loop()
   for(uint8_t i = 0; i < 3; i++) {
     uint8_t accel_high = (0xff & (accel_data[i] >> 8));     
     uint8_t accel_low = (0xff & accel_data[i]);
-    Serial.print(accel_high);
-    Serial.print(accel_low);
+    Serial.write(accel_high);
+    Serial.write(accel_low);
   }
   // transmit gyroscope data
   for(uint8_t i = 0; i < 3; i++) {
     uint8_t gyro_high = (0xff & (gyro_data[i] >> 8));
     uint8_t gyro_low = (0xff & gyro_data[i]);
-    Serial.print(gyro_high);
-    Serial.print(gyro_low);
+    Serial.write(gyro_high);
+    Serial.write(gyro_low);
   }
   // transmit magnetometer data
   for(uint8_t i = 0; i < 3; i++) {
     uint8_t mag_high = (0xff & (mag_data[i] >> 8));
     uint8_t mag_low = (0xff & mag_data[i]);
-    Serial.print(mag_high);
-    Serial.print(mag_low);
+    Serial.write(mag_high);
+    Serial.write(mag_low);
   }
-  Serial.print(message_count);
+  Serial.write(message_count);
   Serial.print("\r\n"); // terminating characters for the raspberry Pi
   message_count++;
   

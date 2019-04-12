@@ -103,8 +103,8 @@ int main(int argc, char** argv)
         {
           read = ser.read(ser.available());
           input+= read;
-          std::cout << read;
-          if(read == "$") {
+          uint8_t value_of_read =  static_cast<int>(read[0]);
+          if(value_of_read == '$') {
               allow_store = true;
               allow_read = false;
               std::cout << "$ received";
