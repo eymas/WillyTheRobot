@@ -149,7 +149,7 @@ int main(int argc, char** argv)
                 int8_t x = (char)input[data_packet_start + 3];
                 int8_t y = (char)input[data_packet_start + 4];
                 int8_t z = (char)input[data_packet_start + 5];
-
+                std::cout.precision(5);
                 double wf = w;
                   wf = wf/100; std::cout << wf << "\r\n";
                 double xf = x;
@@ -176,12 +176,12 @@ int main(int argc, char** argv)
                 int16_t ax = ((static_cast<uint8_t>(input[data_packet_start + 6]  << 8)) | static_cast<uint8_t>(input[data_packet_start + 9]));
                 int16_t ay = ((static_cast<uint8_t>(input[data_packet_start + 7]  << 8)) | static_cast<uint8_t>(input[data_packet_start + 10]));
                 int16_t az = ((static_cast<uint8_t>(input[data_packet_start + 8]  << 8)) | static_cast<uint8_t>(input[data_packet_start + 11]));
-                std::cout << ax << " " << ay << " " << az << "\n";
+
                 // get gyro values
                 int16_t gx = ((static_cast<uint8_t>(input[data_packet_start + 12] << 8)) | static_cast<uint8_t>(input[data_packet_start + 15]));
                 int16_t gy = ((static_cast<uint8_t>(input[data_packet_start + 13] << 8)) | static_cast<uint8_t>(input[data_packet_start + 16]));
                 int16_t gz = ((static_cast<uint8_t>(input[data_packet_start + 14] << 8)) | static_cast<uint8_t>(input[data_packet_start + 17]));
-                std::cout << gx << " " << gy << " " << gz << "\n";
+
                 // get magnetometer values
                 int16_t mx = ((static_cast<uint8_t>(input[data_packet_start + 18] << 8)) | static_cast<uint8_t>(input[data_packet_start + 21]));
                 int16_t my = ((static_cast<uint8_t>(input[data_packet_start + 19] << 8)) | static_cast<uint8_t>(input[data_packet_start + 22]));
@@ -194,12 +194,12 @@ int main(int argc, char** argv)
                 double gxf = gx * (4000.0/65536.0) * (M_PI/180.0);
                 double gyf = gy * (4000.0/65536.0) * (M_PI/180.0);
                 double gzf = gz * (4000.0/65536.0) * (M_PI/180.0);
-
+                  std::cout << gxf << " " << gyf << " " << gzf << "\n";
                 // calculate accelerations in m/s²
                 double axf = ax * (8.0 / 65536.0) * 9.81;
                 double ayf = ay * (8.0 / 65536.0) * 9.81;
                 double azf = az * (8.0 / 65536.0) * 9.81;
-
+                  std::cout << axf << " " << ayf << " " << azf << "\n";
                 std::cout << "package no. " << static_cast<int>(input[data_packet_start+24]) << "\r\n";
                 uint8_t received_message_number = static_cast<int>(input[data_packet_start + 24]);
 
