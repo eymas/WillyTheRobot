@@ -133,11 +133,11 @@ int main(int argc, char** argv)
           while ((input.length() >= kBytesToReceive)/* && allow_read*/)
           { // while there might be a complete package in input
             // parse for data packets
-            std::cout << "reached while allow_read";
-            data_packet_start = input.find("$3");
+            std::cout << "reached while allow_read\n";
+            data_packet_start = input.find("$\x03");
             if (data_packet_start != std::string::npos)
             {
-                std::cout << "found start of data packet";
+              std::cout << "found start of data packet" << data_packet_start << "\n";
               ROS_DEBUG("found possible start of data packet at position %d", data_packet_start);
 
               if ((input.length() >= (data_packet_start + kBytesToReceive)) && (input.compare((data_packet_start + kBytesToReceive-1), 2, "\r\n") >= 0))  //check if positions 26,27 exist, then test values
@@ -173,19 +173,19 @@ int main(int argc, char** argv)
                 tf::Quaternion differential_rotation;
                 differential_rotation = zero_orientation.inverse() * orientation;
                 // get accelerometer values
-                int16_t ax = (((char)input[data_packet_start + 6]  << 8) | (char)input[data_packet_start + 9]);
-                int16_t ay = (((char)input[data_packet_start + 7]  << 8) | (char)input[data_packet_start + 10]);
-                int16_t az = (((char)input[data_packet_start + 8] << 8)  | (char)input[data_packet_start + 11]);
+                int16_t ax = ((static_cast<uint8_t>(input[data_packet_start + 6]  << 8)) | static_cast<uint8_t>(input[data_packet_start + 9]));
+                int16_t ay = ((static_cast<uint8_t>(input[data_packet_start + 7]  << 8)) | static_cast<uint8_t>(input[data_packet_start + 10]));
+                int16_t az = ((static_cast<uint8_t>(input[data_packet_start + 8]  << 8)) | static_cast<uint8_t>(input[data_packet_start + 11]));
 
                 // get gyro values
-                int16_t gx = (((char)input[data_packet_start + 12] << 8) | (char)input[data_packet_start + 15] );
-                int16_t gy = (((char)input[data_packet_start + 13] << 8) | (char)input[data_packet_start + 16] );
-                int16_t gz = (((char)input[data_packet_start + 14] << 8) | (char)input[data_packet_start + 17] );
+                int16_t gx = ((static_cast<uint8_t>(input[data_packet_start + 12] << 8)) | static_cast<uint8_t>(input[data_packet_start + 15]));
+                int16_t gy = ((static_cast<uint8_t>(input[data_packet_start + 13] << 8)) | static_cast<uint8_t>(input[data_packet_start + 16]));
+                int16_t gz = ((static_cast<uint8_t>(input[data_packet_start + 14] << 8)) | static_cast<uint8_t>(input[data_packet_start + 17]));
 
                 // get magnetometer values
-                int16_t mx = (((char)input[data_packet_start + 18] << 8) | (char)input[data_packet_start + 21]);
-                int16_t my = (((char)input[data_packet_start + 19] << 8) | (char)input[data_packet_start + 22]);
-                int16_t mz = (((char)input[data_packet_start + 20] << 8) | (char)input[data_packet_start + 23]);
+                int16_t mx = ((static_cast<uint8_t>(input[data_packet_start + 18] << 8)) | static_cast<uint8_t>(input[data_packet_start + 21]));
+                int16_t my = ((static_cast<uint8_t>(input[data_packet_start + 19] << 8)) | static_cast<uint8_t>(input[data_packet_start + 22]));
+                int16_t mz = ((static_cast<uint8_t>(input[data_packet_start + 20] << 8)) | static_cast<uint8_t>(input[data_packet_start + 23]));
 
                 // calculate rotational velocities in rad/s
                 // http://www.i2cdevlib.com/forums/topic/106-get-angular-velocity-from-mpu-6050/
@@ -200,8 +200,8 @@ int main(int argc, char** argv)
                 double ayf = ay * (8.0 / 65536.0) * 9.81;
                 double azf = az * (8.0 / 65536.0) * 9.81;
 
-                std::cout << "package no. " << (char)input[data_packet_start+24] << "\r\n";
-                uint8_t received_message_number = (char)input[data_packet_start + 24];
+                std::cout << "package no. " << static_cast<int>(input[data_packet_start+24]) << "\r\n";
+                uint8_t received_message_number = static_cast<uint8_t>(input[data_packet_start + 24]);
 
                 if (received_message) // can only check for continuous numbers if already received at least one packet
                 {
