@@ -266,7 +266,7 @@ int main(int argc, char** argv)
                   transform.setRotation(differential_rotation);
                   tf_br.sendTransform(tf::StampedTransform(transform, measurement_time, tf_parent_frame_id, tf_frame_id));
                 }
-                input.erase(0, data_packet_start + kBytesToReceive); // delete everything up to and including the processed packet
+                input.erase(0, data_packet_start + kBytesToReceive-1); // delete everything up to and including the processed packet
               }
               else
               {
