@@ -9,6 +9,7 @@
 #include <tf/transform_broadcaster.h>
 #include <tf/transform_datatypes.h>
 #include <iostream>
+#include <math.h>
 
 
 bool zero_orientation_set = false;
@@ -186,7 +187,7 @@ int main(int argc, char** argv)
                 int16_t mx = ((static_cast<uint8_t>(input[data_packet_start + 18] << 8)) | static_cast<uint8_t>(input[data_packet_start + 21]));
                 int16_t my = ((static_cast<uint8_t>(input[data_packet_start + 19] << 8)) | static_cast<uint8_t>(input[data_packet_start + 22]));
                 int16_t mz = ((static_cast<uint8_t>(input[data_packet_start + 20] << 8)) | static_cast<uint8_t>(input[data_packet_start + 23]));
-                std::cout << mx << " " << my << " " << mz << "\n";
+
                 // calculate rotational velocities in rad/s
                 // http://www.i2cdevlib.com/forums/topic/106-get-angular-velocity-from-mpu-6050/
                 // FIFO frequency 100 Hz -> factor 10 ?
@@ -199,7 +200,13 @@ int main(int argc, char** argv)
                 double axf = ax * (8.0 / 65536.0) * 9.81;
                 double ayf = ay * (8.0 / 65536.0) * 9.81;
                 double azf = az * (8.0 / 65536.0) * 9.81;
-                  std::cout << axf << " " << ayf << " " << azf << "\n";
+                std::cout << axf << " " << ayf << " " << azf << "\n";
+
+                double gmx = mx * pow(10, -7); // convert from milligauss to Tesla for the sake of ROS
+                double gmy = my * pow(10, -7);
+                double gmz = mz * pow(10, -7);
+
+                std::cout << gmx << " " << gmy << " " << gmz << "\n";
                 std::cout << "package no. " << static_cast<int>(input[data_packet_start+24]) << "\r\n";
                 uint8_t received_message_number = static_cast<int>(input[data_packet_start + 24]);
 
@@ -238,9 +245,9 @@ int main(int argc, char** argv)
                 imu.linear_acceleration.y = ayf;
                 imu.linear_acceleration.z = azf;
 
-                magfield.magnetic_field.x = mx;
-                magfield.magnetic_field.y = my;
-                magfield.magnetic_field.z = mz;
+                magfield.magnetic_field.x = gmx;
+                magfield.magnetic_field.y = gmy;
+                magfield.magnetic_field.z = gmz;
 
 
                 //magnetic covariance is unknown, so a 0 is sent in accordance with the MagneticField message documentation.

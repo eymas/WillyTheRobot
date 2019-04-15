@@ -91,7 +91,6 @@ void setup()
     myIMU.getAres();
     myIMU.getGres();
     myIMU.getMres();
-
   } // if (c == 0x73)
   else
   {
@@ -104,11 +103,7 @@ void loop()
   int16_t accel_data[3];
   int16_t gyro_data[3];
   int16_t mag_data[3];
-  for (uint8_t i = 0; i < 3; i++) {
-    accel_data[i] = myIMU.accelCount[i];
-    gyro_data[i] = myIMU.gyroCount[i];
-    mag_data[i] = myIMU.magCount[i];
-  }
+
   // If intPin goes high, all data registers have new data
   // On interrupt, check if data ready interrupt
   if (myIMU.readByte(MPU9250_ADDRESS, INT_STATUS) & 0x01)
@@ -119,7 +114,11 @@ void loop()
     myIMU.readGyroData(myIMU.gyroCount);  // Read the x/y/z adc values
 
     myIMU.readMagData(myIMU.magCount);  // Read the x/y/z adc values
-
+    for (uint8_t i = 0; i < 3; i++) {
+      accel_data[i] = myIMU.accelCount[i];
+      gyro_data[i] = myIMU.gyroCount[i];
+      mag_data[i] = myIMU.magCount[i];
+    }
     // Now we'll calculate the accleration value into actual g's
     // This depends on scale being set
     myIMU.ax = (float)accel_data[0] * myIMU.aRes; // - myIMU.accelBias[0];
@@ -165,8 +164,9 @@ void loop()
   //                       myIMU.mx, myIMU.mz, myIMU.deltat);
 
   myIMU.count = millis();
-  digitalWrite(myLed, !digitalRead(myLed));  // toggle led - kept in to make it easier to check whether or not the arduino has crashed.
+  
   uint8_t transmit_buffer[kBytesToSend];
+  // transmits the start bytes
   transmit_buffer[0] = '$';
   transmit_buffer[1] = 0x03;
   /* transmit quaternion bytes
@@ -178,6 +178,7 @@ void loop()
     int8_t quaternion_value = (*(getQ() + i)) * kQuaternionMultFact;
     transmit_buffer[2 + i] = quaternion_value;
   }
+  
   // transmit accelerometer data
   /*
    *  The data here is split into two bytes.
