@@ -226,7 +226,8 @@ int main(int argc, char** argv)
                 last_received_message_number = received_message_number;
 
                 // calculate measurement time
-                ros::Time measurement_time = ros::Time::now() + ros::Duration(time_offset_in_seconds);
+                ros::Time measurement_time = ros::Time(0) + ros::Duration(time_offset_in_seconds);
+                std::cout << "measurement time is: " << measurement_time << "\n";
 
                 // publish imu message
                 imu.header.stamp = measurement_time;
