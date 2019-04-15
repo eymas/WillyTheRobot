@@ -12,7 +12,7 @@
 
 
 bool zero_orientation_set = false;
-const uint8_t kBytesToReceive = 27;
+const uint8_t kBytesToReceive = 28;
 //const uint8_t kStorageSize = 100;
 bool allow_store = false;
 bool allow_read = false;
@@ -135,11 +135,10 @@ int main(int argc, char** argv)
             // parse for data packets
             std::cout << "reached while allow_read\n";
             data_packet_start = input.find("$\x03");
+            std::cout << "found start of data packet" << data_packet_start << "\n";
             if (data_packet_start != std::string::npos)
             {
-              std::cout << "found start of data packet" << data_packet_start << "\n";
               ROS_DEBUG("found possible start of data packet at position %d", data_packet_start);
-
               if ((input.length() >= (data_packet_start + kBytesToReceive)) && (input.compare((data_packet_start + kBytesToReceive-1), 2, "\r\n") >= 0))  //check if positions 26,27 exist, then test values
               {
                 std::cout << "reached processing stage";
@@ -151,13 +150,13 @@ int main(int argc, char** argv)
                 int8_t z = (char)input[data_packet_start + 5];
 
                 double wf = w;
-                  wf = wf/100;
+                  wf = wf/100; std::cout << wf << "\r\n";
                 double xf = x;
-                  xf = xf/100;
+                  xf = xf/100; std::cout << xf << "\r\n";
                 double yf = y;
-                  yf = yf/100;
+                  yf = yf/100; std::cout << yf << "\r\n";
                 double zf = z;
-                  zf = zf/100;
+                  zf = zf/100; std::cout << zf << "\r\n";
 
                 tf::Quaternion orientation(xf, yf, zf, wf);
 
@@ -176,17 +175,17 @@ int main(int argc, char** argv)
                 int16_t ax = ((static_cast<uint8_t>(input[data_packet_start + 6]  << 8)) | static_cast<uint8_t>(input[data_packet_start + 9]));
                 int16_t ay = ((static_cast<uint8_t>(input[data_packet_start + 7]  << 8)) | static_cast<uint8_t>(input[data_packet_start + 10]));
                 int16_t az = ((static_cast<uint8_t>(input[data_packet_start + 8]  << 8)) | static_cast<uint8_t>(input[data_packet_start + 11]));
-
+                std::cout << ax << " " << ay << " " << az << "\n";
                 // get gyro values
                 int16_t gx = ((static_cast<uint8_t>(input[data_packet_start + 12] << 8)) | static_cast<uint8_t>(input[data_packet_start + 15]));
                 int16_t gy = ((static_cast<uint8_t>(input[data_packet_start + 13] << 8)) | static_cast<uint8_t>(input[data_packet_start + 16]));
                 int16_t gz = ((static_cast<uint8_t>(input[data_packet_start + 14] << 8)) | static_cast<uint8_t>(input[data_packet_start + 17]));
-
+                std::cout << gx << " " << gy << " " << gz << "\n";
                 // get magnetometer values
                 int16_t mx = ((static_cast<uint8_t>(input[data_packet_start + 18] << 8)) | static_cast<uint8_t>(input[data_packet_start + 21]));
                 int16_t my = ((static_cast<uint8_t>(input[data_packet_start + 19] << 8)) | static_cast<uint8_t>(input[data_packet_start + 22]));
                 int16_t mz = ((static_cast<uint8_t>(input[data_packet_start + 20] << 8)) | static_cast<uint8_t>(input[data_packet_start + 23]));
-
+                std::cout << mx << " " << my << " " << mz << "\n";
                 // calculate rotational velocities in rad/s
                 // http://www.i2cdevlib.com/forums/topic/106-get-angular-velocity-from-mpu-6050/
                 // FIFO frequency 100 Hz -> factor 10 ?
@@ -201,7 +200,7 @@ int main(int argc, char** argv)
                 double azf = az * (8.0 / 65536.0) * 9.81;
 
                 std::cout << "package no. " << static_cast<int>(input[data_packet_start+24]) << "\r\n";
-                uint8_t received_message_number = static_cast<uint8_t>(input[data_packet_start + 24]);
+                uint8_t received_message_number = static_cast<int>(input[data_packet_start + 24]);
 
                 if (received_message) // can only check for continuous numbers if already received at least one packet
                 {
