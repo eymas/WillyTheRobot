@@ -138,10 +138,11 @@ int main(int argc, char** argv)
             std::cout << "found start of data packet" << data_packet_start << "\n";
             if (data_packet_start != std::string::npos)
             {
+              std::cout << "found start of data packet: " << data_packet_start << "\n";
               ROS_DEBUG("found possible start of data packet at position %d", data_packet_start);
               if ((input.length() >= (data_packet_start + kBytesToReceive)) && (input.compare((data_packet_start + kBytesToReceive-1), 2, "\r\n") >= 0))  //check if positions 26,27 exist, then test values
               {
-                std::cout << "reached processing stage";
+                std::cout << "reached processing stage" << "\n";
                 ROS_DEBUG("seems to be a real data package: long enough and found end characters");
                 // get quaternion values
                 int8_t w = (char)input[data_packet_start + 2];
@@ -212,6 +213,7 @@ int main(int argc, char** argv)
                 }
                 else
                 {
+                  std::cout << "received message is true. \n";
                   received_message = true;
                 }
                 last_received_message_number = received_message_number;
@@ -263,10 +265,12 @@ int main(int argc, char** argv)
               {
                 if (input.length() >= data_packet_start + kBytesToReceive)
                 {
+                  std::cout << "input erase on false packet";
                   input.erase(0, data_packet_start + 1); // delete up to false data_packet_start character so it is not found again
                 }
                 else
                 {
+                  std::cout << "input erase on incomplete package";
                   // do not delete start character, maybe complete package has not arrived yet
                   input.erase(0, data_packet_start);
                 }
@@ -274,6 +278,7 @@ int main(int argc, char** argv)
             }
             else
             {
+              std::cout << "input cleared: possibly no start character found.";
               // no start character found in input, so delete everything
               input.clear();
             }
