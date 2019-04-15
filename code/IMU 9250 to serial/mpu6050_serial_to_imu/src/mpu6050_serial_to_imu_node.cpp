@@ -134,7 +134,6 @@ int main(int argc, char** argv)
           { // while there might be a complete package in input
             // parse for data packets
             std::cout << "reached while allow_read\n";
-            std::cout << "input: " << input << "\n";
             data_packet_start = input.find("$\x03");
             if (data_packet_start != std::string::npos)
             {
@@ -214,6 +213,7 @@ int main(int argc, char** argv)
                 }
                 else
                 {
+                  std::cout << "received message is true. \n";
                   received_message = true;
                 }
                 last_received_message_number = received_message_number;
@@ -265,10 +265,12 @@ int main(int argc, char** argv)
               {
                 if (input.length() >= data_packet_start + kBytesToReceive)
                 {
+                  std::cout << "input erase on false packet";
                   input.erase(0, data_packet_start + 1); // delete up to false data_packet_start character so it is not found again
                 }
                 else
                 {
+                  std::cout << "input erase on incomplete package";
                   // do not delete start character, maybe complete package has not arrived yet
                   input.erase(0, data_packet_start);
                 }
@@ -276,6 +278,7 @@ int main(int argc, char** argv)
             }
             else
             {
+              std::cout << "input cleared: possibly no start character found.";
               // no start character found in input, so delete everything
               input.clear();
             }
