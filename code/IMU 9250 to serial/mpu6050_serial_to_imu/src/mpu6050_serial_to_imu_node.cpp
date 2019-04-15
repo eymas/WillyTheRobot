@@ -134,15 +134,16 @@ int main(int argc, char** argv)
           { // while there might be a complete package in input
             // parse for data packets
             std::cout << "reached while allow_read\n";
+            std::cout << "input: " << input << "\n";
             data_packet_start = input.find("$\x03");
             if (data_packet_start != std::string::npos)
             {
-              std::cout << "found start of data packet" << data_packet_start << "\n";
+              std::cout << "found start of data packet: " << data_packet_start << "\n";
               ROS_DEBUG("found possible start of data packet at position %d", data_packet_start);
 
               if ((input.length() >= (data_packet_start + kBytesToReceive)) && (input.compare((data_packet_start + kBytesToReceive-1), 2, "\r\n") >= 0))  //check if positions 26,27 exist, then test values
               {
-                std::cout << "reached processing stage";
+                std::cout << "reached processing stage" << "\n";
                 ROS_DEBUG("seems to be a real data package: long enough and found end characters");
                 // get quaternion values
                 int8_t w = (char)input[data_packet_start + 2];
