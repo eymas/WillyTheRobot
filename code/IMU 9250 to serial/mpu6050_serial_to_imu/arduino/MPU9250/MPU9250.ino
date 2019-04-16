@@ -86,11 +86,19 @@ void setup()
 
     // Get magnetometer calibration from AK8963 ROM
     myIMU.initAK8963(myIMU.factoryMagCalibration);
-
     // Get sensor resolutions, only need to do this once
     myIMU.getAres();
     myIMU.getGres();
     myIMU.getMres();
+    
+    myIMU.magBias[0] = -39.04;
+    myIMU.magBias[1] = -129.98;
+    myIMU.magBias[2] = -48.05;
+    
+    myIMU.magScale[0] = 0.66;
+    myIMU.magScale[1] = 1.36;
+    myIMU.magScale[2] = 1.33;
+    
   } // if (c == 0x73)
   else
   {
@@ -119,16 +127,29 @@ void loop()
     }
     // Now we'll calculate the accleration value into actual g's
     // This depends on scale being set
-    myIMU.ax = (float)accel_data[0] * myIMU.aRes - myIMU.accelBias[0];
-    myIMU.ay = (float)accel_data[1] * myIMU.aRes - myIMU.accelBias[1];
-    myIMU.az = (float)accel_data[2] * myIMU.aRes - myIMU.accelBias[2];
-
+    myIMU.ax = ((float)accel_data[0] * myIMU.aRes);// - myIMU.accelBias[0];
+    myIMU.ay = ((float)accel_data[1] * myIMU.aRes);// - myIMU.accelBias[1];
+    myIMU.az = ((float)accel_data[2] * myIMU.aRes);// - myIMU.accelBias[2];
+//    Serial.println("==========================================");
+//    Serial.print('(');
+//    Serial.print(myIMU.ax);
+//    Serial.print(",");
+//    Serial.print(myIMU.ay);
+//    Serial.print(",");
+//    Serial.print(myIMU.az);
+//    Serial.println(')');
     // Calculate the gyro value into actual degrees per second
     // This depends on scale being set
     myIMU.gx = (float)gyro_data[0] * myIMU.gRes;
     myIMU.gy = (float)gyro_data[1] * myIMU.gRes;
     myIMU.gz = (float)gyro_data[2] * myIMU.gRes;
-
+//    Serial.print('(');
+//    Serial.print(myIMU.gx);
+//    Serial.print(",");
+//    Serial.print(myIMU.gy);
+//    Serial.print(",");
+//    Serial.print(myIMU.gz);
+//    Serial.println(')');
     // Calculate the magnetometer values in milliGauss
     // Include factory calibration per data sheet and user environmental
     // corrections
@@ -139,6 +160,14 @@ void loop()
                * myIMU.factoryMagCalibration[1] - myIMU.magBias[1];
     myIMU.mz = (float)mag_data[2] * myIMU.mRes
                * myIMU.factoryMagCalibration[2] - myIMU.magBias[2];
+//    Serial.print('(');
+//    Serial.print(myIMU.mx);
+//    Serial.print(",");
+//    Serial.print(myIMU.my);
+//    Serial.print(",");
+//    Serial.print(myIMU.mz);
+//    Serial.println(')');
+//    delay(50);
   } // if (readByte(MPU9250_ADDRESS, INT_STATUS) & 0x01)
 
   // Must be called before updating quaternions!
@@ -162,7 +191,7 @@ void loop()
   //                       myIMU.mx, myIMU.mz, myIMU.deltat);
 
   myIMU.count = millis();
-  
+
   uint8_t transmit_buffer[kBytesToSend];
   // transmits the start bytes
   transmit_buffer[0] = '$';
@@ -174,9 +203,11 @@ void loop()
    */
   for (uint8_t i = 0; i < 4; i++) {
     int8_t quaternion_value = (*(getQ() + i)) * kQuaternionMultFact;
+//    Serial.print(*(getQ() + i));
+//    Serial.print(",");
     transmit_buffer[2 + i] = quaternion_value;
   }
-  
+
   // transmit accelerometer data
   /*
    *  The data here is split into two bytes.
