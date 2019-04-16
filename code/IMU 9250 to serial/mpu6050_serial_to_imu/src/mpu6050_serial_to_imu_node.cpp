@@ -104,32 +104,6 @@ int main(int argc, char** argv)
         {
           read = ser.read(ser.available());
           input+= read;
-//          uint8_t value_of_read =  static_cast<int>(read[0]);
-//          if(value_of_read == '$') {
-//              allow_store = true;
-//              allow_read = false;
-//              std::cout << "$ received";
-//          }
-//          if(allow_store) {
-//              std::cout << "storing data";
-//              int i = 0;
-//              while(read[i] != '/0') {
-//                  std::cout << i;
-//                  storage[storage_index] = static_cast<int>(read[i]);
-//                  storage_index++;
-//                  if (storage_index >= kStorageSize-1) {
-//                      storage_index = 0;
-//                  }
-//                  if (read[i] == '\n') {
-//                      std::cout << "slash n received";
-//                      allow_store = false;
-//                      allow_read = true;
-//                      storage_index = 0;
-//                      break;
-//                  }
-//                  i++;
-//              }
-//          }
           ROS_DEBUG("read %i new characters from serial port, adding to %i characters of old input.", (int)read.size(), (int)input.size());
           while ((input.length() >= kBytesToReceive)/* && allow_read*/)
           { // while there might be a complete package in input
@@ -177,7 +151,7 @@ int main(int argc, char** argv)
                 int16_t ax = ((static_cast<uint8_t>(input[data_packet_start + 6]  << 8)) | static_cast<uint8_t>(input[data_packet_start + 9]));
                 int16_t ay = ((static_cast<uint8_t>(input[data_packet_start + 7]  << 8)) | static_cast<uint8_t>(input[data_packet_start + 10]));
                 int16_t az = ((static_cast<uint8_t>(input[data_packet_start + 8]  << 8)) | static_cast<uint8_t>(input[data_packet_start + 11]));
-
+                std::cout << "AX: " << ax << " AY: " << ay << " AZ: " << az << "\n";
                 // get gyro values
                 int16_t gx = ((static_cast<uint8_t>(input[data_packet_start + 12] << 8)) | static_cast<uint8_t>(input[data_packet_start + 15]));
                 int16_t gy = ((static_cast<uint8_t>(input[data_packet_start + 13] << 8)) | static_cast<uint8_t>(input[data_packet_start + 16]));
@@ -196,6 +170,7 @@ int main(int argc, char** argv)
                 double gyf = gy * (4000.0/65536.0) * (M_PI/180.0);
                 double gzf = gz * (4000.0/65536.0) * (M_PI/180.0);
                   std::cout << gxf << " " << gyf << " " << gzf << "\n";
+
                 // calculate accelerations in m/s²
                 double axf = ax * (8.0 / 65536.0) * 9.81;
                 double ayf = ay * (8.0 / 65536.0) * 9.81;

@@ -110,9 +110,7 @@ void loop()
   {
 
     myIMU.readAccelData(myIMU.accelCount);  // Read the x/y/z adc values
-
     myIMU.readGyroData(myIMU.gyroCount);  // Read the x/y/z adc values
-
     myIMU.readMagData(myIMU.magCount);  // Read the x/y/z adc values
     for (uint8_t i = 0; i < 3; i++) {
       accel_data[i] = myIMU.accelCount[i];
@@ -121,9 +119,9 @@ void loop()
     }
     // Now we'll calculate the accleration value into actual g's
     // This depends on scale being set
-    myIMU.ax = (float)accel_data[0] * myIMU.aRes; // - myIMU.accelBias[0];
-    myIMU.ay = (float)accel_data[1] * myIMU.aRes; // - myIMU.accelBias[1];
-    myIMU.az = (float)accel_data[2] * myIMU.aRes; // - myIMU.accelBias[2];
+    myIMU.ax = (float)accel_data[0] * myIMU.aRes - myIMU.accelBias[0];
+    myIMU.ay = (float)accel_data[1] * myIMU.aRes - myIMU.accelBias[1];
+    myIMU.az = (float)accel_data[2] * myIMU.aRes - myIMU.accelBias[2];
 
     // Calculate the gyro value into actual degrees per second
     // This depends on scale being set
