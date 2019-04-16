@@ -166,15 +166,15 @@ int main(int argc, char** argv)
                 // http://www.i2cdevlib.com/forums/topic/106-get-angular-velocity-from-mpu-6050/
                 // FIFO frequency 100 Hz -> factor 10 ?
                 //TODO: check / test if rotational velocities are correct
-                double gxf = gx * (4000.0/65536.0) * (M_PI/180.0);
-                double gyf = gy * (4000.0/65536.0) * (M_PI/180.0);
-                double gzf = gz * (4000.0/65536.0) * (M_PI/180.0);
+                double gxf = gx * (M_PI/180.0);
+                double gyf = gy * (M_PI/180.0);
+                double gzf = gz * (M_PI/180.0);
                   std::cout << gxf << " " << gyf << " " << gzf << "\n";
 
                 // calculate accelerations in m/s²
-                double axf = ax * (8.0 / 65536.0) * 9.81;
-                double ayf = ay * (8.0 / 65536.0) * 9.81;
-                double azf = az * (8.0 / 65536.0) * 9.81;
+                double axf = ax  * 9.81;
+                double ayf = ay  * 9.81;
+                double azf = az  * 9.81;
                 std::cout << axf << " " << ayf << " " << azf << "\n";
 
                 double gmx = mx * pow(10, -7); // convert from milligauss to Tesla for the sake of ROS
