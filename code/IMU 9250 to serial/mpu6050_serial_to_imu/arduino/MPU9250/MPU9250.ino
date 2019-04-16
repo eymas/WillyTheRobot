@@ -29,7 +29,7 @@
 
 #define AHRS false         // Set to false for basic data read
 const int kQuaternionMultFact = 100;
-const int kBytesToSend = 27;
+const int kBytesToSend = 44;
 
 // Pin definitions
 int intPin = 12;  // These can be changed, 2 and 3 are the Arduinos ext int pins
@@ -210,43 +210,65 @@ void loop()
 
   // transmit accelerometer data
   /*
-   *  The data here is split into two bytes.
-   *  This is done because serial communication was previously done from a FIFO buffer which was just copied into another buffer
-   *  In order to minimize the amount of work needed on the receiving end, this format is expanded with the magnetometer values.
-   *  The Pi expects a high and low byte for every bit of data, so that is what it will receive.
-   *  All of the sensor readings are in reality 16 bit integers, split into two 8-bit integers for the sake of transmission
-   *  The bytes are labeled "xxx_high" and "xxx_low" for the sake of clarity.
-   *  these are then transmitted separately.
+   *  The data here is split into four bytes.
+  * The reason for this is that floats are 32 bits datatypes, and serial can only transmit 8-bit integers.
+   * As such, each float is split into an array of 4 unsigned interegers
+   * each of which are then added to the transmit_buffer
    */
-  for (uint8_t i = 0; i < 3; i++) {
-    uint8_t accel_high = (0xff & (accel_data[i] >> 8));
-    transmit_buffer[6 + i] = accel_high;
+  uint8_t *accel_array_x = reinterpret_cast<uint8_t*>(&accel_data[0]);
+  uint8_t *accel_array_y = reinterpret_cast<uint8_t*>(&accel_data[1]);
+  uint8_t *accel_array_z = reinterpret_cast<uint8_t*>(&accel_data[2]);
+
+  uint8_t *gyro_array_x = reinterpret_cast<uint8_t*>(&gyro_data[0]);
+  uint8_t *gyro_array_y = reinterpret_cast<uint8_t*>(&gyro_data[1]);
+  uint8_t *gyro_array_z = reinterpret_cast<uint8_t*>(&gyro_data[2]);
+
+  uint8_t *magnet_array_x = reinterpret_cast<uint8_t*>(&mag_data[0]);
+  uint8_t *magnet_array_y = reinterpret_cast<uint8_t*>(&mag_data[1]);
+  uint8_t *magnet_array_z = reinterpret_cast<uint8_t*>(&mag_data[2]);
+
+  for(uint8_t i = 0; i < 4; i++) {
+      transmit_buffer[5+i] = accel_array_x[i];
+      transmit_buffer[9+i] = accel_array_y[i];
+      transmit_buffer[13+i] = accel_array_z[i];
+      transmit_buffer[17+i] = gyro_array_x[i];
+      transmit_buffer[21+i] = gyro_array_y[i];
+      transmit_buffer[25+i] = gyro_array_z[i];
+      transmit_buffer[29+i] = magnet_array_x[i];
+      transmit_buffer[33+i] = magnet_array_y[i];
+      transmit_buffer[37+i] = magnet_array_z[i];
   }
-  for(uint8_t i = 0; i < 3; i++) {
-  uint8_t accel_low = (0xff & accel_data[i]);
-    transmit_buffer[9 + i] = accel_low;
-  }
-  // transmit gyroscope data
-  for (uint8_t i = 0; i < 3; i++) {
-    uint8_t gyro_high = (0xff & (gyro_data[i] >> 8));
-    transmit_buffer[12 + i] = gyro_high;
-  }
-  for (uint8_t i = 0; i < 3; i++) {
-    uint8_t gyro_low = (0xff & gyro_data[i]);
-    transmit_buffer[15 + i] = gyro_low;
-  }
-  // transmit magnetometer data
-  for (uint8_t i = 0; i < 3; i++) {
-    uint8_t mag_high = (0xff & (mag_data[i] >> 8));
-    transmit_buffer[18+i] = mag_high;
-  }
-  for(uint8_t i = 0; i < 3; i++) {
-    uint8_t mag_low = (0xff & mag_data[i]);
-    transmit_buffer[21+i] = mag_low;
-  }
-  transmit_buffer[24] = message_count;
-  transmit_buffer[25] = '\r';
-  transmit_buffer[26] = '\n';  // terminating characters for the raspberry Pi
+
+
+//  for (uint8_t i = 0; i < 3; i++) {
+//    uint8_t accel_high = (0xff & (accel_data[i] >> 8));
+//    transmit_buffer[6 + i] = accel_high;
+//  }
+//  for(uint8_t i = 0; i < 3; i++) {
+//  uint8_t accel_low = (0xff & accel_data[i]);
+//    transmit_buffer[9 + i] = accel_low;
+//  }
+//  // transmit gyroscope data
+//  for (uint8_t i = 0; i < 3; i++) {
+//    uint8_t gyro_high = (0xff & (gyro_data[i] >> 8));
+//    transmit_buffer[12 + i] = gyro_high;
+//  }
+//  for (uint8_t i = 0; i < 3; i++) {
+//    uint8_t gyro_low = (0xff & gyro_data[i]);
+//    transmit_buffer[15 + i] = gyro_low;
+//  }
+//  // transmit magnetometer data
+//  for (uint8_t i = 0; i < 3; i++) {
+//    uint8_t mag_high = (0xff & (mag_data[i] >> 8));
+//    transmit_buffer[18+i] = mag_high;
+//  }
+//  for(uint8_t i = 0; i < 3; i++) {
+//    uint8_t mag_low = (0xff & mag_data[i]);
+//    transmit_buffer[21+i] = mag_low;
+//  }
+  transmit_buffer[41] = message_count;
+  transmit_buffer[42] = '\r';
+  transmit_buffer[43] = '\n';  // terminating characters for the raspberry Pi
   Serial.write(transmit_buffer, kBytesToSend);
   message_count++;
 

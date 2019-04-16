@@ -13,7 +13,7 @@
 
 
 bool zero_orientation_set = false;
-const uint8_t kBytesToReceive = 28;
+const uint8_t kBytesToReceive = 45;
 //const uint8_t kStorageSize = 100;
 bool allow_store = false;
 bool allow_read = false;
@@ -89,8 +89,6 @@ int main(int argc, char** argv)
   transform.setOrigin(tf::Vector3(0,0,0));
 
   std::string input;
- // uint8_t storage[kStorageSize];
- // uint8_t storage_index = 0;
   std::string read;
 
   while(ros::ok())
@@ -147,22 +145,24 @@ int main(int argc, char** argv)
                 //http://answers.ros.org/question/10124/relative-rotation-between-two-quaternions/
                 tf::Quaternion differential_rotation;
                 differential_rotation = zero_orientation.inverse() * orientation;
-                // get accelerometer values
-                double ax = ((static_cast<uint8_t>(input[data_packet_start + 6]  << 8)) | static_cast<uint8_t>(input[data_packet_start + 9]));
-                double ay = ((static_cast<uint8_t>(input[data_packet_start + 7]  << 8)) | static_cast<uint8_t>(input[data_packet_start + 10]));
-                double az = ((static_cast<uint8_t>(input[data_packet_start + 8]  << 8)) | static_cast<uint8_t>(input[data_packet_start + 11]));
-                std::cout << "AX: " << ax << " AY: " << ay << " AZ: " << az << "\n";
-                
-                // get gyro values
-                double gx = ((static_cast<uint8_t>(input[data_packet_start + 12] << 8)) | static_cast<uint8_t>(input[data_packet_start + 15]));
-                double gy = ((static_cast<uint8_t>(input[data_packet_start + 13] << 8)) | static_cast<uint8_t>(input[data_packet_start + 16]));
-                double gz = ((static_cast<uint8_t>(input[data_packet_start + 14] << 8)) | static_cast<uint8_t>(input[data_packet_start + 17]));
 
-                // get magnetometer values
-                double mx = ((static_cast<uint8_t>(input[data_packet_start + 18] << 8)) | static_cast<uint8_t>(input[data_packet_start + 21]));
-                double my = ((static_cast<uint8_t>(input[data_packet_start + 19] << 8)) | static_cast<uint8_t>(input[data_packet_start + 22]));
-                double mz = ((static_cast<uint8_t>(input[data_packet_start + 20] << 8)) | static_cast<uint8_t>(input[data_packet_start + 23]));
-
+                for(uint8_t i = 0; i < 4; i++) {
+                    // get accelerometer values
+                    float ax = (ax << 8 | static_cast<uint8_t>(input[data_packet_start+5+i]));
+                    float ay = (ay << 8 | static_cast<uint8_t>(input[data_packet_start+9+i]));
+                    float az = (az << 8 | static_cast<uint8_t>(input[data_packet_start+13+i]));
+                    std::cout << "AX: " << ax << " AY: " << ay << " AZ: " << az << '\n';
+                    // get gyro values
+                    float gx = (gx << 8 | static_cast<uint8_t>(input[data_packet_start+17+i]));
+                    float gy = (gy << 8 | static_cast<uint8_t>(input[data_packet_start+21+i]));
+                    float gz = (gz << 8 | static_cast<uint8_t>(input[data_packet_start+25+i]));
+                    std::cout << "GX: " << gx << " GY: " << gy << " GZ: " << gz << '\n';
+                    // get magnetometer values
+                    float mx = (mx << 8 | static_cast<uint8_t>(input[data_packet_start+29+i]));
+                    float my = (my << 8 | static_cast<uint8_t>(input[data_packet_start+33+i]));
+                    float mz = (mz << 8 | static_cast<uint8_t>(input[data_packet_start+37+i]));
+                    std::cout << "MX: " << mx << " MY: " << my << " MZ: " << mz << '\n';
+                }
                 // calculate rotational velocities in rad/s
                 // http://www.i2cdevlib.com/forums/topic/106-get-angular-velocity-from-mpu-6050/
                 // FIFO frequency 100 Hz -> factor 10 ?
@@ -183,15 +183,17 @@ int main(int argc, char** argv)
                 double gmz = mz * pow(10, -7);
 
                 std::cout << gmx << " " << gmy << " " << gmz << "\n";
-                std::cout << "package no. " << static_cast<int>(input[data_packet_start+24]) << "\r\n";
-                uint8_t received_message_number = static_cast<int>(input[data_packet_start + 24]);
+                std::cout << "package no. " << static_cast<int>(input[data_packet_start+41]) << "\r\n";
+                uint8_t received_message_number = static_cast<int>(input[data_packet_start + 42]);
 
                 if (received_message) // can only check for continuous numbers if already received at least one packet
                 {
                   uint8_t message_distance = received_message_number - last_received_message_number;
-                  if ( message_distance > 1 )
+                  if ( (message_distance > 1) && message_distance != 0 )
                   {
                     ROS_WARN_STREAM("Missed " << message_distance - 1 << " MPU9250 data packets from arduino.");
+                  } else if (!message_distance) {
+                      ROS_WARN_STREAM("Message number is the same, could the arduino have crashed?");
                   }
                 }
                 else

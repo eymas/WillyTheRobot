@@ -70,24 +70,42 @@ These two integers are then spliced back into a signed 16-bit integer once the P
         [ quaternion value X ]
         [ quaternion value Y ]
         [ quaternion value Z ]
-        [ accelerometer X raw data high byte ]
-        [ accelerometer Y raw data high byte ]
-        [ accelerometer Z raw data high byte ]
-        [ accelerometer X raw data low byte ]
-        [ accelerometer Y raw data low byte ]
-        [ accelerometer Z raw data low byte ]
-        [ gyroscope X raw data high byte ]        
-        [ gyroscope Y raw data high byte ]
-        [ gyroscope Z raw data high byte ]
-        [ gyroscope X raw data low byte ]
-        [ gyroscope Y raw data low byte ]
-        [ gyroscope Z raw data low byte ]
-        [ magnetometer X raw data high byte ]
-        [ magnetometer Y raw data high byte ]
-        [ magnetometer Z raw data high byte ]
-        [ magnetometer X raw data low byte ]
-        [ magnetometer Y raw data low byte ]
-        [ magnetometer Z raw data low byte ]
+        [ accelerometer X byte 1 ]
+        [ accelerometer X byte 2 ]
+        [ accelerometer X byte 3 ]
+        [ accelerometer X byte 4 ]
+        [ accelerometer Y byte 1 ]
+        [ accelerometer Y byte 2 ]
+        [ accelerometer Y byte 3 ]
+        [ accelerometer Y byte 4 ]
+        [ accelerometer Z byte 1 ]
+        [ accelerometer Z byte 2 ]
+        [ accelerometer Z byte 3 ]
+        [ accelerometer Z byte 4 ]
+        [ gyroscope X byte 1 ] 
+        [ gyroscope X byte 2 ]
+        [ gyroscope X byte 3 ]
+        [ gyroscope X byte 4 ]       
+        [ gyroscope Y byte 1 ] 
+        [ gyroscope Y byte 2 ]
+        [ gyroscope Y byte 3 ]
+        [ gyroscope Y byte 4 ] 
+        [ gyroscope Z byte 1 ] 
+        [ gyroscope Z byte 2 ]
+        [ gyroscope Z byte 3 ]
+        [ gyroscope Z byte 4 ] 
+        [ magnetometer X byte 1 ]
+        [ magnetometer X byte 2 ]
+        [ magnetometer X byte 3 ]
+        [ magnetometer X byte 4 ]
+        [ magnetometer Y byte 1 ]
+        [ magnetometer Y byte 2 ]
+        [ magnetometer Y byte 3 ]
+        [ magnetometer Y byte 4 ]
+        [ magnetometer Z byte 1 ]
+        [ magnetometer Z byte 2 ]
+        [ magnetometer Z byte 3 ]
+        [ magnetometer Z byte 4 ]
         [ message count ]
         [ '\r' ] 
         [ '\n' ] 
@@ -104,7 +122,30 @@ After receiving all the data, it sends the messages to the appropriate ROS topic
 First, it creates node handles and message objects that will be used to transmit the relevant data.
 The ROS communication rate is set at 200Hz, which is more than sufficient.
 The covariances are set, though for the magnetometer they are as of yet unknown.
-ROS uses 0.01 as a default value, 
+ROS uses 0.01 as a default value, since the covariance is not noted in any datasheets, and the calculations to find them are almost a study onto themselves.
+
+The basic process is shown in figure \ref{fig::piDataReception}.
+
+\begin{figure}[H]
+\includegraphics[width=12cm]{temp.jpg} \TODO{change image}
+\caption{The process by which incoming data is handled on the Pi}
+\label{fig::piDataReception}
+\end{figure}
+
+Since the data recorded by the arduino is stored in a float format, which is not transmittable by serial communications.
+In order to counter this, all the floats are split into 4 bytes, each stored in an array of 4 unsigned 8-bit integers.
+This is then read byte for byte, and each time the already existing result is left shifted by 8, so that after 4 iterations the full float is back again.
+These floats are still raw data, however.
+In order to ensure they are ROS compliant \cite{ROSformat}, they are changed into the appropriate units, such as radians and $ms^-2$, rather than the degrees and G's they are returned as by the MPU9250 \cite{MPU9250}.
+
+This is done, for the accelerometer data, by multiplying it by the standard for gravity on earth, 9.81.
+This converts it from G's into $ms^-2$.
+For the gyroscope, the data needs to be in radians, which is achieved by multiplying the degrees by \pi, and then dividing it by 180.
+The magnetometer data is a bit simpler, since the difference between milliGauss and Tesla is just a matter of factor.
+One Tesla is $1.0 X 10^7$ milliGauss, so in order to convert mG into T, the opposite needs to be done, $1.0 X 10^-7$.
+
+The message number is used to keep track of whether or not any packages are missed, if there are missed packages a warning is shown in the ROS debug screen.
+If the message number is the same, then another warning is shown because it is likely the arduino running the MPU9250 has crashed.
 
 
 \newpage
