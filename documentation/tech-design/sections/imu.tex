@@ -8,22 +8,22 @@ After that has processed the data into a ROS standard message, it sends the data
 \subsection{Collecting data} \label{sec::collect}
 The main controller for collecting the data is an Arduino Uno, which uses I$^{2}$C for communication with the MPU9250.
 The clock is set at 400000, and the address uses the \code{MPU9250\_ADDRESS\_AD0}, a macro which determines the supposed address.
-In section \ref{sec::setup}, the curiosities of the address are further explained.
+In section \ref{sec::set-up}, the curiosities of the address are further explained.
 The Arduino takes the raw data, and uses \href{https://github.com/sparkfun/SparkFun_MPU-9250_Breakout_Arduino_Library}{this library} to process the data.
 This is needed because the MPU does not output quaternions by default.
 This library allows the Arduino to calculate those, and then send them on to the Pi.
 
 
-\subsubsection{The Setup} \label{sec::setup}
+\subsubsection{The Set-up} \label{sec::setup}
 After checking the address of the MPU9250, it will first do a self-test, where it determines the biases and stores them in its registers, through the \code{MPU9250SelfTest()} and \code{calibrateMPU9250()} functions.
 The address of the MPU should be 0x71 according to the library, but since a slightly different model is used from the one the demo code is written for, the address is 0x73.
 After that, it calibrates itself and stores those values as well.
 Following that, it is fully initialized using the \code{initMPU9250} function.
 
-After that, it checks what the adress of the AK8693 (the magnetometer), and if that is not 0x48, it cancels the entire system.
+After that, it checks what the address of the AK8693 (the magnetometer), and if that is not 0x48, it cancels the entire system.
 Thankfully, this address does match the default in the library provided.
 The AK8963 is initialized, and the resolutions of the 3 different sensors are fetched using \code{getAres(), getGres(), and getMres()}.
-This concludes the setup.
+This concludes the set-up.
 
 
 \subsubsection{The Loop}
@@ -122,17 +122,18 @@ After receiving all the data, it sends the messages to the appropriate ROS topic
 First, it creates node handles and message objects that will be used to transmit the relevant data.
 The ROS communication rate is set at 200Hz, which is more than sufficient.
 The covariances are set, though for the magnetometer they are as of yet unknown.
-ROS uses 0.01 as a default value, since the covariance is not noted in any datasheets, and the calculations to find them are almost a study onto themselves.
+ROS uses 0.01 as a default value, since the covariance is not noted in any data-sheets, and the calculations to find them are almost a study onto themselves.
 
 The basic process is shown in figure \ref{fig::piDataReception}.
 
 \begin{figure}[H]
-\includegraphics[width=12cm]{temp.jpg} \TODO{change image}
+\centering
+\includegraphics[width=12cm]{temp.jpg}
 \caption{The process by which incoming data is handled on the Pi}
 \label{fig::piDataReception}
 \end{figure}
 
-Since the data recorded by the arduino is stored in a float format, which is not transmittable by serial communications.
+The data recorded by the arduino is stored in a float data-type, which is not transmittable by serial communications.
 In order to counter this, all the floats are split into 4 bytes, each stored in an array of 4 unsigned 8-bit integers.
 This is then read byte for byte, and each time the already existing result is left shifted by 8, so that after 4 iterations the full float is back again.
 These floats are still raw data, however.
@@ -140,9 +141,9 @@ In order to ensure they are ROS compliant \cite{ROSformat}, they are changed int
 
 This is done, for the accelerometer data, by multiplying it by the standard for gravity on earth, 9.81.
 This converts it from G's into $ms^-2$.
-For the gyroscope, the data needs to be in radians, which is achieved by multiplying the degrees by \pi, and then dividing it by 180.
+For the gyroscope, the data needs to be in radians, which is achieved by multiplying the degrees by $\pi$, and then dividing it by 180.
 The magnetometer data is a bit simpler, since the difference between milliGauss and Tesla is just a matter of factor.
-One Tesla is $1.0 X 10^7$ milliGauss, so in order to convert mG into T, the opposite needs to be done, $1.0 X 10^-7$.
+One Tesla is $1.0 \cdot 10^{7}$ milliGauss, so in order to convert mG into T, the opposite needs to be done, multiplying the received data by  $1.0 \cdot 10^{-7}$.
 
 The message number is used to keep track of whether or not any packages are missed, if there are missed packages a warning is shown in the ROS debug screen.
 If the message number is the same, then another warning is shown because it is likely the arduino running the MPU9250 has crashed.
