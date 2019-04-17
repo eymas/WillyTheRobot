@@ -147,19 +147,19 @@ int main(int argc, char** argv)
                 int32_t ax, az, ay, gx, gy, gz, mx, my, mz;
                 for(uint8_t i = 0; i < 4; i++) {
                     // get accelerometer values
-                     ax = ((ax << 8) | static_cast<uint8_t>(input[data_packet_start+6+i]));
-                     ay = ((ay << 8) | static_cast<uint8_t>(input[data_packet_start+10+i]));
-                     az = ((az << 8) | static_cast<uint8_t>(input[data_packet_start+14+i]));
+                     ax = ((ax << 8) | static_cast<uint8_t>(input[data_packet_start+10-i]));
+                     ay = ((ay << 8) | static_cast<uint8_t>(input[data_packet_start+14-]));
+                     az = ((az << 8) | static_cast<uint8_t>(input[data_packet_start+18-]));
 
                     // get gyro values
-                     gx = ((gx << 8) | static_cast<uint8_t>(input[data_packet_start+18+i]));
-                     gy = ((gy << 8) | static_cast<uint8_t>(input[data_packet_start+22+i]));
-                     gz = ((gz << 8) | static_cast<uint8_t>(input[data_packet_start+26+i]));
+                     gx = ((gx << 8) | static_cast<uint8_t>(input[data_packet_start+22-i]));
+                     gy = ((gy << 8) | static_cast<uint8_t>(input[data_packet_start+26-i]));
+                     gz = ((gz << 8) | static_cast<uint8_t>(input[data_packet_start+30-i]));
 
                     // get magnetometer values
-                     mx = ((mx << 8) | static_cast<uint8_t>(input[data_packet_start+30+i]));
-                     my = ((my << 8) | static_cast<uint8_t>(input[data_packet_start+34+i]));
-                     mz = ((mz << 8) | static_cast<uint8_t>(input[data_packet_start+38+i]));
+                     mx = ((mx << 8) | static_cast<uint8_t>(input[data_packet_start+34-i]));
+                     my = ((my << 8) | static_cast<uint8_t>(input[data_packet_start+38-i]));
+                     mz = ((mz << 8) | static_cast<uint8_t>(input[data_packet_start+42-i]));
                 }
 
                 float fax, faz, fay, fgx, fgy, fgz, fmx, fmy, fmz;

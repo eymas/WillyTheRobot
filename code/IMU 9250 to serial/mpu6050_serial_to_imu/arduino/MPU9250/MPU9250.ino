@@ -121,15 +121,15 @@ void loop()
     myIMU.readGyroData(myIMU.gyroCount);  // Read the x/y/z adc values
     myIMU.readMagData(myIMU.magCount);  // Read the x/y/z adc values
     for (uint8_t i = 0; i < 3; i++) {
-      accel_data[i] = myIMU.accelCount[i];
-      gyro_data[i] = myIMU.gyroCount[i];
-      mag_data[i] = myIMU.magCount[i];
+      accel_data[i] = static_cast<float>(myIMU.accelCount[i]);
+      gyro_data[i] = static_cast<float>(myIMU.gyroCount[i]);
+      mag_data[i] = static_cast<float>(myIMU.magCount[i]);
     }
     // Now we'll calculate the accleration value into actual g's
     // This depends on scale being set
-    myIMU.ax = ((float)accel_data[0] * myIMU.aRes);// - myIMU.accelBias[0];
-    myIMU.ay = ((float)accel_data[1] * myIMU.aRes);// - myIMU.accelBias[1];
-    myIMU.az = ((float)accel_data[2] * myIMU.aRes);// - myIMU.accelBias[2];
+    myIMU.ax = (accel_data[0] * myIMU.aRes);// - myIMU.accelBias[0];
+    myIMU.ay = (accel_data[1] * myIMU.aRes);// - myIMU.accelBias[1];
+    myIMU.az = (accel_data[2] * myIMU.aRes);// - myIMU.accelBias[2];
 //    Serial.println("==========================================");
 //    Serial.print('(');
 //    Serial.print(myIMU.ax);
@@ -140,9 +140,9 @@ void loop()
 //    Serial.println(')');
     // Calculate the gyro value into actual degrees per second
     // This depends on scale being set
-    myIMU.gx = (float)gyro_data[0] * myIMU.gRes;
-    myIMU.gy = (float)gyro_data[1] * myIMU.gRes;
-    myIMU.gz = (float)gyro_data[2] * myIMU.gRes;
+    myIMU.gx = gyro_data[0] * myIMU.gRes;
+    myIMU.gy = gyro_data[1] * myIMU.gRes;
+    myIMU.gz = gyro_data[2] * myIMU.gRes;
 //    Serial.print('(');
 //    Serial.print(myIMU.gx);
 //    Serial.print(",");
@@ -203,8 +203,6 @@ void loop()
    */
   for (uint8_t i = 0; i < 4; i++) {
     int8_t quaternion_value = (*(getQ() + i)) * kQuaternionMultFact;
-//    Serial.print(*(getQ() + i));
-//    Serial.print(",");
     transmit_buffer[2 + i] = quaternion_value;
   }
 
@@ -238,34 +236,6 @@ void loop()
       transmit_buffer[34+i] = magnet_array_y[i];
       transmit_buffer[38+i] = magnet_array_z[i];
   }
-
-
-//  for (uint8_t i = 0; i < 3; i++) {
-//    uint8_t accel_high = (0xff & (accel_data[i] >> 8));
-//    transmit_buffer[6 + i] = accel_high;
-//  }
-//  for(uint8_t i = 0; i < 3; i++) {
-//  uint8_t accel_low = (0xff & accel_data[i]);
-//    transmit_buffer[9 + i] = accel_low;
-//  }
-//  // transmit gyroscope data
-//  for (uint8_t i = 0; i < 3; i++) {
-//    uint8_t gyro_high = (0xff & (gyro_data[i] >> 8));
-//    transmit_buffer[12 + i] = gyro_high;
-//  }
-//  for (uint8_t i = 0; i < 3; i++) {
-//    uint8_t gyro_low = (0xff & gyro_data[i]);
-//    transmit_buffer[15 + i] = gyro_low;
-//  }
-//  // transmit magnetometer data
-//  for (uint8_t i = 0; i < 3; i++) {
-//    uint8_t mag_high = (0xff & (mag_data[i] >> 8));
-//    transmit_buffer[18+i] = mag_high;
-//  }
-//  for(uint8_t i = 0; i < 3; i++) {
-//    uint8_t mag_low = (0xff & mag_data[i]);
-//    transmit_buffer[21+i] = mag_low;
-//  }
   transmit_buffer[42] = message_count;
   transmit_buffer[43] = '\r';
   transmit_buffer[44] = '\n';  // terminating characters for the raspberry Pi
