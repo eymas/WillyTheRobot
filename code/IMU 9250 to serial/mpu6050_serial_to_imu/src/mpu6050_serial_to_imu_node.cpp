@@ -145,7 +145,7 @@ int main(int argc, char** argv)
                 //http://answers.ros.org/question/10124/relative-rotation-between-two-quaternions/
                 tf::Quaternion differential_rotation;
                 differential_rotation = zero_orientation.inverse() * orientation;
-                float ax, az, ay, gx, gy, gz, mx, my, mz;
+                int32_t ax, az, ay, gx, gy, gz, mx, my, mz;
                 for(uint8_t i = 0; i < 4; i++) {
                     // get accelerometer values
                      ax = ((ax << 8) | static_cast<uint8_t>(input[data_packet_start+5+i]));
@@ -163,24 +163,36 @@ int main(int argc, char** argv)
                      mz = ((mz << 8) | static_cast<uint8_t>(input[data_packet_start+37+i]));
                     std::cout << "MX: " << mx << " MY: " << my << " MZ: " << mz << '\n';
                 }
+                float fax, faz, fay, fgx, fgy, fgz, fmx, fmy, fmz;
+                fax = static_cast<float>(ax);
+                fay = static_cast<float>(ay);
+                faz = static_cast<float>(az);
+
+                fgx = static_cast<float>(gx);
+                fgy = static_cast<float>(gy);
+                fgz = static_cast<float>(gz);
+                
+                fmx = static_cast<float>(mx);
+                fmy = static_cast<float>(my);
+                fmz = static_cast<float>(mz);
                 // calculate rotational velocities in rad/s
                 // http://www.i2cdevlib.com/forums/topic/106-get-angular-velocity-from-mpu-6050/
                 // FIFO frequency 100 Hz -> factor 10 ?
                 //TODO: check / test if rotational velocities are correct
-                double gxf = gx * (M_PI/180.0);
-                double gyf = gy * (M_PI/180.0);
-                double gzf = gz * (M_PI/180.0);
+                double gxf = fgx * (M_PI/180.0);
+                double gyf = fgy * (M_PI/180.0);
+                double gzf = fgz * (M_PI/180.0);
                   std::cout << gxf << " " << gyf << " " << gzf << "\n";
 
                 // calculate accelerations in m/s²
-                double axf = ax  * 9.81;
-                double ayf = ay  * 9.81;
-                double azf = az  * 9.81;
+                double axf = fax  * 9.81;
+                double ayf = fay  * 9.81;
+                double azf = faz  * 9.81;
                 std::cout << axf << " " << ayf << " " << azf << "\n";
 
-                double gmx = mx * pow(10, -7); // convert from milligauss to Tesla for the sake of ROS
-                double gmy = my * pow(10, -7);
-                double gmz = mz * pow(10, -7);
+                double gmx = fmx * pow(10, -7); // convert from milligauss to Tesla for the sake of ROS
+                double gmy = fmy * pow(10, -7);
+                double gmz = fmz * pow(10, -7);
 
                 std::cout << gmx << " " << gmy << " " << gmz << "\n";
                 std::cout << "package no. " << static_cast<int>(input[data_packet_start+41]) << "\r\n";
