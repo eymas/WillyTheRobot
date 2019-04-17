@@ -31,6 +31,11 @@
 const int kQuaternionMultFact = 100;
 const int kBytesToSend = 45;
 
+union Float {
+    float    m_float;
+    uint8_t  m_bytes[sizeof(float)];
+};
+
 // Pin definitions
 int intPin = 12;  // These can be changed, 2 and 3 are the Arduinos ext int pins
 int myLed  = 13;  // Set up pin 13 led for toggling
@@ -130,14 +135,6 @@ void loop()
     myIMU.ax = (accel_data[0] * myIMU.aRes);// - myIMU.accelBias[0];
     myIMU.ay = (accel_data[1] * myIMU.aRes);// - myIMU.accelBias[1];
     myIMU.az = (accel_data[2] * myIMU.aRes);// - myIMU.accelBias[2];
-//    Serial.println("==========================================");
-//    Serial.print('(');
-//    Serial.print(myIMU.ax);
-//    Serial.print(",");
-//    Serial.print(myIMU.ay);
-//    Serial.print(",");
-//    Serial.print(myIMU.az);
-//    Serial.println(')');
     // Calculate the gyro value into actual degrees per second
     // This depends on scale being set
     myIMU.gx = gyro_data[0] * myIMU.gRes;

@@ -25,6 +25,11 @@ bool set_zero_orientation(std_srvs::Empty::Request&,
   return true;
 }
 
+union c_float {
+    uint8_t input_data[4];
+    float output_data;
+};
+
 int main(int argc, char** argv)
 {
   serial::Serial ser;
@@ -144,10 +149,18 @@ int main(int argc, char** argv)
                 //http://answers.ros.org/question/10124/relative-rotation-between-two-quaternions/
                 tf::Quaternion differential_rotation;
                 differential_rotation = zero_orientation.inverse() * orientation;
+
+                union c_float accel_x;
+                for(uint8_t i = 0; i<4; i++) {
+                    accel_x[i] = static_cast<uint8_t>(input[data_packet_start+9-i]);
+                }
+
+                float temp = c_float;
+                std::cout << temp << " is the result of the union";
                 int32_t ax, az, ay, gx, gy, gz, mx, my, mz;
                 for(uint8_t i = 0; i < 4; i++) {
                     // get accelerometer values
-                     ax = (ax << 8);
+                     ax = (ax >> 8);
                      ax |= static_cast<uint8_t>(input[data_packet_start+9-i]);
                      std::cout << "Processed data: " << static_cast<int>(input[data_packet_start+9-i]) << "\n";
                      ay = (ay << 8);
