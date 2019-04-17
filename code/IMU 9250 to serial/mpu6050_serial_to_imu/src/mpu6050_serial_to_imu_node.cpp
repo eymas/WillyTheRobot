@@ -160,17 +160,16 @@ int main(int argc, char** argv)
                      mx = ((mx << 8) | static_cast<uint8_t>(input[data_packet_start+30+i]));
                      my = ((my << 8) | static_cast<uint8_t>(input[data_packet_start+34+i]));
                      mz = ((mz << 8) | static_cast<uint8_t>(input[data_packet_start+38+i]));
-
                 }
                 float fax, faz, fay, fgx, fgy, fgz, fmx, fmy, fmz;
                 fax = static_cast<float>(ax);
                 fay = static_cast<float>(ay);
                 faz = static_cast<float>(az);
-                  std::cout << "AX: " << fax << " AY: " << fay << " AZ: " << faz << '\n';
+
                 fgx = static_cast<float>(gx);
                 fgy = static_cast<float>(gy);
                 fgz = static_cast<float>(gz);
-                  std::cout << "GX: " << fgx << " GY: " << fgy << " GZ: " << fgz << '\n';
+
                 fmx = static_cast<float>(mx);
                 fmy = static_cast<float>(my);
                 fmz = static_cast<float>(mz);
@@ -179,22 +178,23 @@ int main(int argc, char** argv)
                 // http://www.i2cdevlib.com/forums/topic/106-get-angular-velocity-from-mpu-6050/
                 // FIFO frequency 100 Hz -> factor 10 ?
                 //TODO: check / test if rotational velocities are correct
-                double gxf = fgx * (M_PI/180.0);
-                double gyf = fgy * (M_PI/180.0);
-                double gzf = fgz * (M_PI/180.0);
-                  std::cout << gxf << " " << gyf << " " << gzf << "\n";
+                double gxf = static_cast<double>(fgx) * (M_PI/180.0);
+                double gyf = static_cast<double>(fgy) * (M_PI/180.0);
+                double gzf = static_cast<double>(fgz) * (M_PI/180.0);
 
                 // calculate accelerations in m/s²
-                double axf = fax  * 9.81;
-                double ayf = fay  * 9.81;
-                double azf = faz  * 9.81;
+                double axf = static_cast<double>(fax)  * 9.81;
+                double ayf = static_cast<double>(fay)  * 9.81;
+                double azf = static_cast<double>(faz)  * 9.81;
                 std::cout << axf << " " << ayf << " " << azf << "\n";
 
-                double gmx = fmx * pow(10, -7); // convert from milligauss to Tesla for the sake of ROS
-                double gmy = fmy * pow(10, -7);
-                double gmz = fmz * pow(10, -7);
+                double gmx = static_cast<double>(fmx) * pow(10, -7); // convert from milligauss to Tesla for the sake of ROS
+                double gmy = static_cast<double>(fmy) * pow(10, -7);
+                double gmz = static_cast<double>(fmz) * pow(10, -7);
 
-                std::cout << gmx << " " << gmy << " " << gmz << "\n";
+                std::cout << "AXF:" << axf << " AYF:" << ayf << " AZF:" << azf << "\n";
+                std::cout << "GXF:" << gxf << " GYF:" << gyf << " GZF:" << gzf << "\n";
+                std::cout << "GMX:" << gmx << " GMY:" << gmy << " GMZ:" << gmz << "\n";
                 std::cout << "package no. " << static_cast<int>(input[data_packet_start+42]) << "\r\n";
                 uint8_t received_message_number = static_cast<int>(input[data_packet_start + 42]);
 

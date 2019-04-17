@@ -108,9 +108,9 @@ void setup()
 
 void loop()
 {
-  int16_t accel_data[3];
-  int16_t gyro_data[3];
-  int16_t mag_data[3];
+  float accel_data[3];
+  float gyro_data[3];
+  float mag_data[3];
 
   // If intPin goes high, all data registers have new data
   // On interrupt, check if data ready interrupt
