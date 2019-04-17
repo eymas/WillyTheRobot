@@ -150,30 +150,31 @@ int main(int argc, char** argv)
                      ax = ((ax << 8) | static_cast<uint8_t>(input[data_packet_start+6+i]));
                      ay = ((ay << 8) | static_cast<uint8_t>(input[data_packet_start+10+i]));
                      az = ((az << 8) | static_cast<uint8_t>(input[data_packet_start+14+i]));
-                    std::cout << "AX: " << ax << " AY: " << ay << " AZ: " << az << '\n';
+
                     // get gyro values
                      gx = ((gx << 8) | static_cast<uint8_t>(input[data_packet_start+18+i]));
                      gy = ((gy << 8) | static_cast<uint8_t>(input[data_packet_start+22+i]));
                      gz = ((gz << 8) | static_cast<uint8_t>(input[data_packet_start+26+i]));
-                    std::cout << "GX: " << gx << " GY: " << gy << " GZ: " << gz << '\n';
+
                     // get magnetometer values
                      mx = ((mx << 8) | static_cast<uint8_t>(input[data_packet_start+30+i]));
                      my = ((my << 8) | static_cast<uint8_t>(input[data_packet_start+34+i]));
                      mz = ((mz << 8) | static_cast<uint8_t>(input[data_packet_start+38+i]));
-                    std::cout << "MX: " << mx << " MY: " << my << " MZ: " << mz << '\n';
+
                 }
                 float fax, faz, fay, fgx, fgy, fgz, fmx, fmy, fmz;
                 fax = static_cast<float>(ax);
                 fay = static_cast<float>(ay);
                 faz = static_cast<float>(az);
-
+                  std::cout << "AX: " << fax << " AY: " << fay << " AZ: " << faz << '\n';
                 fgx = static_cast<float>(gx);
                 fgy = static_cast<float>(gy);
                 fgz = static_cast<float>(gz);
-
+                  std::cout << "GX: " << fgx << " GY: " << fgy << " GZ: " << fgz << '\n';
                 fmx = static_cast<float>(mx);
                 fmy = static_cast<float>(my);
                 fmz = static_cast<float>(mz);
+                  std::cout << "MX: " << fmx << " MY: " << fmy << " MZ: " << fmz << '\n';
                 // calculate rotational velocities in rad/s
                 // http://www.i2cdevlib.com/forums/topic/106-get-angular-velocity-from-mpu-6050/
                 // FIFO frequency 100 Hz -> factor 10 ?
