@@ -29,7 +29,7 @@
 
 #define AHRS false         // Set to false for basic data read
 const int kQuaternionMultFact = 100;
-const int kBytesToSend = 44;
+const int kBytesToSend = 45;
 
 // Pin definitions
 int intPin = 12;  // These can be changed, 2 and 3 are the Arduinos ext int pins
@@ -228,15 +228,15 @@ void loop()
   uint8_t *magnet_array_z = reinterpret_cast<uint8_t*>(&mag_data[2]);
 
   for(uint8_t i = 0; i < 4; i++) {
-      transmit_buffer[5+i] = accel_array_x[i];
-      transmit_buffer[9+i] = accel_array_y[i];
-      transmit_buffer[13+i] = accel_array_z[i];
-      transmit_buffer[17+i] = gyro_array_x[i];
-      transmit_buffer[21+i] = gyro_array_y[i];
-      transmit_buffer[25+i] = gyro_array_z[i];
-      transmit_buffer[29+i] = magnet_array_x[i];
-      transmit_buffer[33+i] = magnet_array_y[i];
-      transmit_buffer[37+i] = magnet_array_z[i];
+      transmit_buffer[6+i] = accel_array_x[i];
+      transmit_buffer[10+i] = accel_array_y[i];
+      transmit_buffer[14+i] = accel_array_z[i];
+      transmit_buffer[18+i] = gyro_array_x[i];
+      transmit_buffer[22+i] = gyro_array_y[i];
+      transmit_buffer[26+i] = gyro_array_z[i];
+      transmit_buffer[30+i] = magnet_array_x[i];
+      transmit_buffer[34+i] = magnet_array_y[i];
+      transmit_buffer[38+i] = magnet_array_z[i];
   }
 
 
@@ -266,9 +266,9 @@ void loop()
 //    uint8_t mag_low = (0xff & mag_data[i]);
 //    transmit_buffer[21+i] = mag_low;
 //  }
-  transmit_buffer[41] = message_count;
-  transmit_buffer[42] = '\r';
-  transmit_buffer[43] = '\n';  // terminating characters for the raspberry Pi
+  transmit_buffer[42] = message_count;
+  transmit_buffer[43] = '\r';
+  transmit_buffer[44] = '\n';  // terminating characters for the raspberry Pi
   Serial.write(transmit_buffer, kBytesToSend);
   message_count++;
 

@@ -13,7 +13,7 @@
 
 
 bool zero_orientation_set = false;
-const uint8_t kBytesToReceive = 44;
+const uint8_t kBytesToReceive = 46;
 bool allow_store = false;
 bool allow_read = false;
 
