@@ -13,8 +13,7 @@
 
 
 bool zero_orientation_set = false;
-const uint8_t kBytesToReceive = 45;
-//const uint8_t kStorageSize = 100;
+const uint8_t kBytesToReceive = 44;
 bool allow_store = false;
 bool allow_read = false;
 
@@ -171,7 +170,7 @@ int main(int argc, char** argv)
                 fgx = static_cast<float>(gx);
                 fgy = static_cast<float>(gy);
                 fgz = static_cast<float>(gz);
-                
+
                 fmx = static_cast<float>(mx);
                 fmy = static_cast<float>(my);
                 fmz = static_cast<float>(mz);

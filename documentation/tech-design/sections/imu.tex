@@ -137,10 +137,10 @@ The data recorded by the arduino is stored in a float data-type, which is not tr
 In order to counter this, all the floats are split into 4 bytes, each stored in an array of 4 unsigned 8-bit integers.
 This is then read byte for byte, and each time the already existing result is left shifted by 8, so that after 4 iterations the full float is back again.
 These floats are still raw data, however.
-In order to ensure they are ROS compliant \cite{ROSformat}, they are changed into the appropriate units, such as radians and $ms^-2$, rather than the degrees and G's they are returned as by the MPU9250 \cite{MPU9250}.
+In order to ensure they are ROS compliant \cite{ROSformat}, they are changed into the appropriate units, such as radians and $ms^{-2}$, rather than the degrees and G's they are returned as by the MPU9250 \cite{MPU9250}.
 
 This is done, for the accelerometer data, by multiplying it by the standard for gravity on earth, 9.81.
-This converts it from G's into $ms^-2$.
+This converts it from G's into $ms^{-2}$.
 For the gyroscope, the data needs to be in radians, which is achieved by multiplying the degrees by $\pi$, and then dividing it by 180.
 The magnetometer data is a bit simpler, since the difference between milliGauss and Tesla is just a matter of factor.
 One Tesla is $1.0 \cdot 10^{7}$ milliGauss, so in order to convert mG into T, the opposite needs to be done, multiplying the received data by  $1.0 \cdot 10^{-7}$.
