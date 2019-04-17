@@ -100,7 +100,7 @@ int main(int argc, char** argv)
         if(ser.available())
         {
           read = ser.read(ser.available());
-          input+= read;
+          input += read;
           ROS_DEBUG("read %i new characters from serial port, adding to %i characters of old input.", (int)read.size(), (int)input.size());
           while ((input.length() >= kBytesToReceive)/* && allow_read*/)
           { // while there might be a complete package in input
@@ -147,19 +147,20 @@ int main(int argc, char** argv)
                 int32_t ax, az, ay, gx, gy, gz, mx, my, mz;
                 for(uint8_t i = 0; i < 4; i++) {
                     // get accelerometer values
-                     ax = ((ax << 8) | static_cast<uint8_t>(input[data_packet_start+9-i]));
-                     ay = ((ay << 8) | static_cast<uint8_t>(input[data_packet_start+13-i]));
-                     az = ((az << 8) | static_cast<uint8_t>(input[data_packet_start+17-i]));
+                     ax = ((ax << 8) | static_cast<int32_t>(input[data_packet_start+9-i]));
+                     std::cout << "Processed data: " << static_cast<int>(input[data_packet_start+9-i]) << "\n";
+                     ay = ((ay << 8) | static_cast<int32_t>(input[data_packet_start+13-i]));
+                     az = ((az << 8) | static_cast<int32_t>(input[data_packet_start+17-i]));
 
                     // get gyro values
-                     gx = ((gx << 8) | static_cast<uint8_t>(input[data_packet_start+21-i]));
-                     gy = ((gy << 8) | static_cast<uint8_t>(input[data_packet_start+25-i]));
-                     gz = ((gz << 8) | static_cast<uint8_t>(input[data_packet_start+29-i]));
+                     gx = ((gx << 8) | static_cast<int32_t>(input[data_packet_start+21-i]));
+                     gy = ((gy << 8) | static_cast<int32_t>(input[data_packet_start+25-i]));
+                     gz = ((gz << 8) | static_cast<int32_t>(input[data_packet_start+29-i]));
 
                     // get magnetometer values
-                     mx = ((mx << 8) | static_cast<uint8_t>(input[data_packet_start+33-i]));
-                     my = ((my << 8) | static_cast<uint8_t>(input[data_packet_start+37-i]));
-                     mz = ((mz << 8) | static_cast<uint8_t>(input[data_packet_start+41-i]));
+                     mx = ((mx << 8) | static_cast<int32_t>(input[data_packet_start+33-i]));
+                     my = ((my << 8) | static_cast<int32_t>(input[data_packet_start+37-i]));
+                     mz = ((mz << 8) | static_cast<int32_t>(input[data_packet_start+41-i]));
                 }
 
                 float fax, faz, fay, fgx, fgy, fgz, fmx, fmy, fmz;
