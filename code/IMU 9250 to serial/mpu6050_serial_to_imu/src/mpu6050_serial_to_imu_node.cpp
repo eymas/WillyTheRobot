@@ -147,19 +147,19 @@ int main(int argc, char** argv)
                 int32_t ax, az, ay, gx, gy, gz, mx, my, mz;
                 for(uint8_t i = 0; i < 4; i++) {
                     // get accelerometer values
-                     ax = ((ax << 8) | static_cast<uint8_t>(input[data_packet_start+5+i]));
-                     ay = ((ay << 8) | static_cast<uint8_t>(input[data_packet_start+9+i]));
-                     az = ((az << 8) | static_cast<uint8_t>(input[data_packet_start+13+i]));
+                     ax = ((ax << 8) | static_cast<uint8_t>(input[data_packet_start+6+i]));
+                     ay = ((ay << 8) | static_cast<uint8_t>(input[data_packet_start+10+i]));
+                     az = ((az << 8) | static_cast<uint8_t>(input[data_packet_start+14+i]));
                     std::cout << "AX: " << ax << " AY: " << ay << " AZ: " << az << '\n';
                     // get gyro values
-                     gx = ((gx << 8) | static_cast<uint8_t>(input[data_packet_start+17+i]));
-                     gy = ((gy << 8) | static_cast<uint8_t>(input[data_packet_start+21+i]));
-                     gz = ((gz << 8) | static_cast<uint8_t>(input[data_packet_start+25+i]));
+                     gx = ((gx << 8) | static_cast<uint8_t>(input[data_packet_start+18+i]));
+                     gy = ((gy << 8) | static_cast<uint8_t>(input[data_packet_start+22+i]));
+                     gz = ((gz << 8) | static_cast<uint8_t>(input[data_packet_start+26+i]));
                     std::cout << "GX: " << gx << " GY: " << gy << " GZ: " << gz << '\n';
                     // get magnetometer values
-                     mx = ((mx << 8) | static_cast<uint8_t>(input[data_packet_start+29+i]));
-                     my = ((my << 8) | static_cast<uint8_t>(input[data_packet_start+33+i]));
-                     mz = ((mz << 8) | static_cast<uint8_t>(input[data_packet_start+37+i]));
+                     mx = ((mx << 8) | static_cast<uint8_t>(input[data_packet_start+30+i]));
+                     my = ((my << 8) | static_cast<uint8_t>(input[data_packet_start+34+i]));
+                     mz = ((mz << 8) | static_cast<uint8_t>(input[data_packet_start+38+i]));
                     std::cout << "MX: " << mx << " MY: " << my << " MZ: " << mz << '\n';
                 }
                 float fax, faz, fay, fgx, fgy, fgz, fmx, fmy, fmz;
@@ -194,7 +194,7 @@ int main(int argc, char** argv)
                 double gmz = fmz * pow(10, -7);
 
                 std::cout << gmx << " " << gmy << " " << gmz << "\n";
-                std::cout << "package no. " << static_cast<int>(input[data_packet_start+41]) << "\r\n";
+                std::cout << "package no. " << static_cast<int>(input[data_packet_start+42]) << "\r\n";
                 uint8_t received_message_number = static_cast<int>(input[data_packet_start + 42]);
 
                 if (received_message) // can only check for continuous numbers if already received at least one packet
