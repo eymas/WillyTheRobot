@@ -166,14 +166,14 @@ int main(int argc, char** argv)
                      ay = (ay << 8);
                      ay |= static_cast<uint8_t>(input[data_packet_start+13-i]);
                      az = (az << 8);
-                     az |= static_cast<uint8_t>(input[data_packet_start+17-i]));
+                     az |= static_cast<uint8_t>(input[data_packet_start+17-i]);
 
                     // get gyro values
                      gx = (gx << 8);
                      gx |= static_cast<uint8_t>(input[data_packet_start+21-i]);
-                     gy = (gy << 8)
+                     gy = (gy << 8);
                      gy |= static_cast<uint8_t>(input[data_packet_start+25-i]);
-                     gz = (gz << 8)
+                     gz = (gz << 8);
                      gz |= static_cast<uint8_t>(input[data_packet_start+29-i]);
 
                     // get magnetometer values
