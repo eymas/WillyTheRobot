@@ -1,5 +1,5 @@
 \section{IMU}
-The previous odometry measuring device, the MPU6250 \cite{mpu6250} was broken, which is why a new, updated version is currently being used.
+The previous odometry measuring device, the MPU6050 \cite{MPU6050} was broken, which is why a new, updated version is currently being used.
 Another reason a new version is used is that the MPU9250 \cite{MPU9250} also contains an AK8963, which is a 3-axis magnetometer.
 This allow WTR to more accurately track orientation, since it can use the magnetometer to find its position relative to the north.
 The data is collected as explained in this section \ref{sec::collect}, and then transmitted to a Raspberry Pi which deals with all the sensors.
@@ -14,7 +14,7 @@ This is needed because the MPU does not output quaternions by default.
 This library allows the Arduino to calculate those, and then send them on to the Pi.
 
 
-\subsubsection{The Set-up} \label{sec::setup}
+\subsubsection{The Set-up} \label{sec::set-up}
 After checking the address of the MPU9250, it will first do a self-test, where it determines the biases and stores them in its registers, through the \code{MPU9250SelfTest()} and \code{calibrateMPU9250()} functions.
 The address of the MPU should be 0x71 according to the library, but since a slightly different model is used from the one the demo code is written for, the address is 0x73.
 After that, it calibrates itself and stores those values as well.
@@ -140,7 +140,7 @@ These floats are still raw data, however.
 In order to ensure they are ROS compliant \cite{ROSformat}, they are changed into the appropriate units, such as radians and $ms^{-2}$, rather than the degrees and G's they are returned as by the MPU9250 \cite{MPU9250}.
 
 This is done, for the accelerometer data, by multiplying it by the standard for gravity on earth, 9.81.
-This converts it from G's into $ms^{-2}$.
+This converts it from $G$ into $ms^{-2}$.
 For the gyroscope, the data needs to be in radians, which is achieved by multiplying the degrees by $\pi$, and then dividing it by 180.
 The magnetometer data is a bit simpler, since the difference between milliGauss and Tesla is just a matter of factor.
 One Tesla is $1.0 \cdot 10^{7}$ milliGauss, so in order to convert mG into T, the opposite needs to be done, multiplying the received data by  $1.0 \cdot 10^{-7}$.
