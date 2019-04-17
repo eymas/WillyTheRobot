@@ -150,67 +150,37 @@ int main(int argc, char** argv)
                 tf::Quaternion differential_rotation;
                 differential_rotation = zero_orientation.inverse() * orientation;
 
-                union c_float accel_x;
-                for(uint8_t i = 0; i<4; i++) {
-                    accel_x[i] = static_cast<uint8_t>(input[data_packet_start+9-i]);
-                }
+                union c_float accel_x, accel_y, accel_z, gyro_x, gyro_y, gyro_z, mag_x, mag_y, mag_z;
 
-                float temp = c_float;
-                std::cout << temp << " is the result of the union";
-                int32_t ax, az, ay, gx, gy, gz, mx, my, mz;
                 for(uint8_t i = 0; i < 4; i++) {
-                    // get accelerometer values
-                     ax = (ax >> 8);
-                     ax |= static_cast<uint8_t>(input[data_packet_start+9-i]);
-                     std::cout << "Processed data: " << static_cast<int>(input[data_packet_start+9-i]) << "\n";
-                     ay = (ay << 8);
-                     ay |= static_cast<uint8_t>(input[data_packet_start+13-i]);
-                     az = (az << 8);
-                     az |= static_cast<uint8_t>(input[data_packet_start+17-i]);
+                    accel_x.input_data[i] = static_cast<uint8_t>(input[data_packet_start+6+i]);
+                    accel_y.input_data[i] = static_cast<uint8_t>(input[data_packet_start+10+i]);
+                    accel_z.input_data[i] = static_cast<uint8_t>(input[data_packet_start+14+i]);
 
-                    // get gyro values
-                     gx = (gx << 8);
-                     gx |= static_cast<uint8_t>(input[data_packet_start+21-i]);
-                     gy = (gy << 8);
-                     gy |= static_cast<uint8_t>(input[data_packet_start+25-i]);
-                     gz = (gz << 8);
-                     gz |= static_cast<uint8_t>(input[data_packet_start+29-i]);
+                    gyro_x.input_data[i] = static_cast<uint8_t>(input[data_packet_start+18+i]);
+                    gyro_y.input_data[i] = static_cast<uint8_t>(input[data_packet_start+22+i]);
+                    gyro_z.input_data[i] = static_cast<uint8_t>(input[data_packet_start+26+i]);
 
-                    // get magnetometer values
-                     mx = ((mx << 8) | static_cast<uint8_t>(input[data_packet_start+33-i]));
-                     my = ((my << 8) | static_cast<uint8_t>(input[data_packet_start+37-i]));
-                     mz = ((mz << 8) | static_cast<uint8_t>(input[data_packet_start+41-i]));
+                    mag_x.input_data[i] = static_cast<uint8_t>(input[data_packet_start+30+i]);
+                    mag_y.input_data[i] = static_cast<uint8_t>(input[data_packet_start+34+i]);
+                    mag_z.input_data[i] = static_cast<uint8_t>(input[data_packet_start+38+i]);
                 }
-
-                float fax, faz, fay, fgx, fgy, fgz, fmx, fmy, fmz;
-                fax = static_cast<float>(ax);
-                fay = static_cast<float>(ay);
-                faz = static_cast<float>(az);
-
-                fgx = static_cast<float>(gx);
-                fgy = static_cast<float>(gy);
-                fgz = static_cast<float>(gz);
-
-                fmx = static_cast<float>(mx);
-                fmy = static_cast<float>(my);
-                fmz = static_cast<float>(mz);
                 // calculate rotational velocities in rad/s
                 // http://www.i2cdevlib.com/forums/topic/106-get-angular-velocity-from-mpu-6050/
                 // FIFO frequency 100 Hz -> factor 10 ?
                 //TODO: check / test if rotational velocities are correct
-                double gxf = static_cast<double>(fgx) * (M_PI/180.0);
-                double gyf = static_cast<double>(fgy) * (M_PI/180.0);
-                double gzf = static_cast<double>(fgz) * (M_PI/180.0);
+                double gxf = gyro_x.output_data * (M_PI/180.0);
+                double gyf = gyro_y.output_data * (M_PI/180.0);
+                double gzf = gyro_z.output_data * (M_PI/180.0);
 
                 // calculate accelerations in m/s²
-                double axf = static_cast<double>(fax)  * 9.81;
-                double ayf = static_cast<double>(fay)  * 9.81;
-                double azf = static_cast<double>(faz)  * 9.81;
-                std::cout << axf << " " << ayf << " " << azf << "\n";
+                double axf = accel_x.output_data  * 9.81;
+                double ayf = accel_y.output_data  * 9.81;
+                double azf = accel_z.output_data  * 9.81;
 
-                double gmx = static_cast<double>(fmx) * pow(10, -7); // convert from milligauss to Tesla for the sake of ROS
-                double gmy = static_cast<double>(fmy) * pow(10, -7);
-                double gmz = static_cast<double>(fmz) * pow(10, -7);
+                double gmx = mag_x.output_data * pow(10, -7); // convert from milligauss to Tesla for the sake of ROS
+                double gmy = mag_y.output_data * pow(10, -7);
+                double gmz = mag_z.output_data * pow(10, -7);
 
                 std::cout << "AXF:" << axf << " AYF:" << ayf << " AZF:" << azf << "\n";
                 std::cout << "GXF:" << gxf << " GYF:" << gyf << " GZF:" << gzf << "\n";
