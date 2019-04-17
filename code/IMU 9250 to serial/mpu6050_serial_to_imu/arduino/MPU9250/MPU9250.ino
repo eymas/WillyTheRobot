@@ -235,6 +235,13 @@ void loop()
       transmit_buffer[30+i] = magnet_array_x[i];
       transmit_buffer[34+i] = magnet_array_y[i];
       transmit_buffer[38+i] = magnet_array_z[i];
+//      Serial.print(myIMU.accelCount[0]);
+//      Serial.print(">");
+//      Serial.print(accel_data[0]);
+//      Serial.print("-->");
+//      Serial.print(accel_array_x[i]);
+//      Serial.print("&&");
+//      Serial.println(transmit_buffer[6+i]);
   }
   transmit_buffer[42] = message_count;
   transmit_buffer[43] = '\r';
