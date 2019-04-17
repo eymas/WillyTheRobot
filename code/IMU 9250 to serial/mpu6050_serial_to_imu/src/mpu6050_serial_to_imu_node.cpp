@@ -161,6 +161,7 @@ int main(int argc, char** argv)
                      my = ((my << 8) | static_cast<uint8_t>(input[data_packet_start+34+i]));
                      mz = ((mz << 8) | static_cast<uint8_t>(input[data_packet_start+38+i]));
                 }
+
                 float fax, faz, fay, fgx, fgy, fgz, fmx, fmy, fmz;
                 fax = static_cast<float>(ax);
                 fay = static_cast<float>(ay);
@@ -173,7 +174,6 @@ int main(int argc, char** argv)
                 fmx = static_cast<float>(mx);
                 fmy = static_cast<float>(my);
                 fmz = static_cast<float>(mz);
-                  std::cout << "MX: " << fmx << " MY: " << fmy << " MZ: " << fmz << '\n';
                 // calculate rotational velocities in rad/s
                 // http://www.i2cdevlib.com/forums/topic/106-get-angular-velocity-from-mpu-6050/
                 // FIFO frequency 100 Hz -> factor 10 ?
@@ -248,8 +248,6 @@ int main(int argc, char** argv)
 
                 imu_pub.publish(imu);
                 mag_pub.publish(magfield);
-
-                //imu_temperature_pub.publish(temperature_msg);
 
                 // publish tf transform
                 if (broadcast_tf)
