@@ -1,7 +1,3 @@
-#include <Ethernet.h>
-
-#include <SpacebrewYun.h>
-
 /*  This is the main file in the arduino Mega controlling the motorcontroller.
  *  
  *  Tasks:
@@ -11,6 +7,10 @@
  *  -The error is converted into an control value (by means of PID) for the motorcontroller
  *  -The control value is send to the motorcontroller.
  *  -Repeat
+ *  
+ *  Optional:
+ *  A program is available called: PID_GUI which reads out serial 2 from the motor controller and
+ *  shows graphs of varias data which can be used to tune various variables.
  *  
  *  Revision 3
  *  6-3-2019
@@ -31,14 +31,14 @@ float volatile irun, iturn;
 unsigned long time_stamp;
 unsigned char data[6];
 
-/*  Turn and drive variables are read out from ros and stored in irun and idrive.
- */
+//Turn and drive variables are read out from ros and stored in irun and idrive.
 void messageCb(const geometry_msgs::Twist& twistMsg)
 {
   irun = twistMsg.linear.x;
   iturn = twistMsg.angular.z;
-  time_stamp = millis();    // store time at which message was received so old instructions are not repeated.
-  
+      
+  // store time at which message was received so old instructions are not repeated.
+  time_stamp = millis();
 }
 
 ros::Subscriber<geometry_msgs::Twist> sub("/cmd_vel", &messageCb);
@@ -53,10 +53,9 @@ const int LeftPulseInputB = 21;
 const int RightPulseInputA = 2;
 const int RightPulseInputB = 3;
 
-//Controlloop with 2 PID. One for turning and one for driving.
-//Values represent: turn Kp, turn Ki, turn Kd, drive Kp, drive Ki, drive Kd, Diff (Diff is used to change the reference speed for turning if needed)
+//Controlloop with 2 PID controllers. One for turning and one for driving.
+//Values represent: turn Kp, turn Ki, turn Kd, drive Kp, drive Ki, drive Kd
 ControlLoop Willy(80, 10, 0, 150, 15, 0);
-
 
 //used to lower the frequency of the PID loop.
 int PIDTrig = 0;                
@@ -86,8 +85,7 @@ void RightPulsBChange()
   RightWheel.BChange();
 }
 
-/* Main setup
- */
+// Main setup
 void setup() {
   nh.initNode();
   nh.subscribe(sub);
@@ -119,22 +117,6 @@ void SendToMotor(int Setdrive, int Setturn)
   int drive = Setdrive;                                                       //Set value from ros to motorcontroller
   int turn = Setturn;                                                       //Set value from ros to motorcontroller
 
-  //limit values to max 100 and min -100.
-  if (drive > 100) {
-    drive = 100;
-  }
-
-  if (drive < -100) {
-    drive = -100;
-  }
-
-  if (turn > 100) {
-    turn = 100;
-  }
-  if (turn < -100) {
-    turn = -100;
-  }
-
   //Create data array
   data[0] = 0x6A;                                            //-Datagram always start with 0x6A
   data[1] = drive;                                           //-Drive +-100
@@ -150,14 +132,16 @@ void SendToMotor(int Setdrive, int Setturn)
   }
 }
 
-void writeString(String stringData) { // Used to serially push out a String with Serial2.write()
+// Used to serially push out a String with Serial2.write()
+void writeString(String stringData) {
 
   for (int i = 0; i < stringData.length(); i++)
   {
-    Serial2.write(stringData[i]);   // Push each char 1 by 1 on each loop pass
+    // Push each char 1 by 1 on each loop pass
+    Serial2.write(stringData[i]);
   }
 
-}// end writeString
+}
 
 /*  Activate PID
  *  Read out sensors
@@ -173,6 +157,7 @@ void ActivatePID()
     PIDTrig = 0;
 }
 
+//For tuning/read out purpuses.
 void SendSerial()
 {
     String TI = String(iturn,5);   //Turn input
@@ -187,33 +172,53 @@ void SendSerial()
     Serial2.println(TI + ";" + DI + ";" + TS + ";" + DS + ";" + TO + ";" + DO);
 }
 
+//safety
+void Stop()
+{
+    irun = 0;
+    iturn = 0;
+    SendToMotor(0, 0);
+}
+
 /* Main loop 
  * Run at 50Hz.
  */
 void loop() {
-  
+
+  //Time out to make sure robot stops when nothing is reiced whitin time.
   if((millis() - time_stamp) > 750) {
-    irun = 0;
-    iturn = 0;
-    SendToMotor(0, 0);
+    Stop();
   }
   
-
+  //used to lower PID frequency
   PIDTrig++;
 
     //Run only at 10Hz.
     if (PIDTrig > 5)
     {
      ActivatePID();
-     SendSerial();
+     SendSerial(); //for tuning
     }
 
     SendToMotor(PIDDrive, PIDTurn);
 
+    analogValue = analogRead(A8);
+
+    if (analogValue > 500) 
+    {
+      //emergency stop active/pressed 
+      emergency.data = false;
+    } 
+    else 
+    {
+      //emergency stop non active
+      Stop();
+      emergency.data = true;
+    }
+
     pub.publish(&emergency);
   
     nh.spinOnce();
-    //Serial.flush();
+
     delay(20);
-  
 }

@@ -1,18 +1,21 @@
-/* This class is intended to decode a quadruature encoder in order to get a speed value in rad/s
+/* This class is intended to decode a quadruature encoder in order to get a speed value in m/s
  * Revision 1
  * 1-3-2019
  */
 
 class Encoder {
   private:
+    
+    const float Pi = 3.14159265359;            
+    const float pulsesPerRotation = 1024;        
+    const float WheelRadius = 0.16;               
 
-    const float Pi = 3.14159265359;               //Pi
-    const float pulsesPerRotation = 1024;          //amount of pulses per rotation
-    const float WheelRadius = 0.16;
-
+    //used to inverse result which is needed because one sensors is mounted mirrored
     bool Inverse = false;
 
+    //bool used for direction of rotation
     bool CCW = false;
+    
     bool SpeedRead = false;
     float counts = 0;
 

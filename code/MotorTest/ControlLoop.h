@@ -20,11 +20,11 @@ class ControlLoop {
     float Drive_Speed;  //unit:  [m/s]
   
     //ERROR
-    float Turn_Error = 0;
-    float Drive_Error = 0;
+    float Turn_Error = 0;  //unit:  [rad/s]
+    float Drive_Error = 0; //unit:  [m/s]
     
     //OUTPUTS
-    float Turn_Output = 0;  
+    float Turn_Output = 0; 
     float Drive_Output = 0;  
 
     //CONSTRUCTOR
@@ -44,12 +44,17 @@ class ControlLoop {
         TurnController.Reset();
       }
 
-      Turn_Speed = (Speed_Sensor_R - Speed_Sensor_L)/0.6;
-      Drive_Speed = (Speed_Sensor_R + Speed_Sensor_L)*0.5;
+      //calculate speed at which the robot is rotating, unit:  [rad/s]. 0.6 is the distance between the wheels in meters.
+      Turn_Speed = (Speed_Sensor_R - Speed_Sensor_L)/0.6; 
 
+      //calculate the speed at which the robot is moving, unit:  [m/s]. 0.5 is used to provide an average between both wheels.
+      Drive_Speed = (Speed_Sensor_R + Speed_Sensor_L)*0.5; 
+
+      //calculate errors.
       Turn_Error = Turn_Input - Turn_Speed;
       Drive_Error = Drive_Input - Drive_Speed;
 
+      //errors are send to both controllers to get an output signal.
       Turn_Output = TurnController.Get(Turn_Error);
       Drive_Output = DriveController.Get(Drive_Error);
     }

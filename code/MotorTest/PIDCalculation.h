@@ -35,6 +35,7 @@ class PIDCalculation {
       Error_2 = Error_1;
       Error_1 = Error;
 
+      //limit output to max 100 and min -100
       if (Output > 100)
       {
         Output = 100;
