@@ -20,7 +20,7 @@ The following devices were selected as potentially viable options:
 
 Each device has its features outlined in the following table:
 
-\begin{table}[h]
+\begin{figure}[H]
     \begin{tabular}{|c|c|c|c|c|c|}
     \hline
     \textbf{device} & \textbf{cost} & \textbf{operating voltage $V$} & \textbf{angular scale $^O /sec$} & \textbf{acceleration scale $G$}  & \textbf{format} \\ \hline
@@ -30,7 +30,7 @@ Each device has its features outlined in the following table:
     \end{tabular}
 \caption{comparison of features of the three selected 9-axis IMU's}
 \label{tbl::IMUcomp}
-\end{table}
+\end{figure}
 
 The three sensors here are fairly similar, though there are a few critical differences.
 The MPU9250 and the NXP are very similar, and even have the same price.
@@ -44,6 +44,31 @@ Figures were obtained from the following places:
 \item BNO055  - \cite{bno}
 \item NXP - \cite{nxp1} , \cite{nxp2}
 \end{itemize}
+
+
+\subsection{Hardware Setup}
+The wiring for the MPU9250 is as follows:
+
+\begin{figure}[H]
+\centering
+\includegraphics[width=12cm]{wires.png}
+\caption{Wiring setup for the MPU to Arduino communication}
+\label{fig::wiring}
+\end{figure}
+
+The pins used on the arduino are as follows: 
+\begin{figure}[H]
+\centering
+\begin{tabular}{|c|c|}
+\hline
+\textbf{Pin} & \textbf{Function} \\ \hline
+Analogue 4 & SDA \\ \hline
+Analogue 5 & SCL \\ \hline
+GND        & ground  \\ \hline
+3.3V       & VDD     \\ \hline
+\end{tabular}
+\end{figure}
+
 
 \newpage    
     

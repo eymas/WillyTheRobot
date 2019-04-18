@@ -169,7 +169,7 @@ int main(int argc, char** argv)
                 // http://www.i2cdevlib.com/forums/topic/106-get-angular-velocity-from-mpu-6050/
                 // FIFO frequency 100 Hz -> factor 10 ?
                 //TODO: check / test if rotational velocities are correct
-                double gxf = gyro_x.output_data * (M_PI/180.0);             
+                double gxf = gyro_x.output_data * (M_PI/180.0);
                 double gyf = gyro_y.output_data * (M_PI/180.0);
                 double gzf = gyro_z.output_data * (M_PI/180.0);
 
