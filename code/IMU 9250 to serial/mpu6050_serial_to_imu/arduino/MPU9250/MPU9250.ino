@@ -27,14 +27,16 @@
 #include "quaternionFilters.h"
 #include "MPU9250.h"
 
+
+//#define DEBUG
 #define AHRS false         // Set to false for basic data read
 const int kQuaternionMultFact = 100;
 const int kBytesToSend = 45;
 
-union Float {
-    float    m_float;
-    uint8_t  m_bytes[sizeof(float)];
-};
+  float accel_data[3][5];
+  float gyro_data[3][5];
+  float mag_data[3][5];
+  float accel_avg[3], gyro_avg[3], mag_avg[3];
 
 // Pin definitions
 int intPin = 12;  // These can be changed, 2 and 3 are the Arduinos ext int pins
@@ -95,15 +97,15 @@ void setup()
     myIMU.getAres();
     myIMU.getGres();
     myIMU.getMres();
-    
+
     myIMU.magBias[0] = -39.04;
     myIMU.magBias[1] = -129.98;
     myIMU.magBias[2] = -48.05;
-    
+
     myIMU.magScale[0] = 0.66;
     myIMU.magScale[1] = 1.36;
     myIMU.magScale[2] = 1.33;
-    
+
   } // if (c == 0x73)
   else
   {
@@ -113,58 +115,99 @@ void setup()
 
 void loop()
 {
-  float accel_data[3];
-  float gyro_data[3];
-  float mag_data[3];
 
+
+  for (uint8_t j = 0; j < 3; j++) {
+    for (uint8_t i = 0; i < 4; i++) {
+      accel_data[j][i + 1] = accel_data[j][i];
+      gyro_data[j][i + 1] = gyro_data[j][i];
+      mag_data[j][i + 1] = mag_data[j][i];
+    }
+  }
   // If intPin goes high, all data registers have new data
   // On interrupt, check if data ready interrupt
   if (myIMU.readByte(MPU9250_ADDRESS, INT_STATUS) & 0x01)
   {
-
     myIMU.readAccelData(myIMU.accelCount);  // Read the x/y/z adc values
     myIMU.readGyroData(myIMU.gyroCount);  // Read the x/y/z adc values
     myIMU.readMagData(myIMU.magCount);  // Read the x/y/z adc values
     for (uint8_t i = 0; i < 3; i++) {
-      accel_data[i] = static_cast<float>(myIMU.accelCount[i]);
-      gyro_data[i] = static_cast<float>(myIMU.gyroCount[i]);
-      mag_data[i] = static_cast<float>(myIMU.magCount[i]);
+      accel_data[i][0] = static_cast<float>(myIMU.accelCount[i]);
+      gyro_data[i][0] = static_cast<float>(myIMU.gyroCount[i]);
+      mag_data[i][0] = static_cast<float>(myIMU.magCount[i]);
+    }
+    for (uint8_t j = 0; j < 3; j++) {
+      for (uint8_t i = 0; i < 5; i++) {
+        accel_avg[j] += accel_data[j][i];
+        gyro_avg[j]  += gyro_data[j][i];
+        mag_avg[j]   += mag_data[j][i];
+      }
+      #ifdef DEBUG
+      Serial.print("mavg = ");
+      Serial.println(mag_avg[j]);
+      #endif
+    }
+    for (uint8_t i = 0; i < 3; i++) {
+      accel_avg[i] = accel_avg[i] / 5;
+      gyro_avg[i] = gyro_avg[i] / 5;
+      mag_avg[i] = mag_avg[i] / 5;
+      #ifdef DEBUG
+      Serial.print("mavg/5 = ");
+      Serial.println(mag_avg[i]);
+      #endif
     }
     // Now we'll calculate the accleration value into actual g's
     // This depends on scale being set
-    myIMU.ax = (accel_data[0] * myIMU.aRes);// - myIMU.accelBias[0];
-    myIMU.ay = (accel_data[1] * myIMU.aRes);// - myIMU.accelBias[1];
-    myIMU.az = (accel_data[2] * myIMU.aRes);// - myIMU.accelBias[2];
+    myIMU.ax = (accel_avg[0] * myIMU.aRes) - myIMU.accelBias[0];
+    myIMU.ay = (accel_avg[1] * myIMU.aRes) - myIMU.accelBias[1];
+    myIMU.az = (accel_avg[2] * myIMU.aRes) - myIMU.accelBias[2];
     // Calculate the gyro value into actual degrees per second
     // This depends on scale being set
-    myIMU.gx = gyro_data[0] * myIMU.gRes;
-    myIMU.gy = gyro_data[1] * myIMU.gRes;
-    myIMU.gz = gyro_data[2] * myIMU.gRes;
-//    Serial.print('(');
-//    Serial.print(myIMU.gx);
-//    Serial.print(",");
-//    Serial.print(myIMU.gy);
-//    Serial.print(",");
-//    Serial.print(myIMU.gz);
-//    Serial.println(')');
+    myIMU.gx = gyro_avg[0] * myIMU.gRes - myIMU.gyroBias[0];
+    myIMU.gy = gyro_avg[1] * myIMU.gRes - myIMU.gyroBias[1];
+    myIMU.gz = gyro_avg[2] * myIMU.gRes - myIMU.gyroBias[2];
+#ifdef DEBUG
+    Serial.print('(');
+    Serial.print(myIMU.gx);
+    Serial.print(",");
+    Serial.print(myIMU.gy);
+    Serial.print(",");
+    Serial.print(myIMU.gz);
+    Serial.println(')');
+#endif
     // Calculate the magnetometer values in milliGauss
     // Include factory calibration per data sheet and user environmental
     // corrections
     // Get actual magnetometer value, this depends on scale being set
-    myIMU.mx = (float)mag_data[0] * myIMU.mRes
+    myIMU.mx = (float)mag_avg[0] * myIMU.mRes
                * myIMU.factoryMagCalibration[0] - myIMU.magBias[0];
-    myIMU.my = (float)mag_data[1] * myIMU.mRes
+    myIMU.my = (float)mag_avg[1] * myIMU.mRes
                * myIMU.factoryMagCalibration[1] - myIMU.magBias[1];
-    myIMU.mz = (float)mag_data[2] * myIMU.mRes
+    myIMU.mz = (float)mag_avg[2] * myIMU.mRes
                * myIMU.factoryMagCalibration[2] - myIMU.magBias[2];
-//    Serial.print('(');
-//    Serial.print(myIMU.mx);
-//    Serial.print(",");
-//    Serial.print(myIMU.my);
-//    Serial.print(",");
-//    Serial.print(myIMU.mz);
-//    Serial.println(')');
-//    delay(50);
+#ifdef DEBUG
+    Serial.print("accel(");
+    Serial.print(myIMU.ax);
+    Serial.print(",");
+    Serial.print(myIMU.ay);
+    Serial.print(",");
+    Serial.print(myIMU.az);
+    Serial.println(')');
+    Serial.print("gyro(");
+    Serial.print(myIMU.gx);
+    Serial.print(",");
+    Serial.print(myIMU.gy);
+    Serial.print(",");
+    Serial.print(myIMU.gz);
+    Serial.println(')');
+    Serial.print("mag(");
+    Serial.print(myIMU.mx);
+    Serial.print(",");
+    Serial.print(myIMU.my);
+    Serial.print(",");
+    Serial.print(myIMU.mz);
+    Serial.println(')');
+#endif
   } // if (readByte(MPU9250_ADDRESS, INT_STATUS) & 0x01)
 
   // Must be called before updating quaternions!
@@ -194,51 +237,60 @@ void loop()
   transmit_buffer[0] = '$';
   transmit_buffer[1] = 0x03;
   /* transmit quaternion bytes
-   * rather than transmit floats, which take a lot of bytes (4 each) instead they are multiplied by 100 (ignoring everything more than 2 decimal places behind the 0
-   * This allows for them to be transmitted as integers, without significant impact.
-   * Kind of a workaround, there is probably a neater method out there.
-   */
+     rather than transmit floats, which take a lot of bytes (4 each) instead they are multiplied by 100 (ignoring everything more than 2 decimal places behind the 0
+     This allows for them to be transmitted as integers, without significant impact.
+     Kind of a workaround, there is probably a neater method out there.
+  */
   for (uint8_t i = 0; i < 4; i++) {
     int8_t quaternion_value = (*(getQ() + i)) * kQuaternionMultFact;
     transmit_buffer[2 + i] = quaternion_value;
-  }
+#ifdef DEBUG
+    Serial.print(quaternion_value);
+    Serial.print("...");
 
+#endif
+  }
+#ifdef DEBUG
+  Serial.println();
+#endif
   // transmit accelerometer data
   /*
-   *  The data here is split into four bytes.
-  * The reason for this is that floats are 32 bits datatypes, and serial can only transmit 8-bit integers.
-   * As such, each float is split into an array of 4 unsigned interegers
-   * each of which are then added to the transmit_buffer
-   */
-  uint8_t *accel_array_x = reinterpret_cast<uint8_t*>(&accel_data[0]);
-  uint8_t *accel_array_y = reinterpret_cast<uint8_t*>(&accel_data[1]);
-  uint8_t *accel_array_z = reinterpret_cast<uint8_t*>(&accel_data[2]);
+      The data here is split into four bytes.
+    The reason for this is that floats are 32 bits datatypes, and serial can only transmit 8-bit integers.
+     As such, each float is split into an array of 4 unsigned interegers
+     each of which are then added to the transmit_buffer
+  */
+  uint8_t *accel_array_x = reinterpret_cast<uint8_t*>(&accel_avg[0]);
+  uint8_t *accel_array_y = reinterpret_cast<uint8_t*>(&accel_avg[1]);
+  uint8_t *accel_array_z = reinterpret_cast<uint8_t*>(&accel_avg[2]);
 
-  uint8_t *gyro_array_x = reinterpret_cast<uint8_t*>(&gyro_data[0]);
-  uint8_t *gyro_array_y = reinterpret_cast<uint8_t*>(&gyro_data[1]);
-  uint8_t *gyro_array_z = reinterpret_cast<uint8_t*>(&gyro_data[2]);
+  uint8_t *gyro_array_x = reinterpret_cast<uint8_t*>(&gyro_avg[0]);
+  uint8_t *gyro_array_y = reinterpret_cast<uint8_t*>(&gyro_avg[1]);
+  uint8_t *gyro_array_z = reinterpret_cast<uint8_t*>(&gyro_avg[2]);
 
-  uint8_t *magnet_array_x = reinterpret_cast<uint8_t*>(&mag_data[0]);
-  uint8_t *magnet_array_y = reinterpret_cast<uint8_t*>(&mag_data[1]);
-  uint8_t *magnet_array_z = reinterpret_cast<uint8_t*>(&mag_data[2]);
+  uint8_t *magnet_array_x = reinterpret_cast<uint8_t*>(&mag_avg[0]);
+  uint8_t *magnet_array_y = reinterpret_cast<uint8_t*>(&mag_avg[1]);
+  uint8_t *magnet_array_z = reinterpret_cast<uint8_t*>(&mag_avg[2]);
 
-  for(uint8_t i = 0; i < 4; i++) {
-      transmit_buffer[6+i] = accel_array_x[i];
-      transmit_buffer[10+i] = accel_array_y[i];
-      transmit_buffer[14+i] = accel_array_z[i];
-      transmit_buffer[18+i] = gyro_array_x[i];
-      transmit_buffer[22+i] = gyro_array_y[i];
-      transmit_buffer[26+i] = gyro_array_z[i];
-      transmit_buffer[30+i] = magnet_array_x[i];
-      transmit_buffer[34+i] = magnet_array_y[i];
-      transmit_buffer[38+i] = magnet_array_z[i];
-//      Serial.print(myIMU.accelCount[0]);
-//      Serial.print(">");
-//      Serial.print(accel_data[0]);
-//      Serial.print("-->");
-//      Serial.print(accel_array_x[i]);
-//      Serial.print("&&");
-//      Serial.println(transmit_buffer[6+i]);
+  for (uint8_t i = 0; i < 4; i++) {
+    transmit_buffer[6 + i] = accel_array_x[i];
+    transmit_buffer[10 + i] = accel_array_y[i];
+    transmit_buffer[14 + i] = accel_array_z[i];
+    transmit_buffer[18 + i] = gyro_array_x[i];
+    transmit_buffer[22 + i] = gyro_array_y[i];
+    transmit_buffer[26 + i] = gyro_array_z[i];
+    transmit_buffer[30 + i] = magnet_array_x[i];
+    transmit_buffer[34 + i] = magnet_array_y[i];
+    transmit_buffer[38 + i] = magnet_array_z[i];
+#ifdef DEBUG
+    Serial.print(myIMU.accelCount[0]);
+    Serial.print(">");
+    Serial.print(accel_avg[0]);
+    Serial.print("-->");
+    Serial.print(accel_array_x[i]);
+    Serial.print("&&");
+    Serial.println(transmit_buffer[6 + i]);
+#endif
   }
   transmit_buffer[42] = message_count;
   transmit_buffer[43] = '\r';
@@ -249,5 +301,4 @@ void loop()
   myIMU.count = millis();
   myIMU.sumCount = 0;
   myIMU.sum = 0;
-  delay(5);
 }
