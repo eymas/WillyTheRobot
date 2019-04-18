@@ -57,9 +57,9 @@ As a quick warning, this is rather complex math, using both imaginary numbers an
 It is worthwhile to study, since they form an integral part of the message to ROS.
 
 As serial communications are used, the data cannot be transmitted as is.
-In order to combat this, the data is split into two parts, with the quaternion again being an exception.
-The two 8-bit unsigned integers are then transmitted, with the 8 bits representing the MSB \ref{trm::MSB} first and the LSB \ref{trm::LSB} last.
-These two integers are then spliced back into a signed 16-bit integer once the Pi has received them.
+In order to combat this, the data is split into parts, with the quaternion again being an exception.
+Each float is split into 4 8-bit integers, which are transmitted to the Pi, with the 8 bits representing the MSB \ref{trm::MSB} first and the LSB \ref{trm::LSB} last.
+These 4 integers are then spliced back into a signed 16-bit integer once the Pi has received them, more detail on that here \ref{sec::union}.
 
 
 \begin{figure}[H]
@@ -114,6 +114,15 @@ These two integers are then spliced back into a signed 16-bit integer once the P
 \label{fig::dataformat}
 \end{figure}
 
+The process is shown schematically in fig \ref{fig::ardschem}.
+
+\begin{figure}[H]
+\centering
+\includegraphics[width = 12cm]{arduinoSchem.PNG}
+\caption{A flow chart showing the process by which the arduino handles data from the IMU}
+\label{fig::ardschem}
+\end{figure}
+
 \subsection{Reception on the Pi}
 Naturally, the data has to be sent somewhere.
 In this case, the sensor Pi is responsible for handling this data.
@@ -125,18 +134,24 @@ The covariances are set, though for the magnetometer they are as of yet unknown.
 ROS uses 0.01 as a default value, since the covariance is not noted in any data-sheets, and the calculations to find them are almost a study onto themselves.
 
 The basic process is shown in figure \ref{fig::piDataReception}.
+In case a higher resolution is needed, the actual file will be included in the github repository.
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=12cm]{temp.jpg}
+\includegraphics[width=12cm]{PiSchem.PNG}
 \caption{The process by which incoming data is handled on the Pi}
 \label{fig::piDataReception}
 \end{figure}
 
+
+\subsubsection{Unions} \label{sec::union}
 The data recorded by the arduino is stored in a float data-type, which is not transmittable by serial communications.
 In order to counter this, all the floats are split into 4 bytes, each stored in an array of 4 unsigned 8-bit integers.
-This is then read byte for byte, and each time the already existing result is left shifted by 8, so that after 4 iterations the full float is back again.
-These floats are still raw data, however.
+These four bytes are stored in a union, a relatively obscure C technique which allows the same section of memory to be treated as different data types.
+In this case, the input is an array of 4 8-bit integers, and the output is treated as a float.
+While this approach is definitely not recommended, the compiler used on the Pi (GNU C++) does not allow bit-shifting on floats, due to the lack of a shifter capable of handling the format.
+
+\subsubsection{Format}
 In order to ensure they are ROS compliant \cite{ROSformat}, they are changed into the appropriate units, such as radians and $ms^{-2}$, rather than the degrees and G's they are returned as by the MPU9250 \cite{MPU9250}.
 
 This is done, for the accelerometer data, by multiplying it by the standard for gravity on earth, 9.81.
