@@ -69,6 +69,10 @@ GND        & ground  \\ \hline
 \end{tabular}
 \end{figure}
 
-
+\subsubsection{Address}
+In the example code it is stated the the address of the MPU9250 should be \code{0x71}.
+This is not the case, and instead the address is \code{0x73}.
+The reason for this difference is not exactly clear, but it does not pose any problem other than the code used not matching the examples.
+The magnetometer, the AK8963, does still have the same address as mentioned in any documentation about it, as well as the example code.
 \newpage    
     

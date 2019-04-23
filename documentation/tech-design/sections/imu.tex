@@ -13,6 +13,9 @@ The Arduino takes the raw data, and uses \href{https://github.com/sparkfun/Spark
 This is needed because the MPU does not output quaternions by default.
 This library allows the Arduino to calculate those, and then send them on to the Pi.
 
+Most of the program used to interface with the MPU9250 is based on a program by sparkfun, \cite{sparkfunMPU9250}, which is in turn based on the code by KrisWiner on Github \cite{kriswiner}.
+Several parts have been stripped out, since no LCD is used.
+
 
 \subsubsection{The Set-up} \label{sec::set-up}
 After checking the address of the MPU9250, it will first do a self-test, where it determines the biases and stores them in its registers, through the \code{MPU9250SelfTest()} and \code{calibrateMPU9250()} functions.
@@ -29,9 +32,16 @@ This concludes the set-up.
 \subsubsection{The Loop}
 The core concept of the loop is relatively simple, were it not for some of the quaternion calculations.
 First it reads the data gathered by the IMU, and stores it in 3 arrays, one per sensor.
-This data is then transformed, though differently per sensor.
-The accelerometer data is changed to acceleration in $m/s^2$, and the gyroscopic data is calculated into degrees per second.
-The magnetometer data does not get changed much, except for the compensation for the biases.
+These are then averaged after five measurements, and used to calculate a moving average.
+An explanation of this concept can be found on Investopedia, which explains it uses in the business world \cite{movingavg}.
+The moving average is mainly used to smooth out the sudden peaks and jumps that might occur, since WTR is meant to be moving.
+A shock, like a small collision, could cause the sensor to give out false readings, which are mitigated by the moving average.
+
+Since the data obtained here is just the raw data, it servers no purpose yet.
+In order to have it be useful, it needs to be turned into data with actual units behind it.
+The accelerometer data is changed to acceleration in $G$, and the gyroscopic data is calculated into degrees per second.
+At the same time, the biases are removed from both pieces of data.
+The magnetometer data is calculate in milliGauss, and the scale and biases are applied.
 
 This data is then calculated into a quaternion, using the Madgwick calculation.
 This is very complicated, and better to be considered as a black box.
@@ -43,11 +53,7 @@ Of course, all the collected data in the world does not do any good if it is not
 
 \subsection{Arduino to Pi protocol}
 The order in which the data is sent is naturally important.
-The raspberry Pi expects the data packet to start with "\$ 0x03", and then the data of the quaternion, the gyroscope, the accelerometer, the temperature and lastly the magnetometer. 
-
-Most of the program used to interface with the MPU9250 is based on a program by sparkfun, \cite{sparkfunMPU9250}, which is in turn based on the code by KrisWiner on Github \cite{kriswiner}.
-Several parts have been stripped out, since no LCD is used.
-Additionally, any debug messages have been removed after confirming that the code runs consistently.
+The raspberry Pi expects the data packet to start with "\$ 0x03", and then the data of the quaternion, the gyroscope, the accelerometer, the magnetometer, and then the terminating characters. 
 
 Each of the sensors returns a 16 bit piece of data, as a signed 16-bit integer.
 The exception to this rule is the quaternion calculation.
@@ -163,5 +169,12 @@ One Tesla is $1.0 \cdot 10^{7}$ milliGauss, so in order to convert mG into T, th
 The message number is used to keep track of whether or not any packages are missed, if there are missed packages a warning is shown in the ROS debug screen.
 If the message number is the same, then another warning is shown because it is likely the arduino running the MPU9250 has crashed.
 
-
+An astute reader of the code may also notice that there are some multiplications that seem a mite random. 
+Take this line for example, \code{$double ayf = (accel_y.output_data  * 9.81 * (4.0f/65536.0f));$}
+While multiplying the output data by $9.81$ is a standard way of converting from $G$ to $ms^{-2}$, the multiplication by $4.0/65536$ is a bit less standard.
+This has to do with the amount of LSB's \ref{trm::LSB} per output unit, in this case G.
+These can be found in the datasheet \cite{MPU9250}.
+This is done, as far as this group was able to figure out, to convert the data from raw measurement to useful values.
+Why this is not done by the library on the Arduino is not understood, but it seemed foolish to mess with something that was already working.
+\footnote{The author would like to make it known a lot of this code was based on pre-existing code from previous groups in the spirit of not discarding the work of predecessors and starting over.}
 \newpage
