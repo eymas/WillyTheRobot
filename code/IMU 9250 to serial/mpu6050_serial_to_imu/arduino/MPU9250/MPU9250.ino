@@ -32,10 +32,10 @@
 #define AHRS false         // Set to false for basic data read
 const int kQuaternionMultFact = 100;
 const int kBytesToSend = 45;
-
-  float accel_data[3][5];
-  float gyro_data[3][5];
-  float mag_data[3][5];
+const int kSamplesPerAverage = 10;
+  float accel_data[3][kSamplesPerAverage];
+  float gyro_data[3][kSamplesPerAverage];
+  float mag_data[3][kSamplesPerAverage];
   float accel_avg[3], gyro_avg[3], mag_avg[3];
 
 // Pin definitions
@@ -118,7 +118,7 @@ void loop()
 
 
   for (uint8_t j = 0; j < 3; j++) {
-    for (uint8_t i = 0; i < 4; i++) {
+    for (uint8_t i = 0; i < (kSamplesPerAverage-1); i++) {
       accel_data[j][i + 1] = accel_data[j][i];
       gyro_data[j][i + 1] = gyro_data[j][i];
       mag_data[j][i + 1] = mag_data[j][i];
@@ -137,7 +137,7 @@ void loop()
       mag_data[i][0] = static_cast<float>(myIMU.magCount[i]);
     }
     for (uint8_t j = 0; j < 3; j++) {
-      for (uint8_t i = 0; i < 5; i++) {
+      for (uint8_t i = 0; i < kSamplesPerAverage; i++) {
         accel_avg[j] += accel_data[j][i];
         gyro_avg[j]  += gyro_data[j][i];
         mag_avg[j]   += mag_data[j][i];
@@ -148,24 +148,24 @@ void loop()
       #endif
     }
     for (uint8_t i = 0; i < 3; i++) {
-      accel_avg[i] = accel_avg[i] / 5;
-      gyro_avg[i] = gyro_avg[i] / 5;
-      mag_avg[i] = mag_avg[i] / 5;
+      accel_avg[i] = accel_avg[i] / kSamplesPerAverage;
+      gyro_avg[i] = gyro_avg[i] / kSamplesPerAverage;
+      mag_avg[i] = mag_avg[i] / kSamplesPerAverage;
       #ifdef DEBUG
-      Serial.print("mavg/5 = ");
+      Serial.print("mavg/kSamplesPerAverage = ");
       Serial.println(mag_avg[i]);
       #endif
     }
     // Now we'll calculate the accleration value into actual g's
     // This depends on scale being set
-    myIMU.ax = (accel_avg[0] * myIMU.aRes) - myIMU.accelBias[0];
+    myIMU.ax = -((accel_avg[0] * myIMU.aRes) - myIMU.accelBias[0]);
     myIMU.ay = (accel_avg[1] * myIMU.aRes) - myIMU.accelBias[1];
     myIMU.az = (accel_avg[2] * myIMU.aRes) - myIMU.accelBias[2];
     // Calculate the gyro value into actual degrees per second
     // This depends on scale being set
     myIMU.gx = gyro_avg[0] * myIMU.gRes - myIMU.gyroBias[0];
     myIMU.gy = gyro_avg[1] * myIMU.gRes - myIMU.gyroBias[1];
-    myIMU.gz = gyro_avg[2] * myIMU.gRes - myIMU.gyroBias[2];
+    myIMU.gz = -(gyro_avg[2] * myIMU.gRes - myIMU.gyroBias[2]);
 #ifdef DEBUG
     Serial.print('(');
     Serial.print(myIMU.gx);
@@ -247,7 +247,7 @@ void loop()
 #ifdef DEBUG
     Serial.print(quaternion_value);
     Serial.print("...");
-
+    Serial.println(quaternion_value);
 #endif
   }
 #ifdef DEBUG

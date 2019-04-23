@@ -174,8 +174,8 @@ int main(int argc, char** argv)
                 double gzf = gyro_z.output_data * (M_PI/180.0) * (131.0f/65536.0f);
 
                 // calculate accelerations in m/s²
-                double axf = (accel_x.output_data  * 9.81 * (4.0f/65536.0f));   //convert to ms^-2
-                double ayf = (accel_y.output_data  * 9.81 * (4.0f/65536.0f));
+                double axf = (accel_x.output_data  * 9.81 * (4.0f/65536.0f));    // This also needs to be inverted it seems.
+                double ayf = (accel_y.output_data  * 9.81 * (4.0f/65536.0f));// convert to ms^-2
                 double azf = (accel_z.output_data  * 9.81 * (4.0f/65536.0f));
 
                 double gmx = mag_x.output_data * pow(10, -7); // convert from milligauss to Tesla for the sake of ROS
