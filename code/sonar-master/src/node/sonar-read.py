@@ -8,7 +8,7 @@ import re
 
 ############## Methods #############
 def RepresentsFloat(s):
-	try: 
+	try:
 		float(s)
 		return True
 	except ValueError:
@@ -30,7 +30,7 @@ TopicDistance = tuple()
 # Init serial components
 socket = serial.Serial()
 socket.baudrate = 9600
-socket.port = '/dev/willy_sonar'
+socket.port = '/dev/ttyACM1'
 socket.timeout = 1
 socket.open()
 
@@ -38,26 +38,26 @@ socket.open()
 def PostOnTopic(frameid, Distance):
 	message = Range()
 	if(RepresentsFloat(Distance)):
-	message.header.stamp.secs = rospy.get_rostime().secs
-	message.header.stamp.nsecs = rospy.get_rostime().nsecs
-	message.header.frame_id = frameid
-	message.radiation_type = 0
-	message.field_of_view = 0.01
-	message.max_range = 5
-	message.min_range = 0.1
-	message.range = float(Distance) / 100
-	pubTopicInstance.publish(message)
-	print(message)
+		message.header.stamp.secs = rospy.get_rostime().secs
+		message.header.stamp.nsecs = rospy.get_rostime().nsecs
+		message.header.frame_id = frameid
+		message.radiation_type = 0
+		message.field_of_view = 0.01
+		message.max_range = 5
+		message.min_range = 0.1
+		message.range = float(Distance) / 100
+		pubTopicInstance.publish(message)
+		print("message sent on topic: " + frameid + ", value: " + str(message.range))
 		#print(Distance)
 
 # Continous loop for publishing serial data
-while not rospy.is_shutdown(): 
+while not rospy.is_shutdown():
 	topicMessage = socket.readline()
 	topicMessage = topicMessage.rstrip()
-	#print(topicMessage)
+	print("--- \n Sonar outputs:")
+	print(topicMessage)
 
-	if(re.search(r"/\d+\.\d+\|\d+\.\d+\|\d+\.\d+\|\d+\.\d+\|\d+\.\d+\|\d+\.\d+\|\d+\.\d+\|\d+\.\d+/g", topicMessage)):
-		print(topicMessage)
+	if(re.search(r"\d+\.\d+\|\d+\.\d+\|\d+\.\d+\|\d+\.\d+\|\d+\.\d+\|\d+\.\d+\|\d+\.\d+\|\d+\.\d+", topicMessage)):
 		PostOnTopic("/frontLeft",float(topicMessage.split("|")[0]))
 		PostOnTopic("/frontMiddle",float(topicMessage.split("|")[1]))
 		PostOnTopic("/frontRight",float(topicMessage.split("|")[2]))
