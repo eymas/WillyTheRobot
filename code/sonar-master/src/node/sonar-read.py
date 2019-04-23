@@ -7,16 +7,13 @@ from sensor_msgs.msg import Range
 import re
 
 ############## Methods #############
-
 def RepresentsFloat(s):
-    try: 
-        float(s)
-        return True
-    except ValueError:
-        return False
-
+	try: 
+		float(s)
+		return True
+	except ValueError:
+		return False
 ####################################
-
 
 # To which topic on Willy we will publish
 pubTopicName = 'sonar_data'
@@ -37,12 +34,10 @@ socket.port = '/dev/willy_sonar'
 socket.timeout = 1
 socket.open()
 
-
 # Function for publish on topic
 def PostOnTopic(frameid, Distance):
- 
-    message = Range()
-    if(RepresentsFloat(Distance)):
+	message = Range()
+	if(RepresentsFloat(Distance)):
 	message.header.stamp.secs = rospy.get_rostime().secs
 	message.header.stamp.nsecs = rospy.get_rostime().nsecs
 	message.header.frame_id = frameid
@@ -53,17 +48,16 @@ def PostOnTopic(frameid, Distance):
 	message.range = float(Distance) / 100
 	pubTopicInstance.publish(message)
 	print(message)
-        #print(Distance)
-
+		#print(Distance)
 
 # Continous loop for publishing serial data
 while not rospy.is_shutdown(): 
-    topicMessage = socket.readline()
-    topicMessage = topicMessage.rstrip()
-    #print(topicMessage)
+	topicMessage = socket.readline()
+	topicMessage = topicMessage.rstrip()
+	#print(topicMessage)
 
-    if(re.search(r"\d+\|\d+\|\d+", topicMessage)):
-        print(topicMessage)
+	if(re.search(r"/\d+\.\d+\|\d+\.\d+\|\d+\.\d+\|\d+\.\d+\|\d+\.\d+\|\d+\.\d+\|\d+\.\d+\|\d+\.\d+/g", topicMessage)):
+		print(topicMessage)
 		PostOnTopic("/frontLeft",float(topicMessage.split("|")[0]))
 		PostOnTopic("/frontMiddle",float(topicMessage.split("|")[1]))
 		PostOnTopic("/frontRight",float(topicMessage.split("|")[2]))
