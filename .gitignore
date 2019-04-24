@@ -30,7 +30,9 @@
 *.cbp
 *.check_cache
 *.bin
-*.sqlite
 *.db
 *.suo
 *.json
+*.sqlite
+*.docx
+
