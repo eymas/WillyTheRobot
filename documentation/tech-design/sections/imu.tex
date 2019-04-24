@@ -1,0 +1,70 @@
+\section{IMU}
+The previous odometry measuring device, the MPU6250 \cite{mpu6250} was broken, which is why a new, updated version is currently being used.
+Another reason a new version is used is that the MPU9250 \cite{MPU9250} also contains an AK8963, which is a 3-axis magnetometer.
+This allow WTR to more accurately track orientation, since it can use the magnetometer to find its position relative to the north.
+The data is collected as explained in this section \ref{sec::collect}, and then transmitted to a Raspberry Pi which deals with all the sensors.
+After that has processed the data into a ROS standard message, it sends the data on to the topic, where it can then be used by planners.
+
+\subsection{Collecting data} \label{sec::collect}
+The main controller for collecting the data is an Arduino Uno, which uses I$^{2}$C for communication with the MPU9250.
+This happens at a rate of \todo{find rate}.
+The Arduino takes the raw data, and uses \href{https://github.com/sparkfun/SparkFun_MPU-9250_Breakout_Arduino_Library}{this library} to process the data.
+This is needed because the MPU does not output quaternions by default.
+This library allows the Arduino to calculate those automatically, and then send them on to the Pi.
+
+\subsection{Arduino to Pi protocol}
+The order in which the data is sent is naturally important.
+The raspberry Pi expects the data packet to start with "\$ 0x03", and then the data of the quaternion, the gyroscope, the accelerometer, the temperature and lastly the magnetometer. 
+
+Most of the program used to interface with the MPU9250 is based on a program by sparkfun, \cite{sparkfunMPU}, which is in turn based on the code by KrisWiner on Github \cite{kriswiner}.
+Several parts have been stripped out, since no LCD is used.
+Additionally, any debug messages have been removed after confirming that the code runs consistently.
+
+Each of the sensors returns a 16 bit piece of data, as a signed 16-bit integer.
+The exception to this rule is the quaternion calculation.
+For that, a float with the values ranging between -1 and +1 can be expected.
+Quaternions are rather tricky to work with, but more explanation can be found \href{https://www.3dgep.com/understanding-quaternions/#The_Complex_Plane}{here.}
+As a quick warning, this is rather complex math, using both imaginary numbers and matrices.
+It is worthwhile to study, since they form an integral part of the message to ROS.
+
+As serial communications are used, the data cannot be transmitted as is.
+In order to combat this, the data is split into two parts, with the quaternion again being an exception.
+The two 8-bit unsigned integers are then transmitted, with the 8 bits representing the MSB \ref{trm::MSB} first and the LSB \ref{LSB} last.
+These two integers are then spliced back into a signed 16-bit integer once the Pi has received them.
+
+
+\begin{figure}[H]
+    \begin{lstlisting}[language=c++,firstnumber=0]
+        [ start byte ] = '$'
+        [ start byte ] = 0x03
+        [ quaternion value W ] = quaternion value from -1 to +1, multiplied by 100
+        [ quaternion value X ] = See above
+        [ quaternion value Y ] = See above
+        [ quaternion value Z ] = See above
+        [ accelerometer X raw data high byte \footnote{as in, the actual unprocessed data from the register of the MPU9250, not in m/s^{2}} ]
+        [ accelerometer X raw data low byte ]
+        [ accelerometer Y raw data high byte ]
+        [ accelerometer Y raw data low byte ]
+        [ accelerometer Z raw data high byte ]
+        [ accelerometer Z raw data low byte ]
+        [ gyroscope X raw data high byte ]
+        [ gyroscope X raw data low byte ]
+        [ gyroscope Y raw data high byte ]
+        [ gyroscope Y raw data low byte ]
+        [ gyroscope Z raw data high byte ]
+        [ gyroscope Z raw data low byte ]
+        [ magnetometer X raw data high byte ]
+        [ magnetometer X raw data low byte ]
+        [ magnetometer Y raw data high byte ]
+        [ magnetometer Y raw data low byte ]
+        [ magnetometer Z raw data high byte ]
+        [ magnetometer Z raw data low byte ]
+    \end{lstlisting} 
+\caption{The order the Pi expects the data it receives to have}
+\label{fig::dataformat}
+\end{figure}
+
+
+        
+        
+        
