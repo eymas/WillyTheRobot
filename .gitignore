@@ -31,3 +31,6 @@
 *.check_cache
 *.bin
 *.db
+*.suo
+*.json
+*.sqlite
