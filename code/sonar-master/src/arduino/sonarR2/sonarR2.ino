@@ -1,4 +1,4 @@
-int trigPin = 12;    // Trigger
+int trigPin = 13;    // Trigger
 
 void setup() {
   //Serial Port begin
@@ -22,8 +22,20 @@ float GetDistance(int pin)
 
   //pinMode(echoPin, INPUT);
   long Duration = pulseIn(pin, HIGH, 12000);
-  int Distance = Duration * 0.0343 / 2;
+
+  int Distance = 0;
+  
+  if (Duration > 0)
+  {
+    Distance = Duration * 0.0343 / 2;
+  }
+  else
+  {
+    Distance = 200;
+  }
+
   return Distance;
+    
 }
 
 void loop() {
