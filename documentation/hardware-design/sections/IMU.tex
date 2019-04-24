@@ -74,5 +74,20 @@ In the example code it is stated the the address of the MPU9250 should be \code{
 This is not the case, and instead the address is \code{0x73}.
 The reason for this difference is not exactly clear, but it does not pose any problem other than the code used not matching the examples.
 The magnetometer, the AK8963, does still have the same address as mentioned in any documentation about it, as well as the example code.
+
+\subsubsection{Positioning}
+During the development, a small issue was forgotten.
+When the word "small" is used, this is an understatement.
+A magnetometer is reliant on, as the name implies, magnetism.
+Since the frame is made of steel, it interferes with the magnetometer to a rather large extent.
+When the IMU is mounted to the frame, the quaternion it outputs is essentially always the same, since the magnetic values never change.
+If the robot turns, the magnetic field it produces turns with it.
+This is akin to using a compass with a powerful magnet held in front of it.
+Regardless of how you turn, the compass will always point towards the magnet, rather than the north.
+To combat this issue, there are two solutions.
+The first would be to somehow isolate the frame, electric motors and car batteries so that the magnetic field is contained.
+No one in the current group has the expertise or knowledge to do this, and it would probably also weigh down WTR so much the robot would become nearly immovable.
+The second option is to move the sensor as far away from the source of the interference as possible.
+To this end, a case has been designed which can be hung from the top of the screen, as far away from the magnetic influences of the robot as possible.
 \newpage    
     

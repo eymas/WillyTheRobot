@@ -126,7 +126,6 @@ int main(int argc, char** argv)
                 int8_t x = (char)input[data_packet_start + 3];
                 int8_t y = (char)input[data_packet_start + 4];
                 int8_t z = (char)input[data_packet_start + 5];
-                std::cout.precision(5);
                 double wf = w;
                   wf = wf/100; std::cout << wf << "\r\n";
                 double xf = x;
