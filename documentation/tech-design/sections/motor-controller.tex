@@ -1,7 +1,3 @@
-\section{Motor Controller}
-
-\newpage
-=======
 \section{Motor controller}
 
 \subsection{Integration of closed loop}
@@ -18,8 +14,7 @@ The architecture of the software in the arduino Mega motor controller can be see
 \label{fig::Motorconarc}
 \end{figure}
 
-\subsection{MotorTest.ino}
-\todo{Change name pls}
+\subsection{Arduino Mega Code}
 The main program combines the classes together. It will also send the commands to the actual motor controller via serial bus. The commands send to the motor are refreshed at a higher frequency than the control loop is called. The flow of the main program can be found in figure \ref{fig::MPF}.
 
 \begin{figure}[H]
@@ -54,6 +49,8 @@ When the main program wants to now the speed, it will call a speed read function
 \caption{Puls change interrupt flow.}
 \label{fig::PCF}
 \end{figure}
+
+
 \begin{figure}[H]
 \centering
 \includegraphics[width=6 cm]{Speed_determinator-Page-2.png}
