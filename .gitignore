@@ -21,3 +21,18 @@
 *.doc
 *.tex.bak
 documentation/tech-design/MPU9250 mag bias.txt
+*.xml
+*.d
+*.txt
+*.iml
+*.a
+*.hex
+*.eep
+*.cbp
+*.check_cache
+*.bin
+*.db
+*.suo
+*.json
+*.sqlite
+*.docx
