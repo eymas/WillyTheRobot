@@ -257,8 +257,8 @@ class ProcProc(object):
 
 	# Stop the ROS Core
 	def stopROS(self):
-		self.rosProcess.terminate()
-		self.rmonThread.terminate()
+		self.rosProcess.kill()
+		self.rmonThread.kill()
 		print("ROS Core Process terminated.")
 
 	# Start the motor controller
@@ -268,7 +268,7 @@ class ProcProc(object):
 
 	# Stop the motor controller
 	def stopMC(self):
-		self.motorProcess.terminate()
+		self.motorProcess.kill()
 		print("Motor Controller Process terminated.")
 
 	# Start the joystick interface
@@ -278,7 +278,7 @@ class ProcProc(object):
 
 	# Stop the joystick interface
 	def stopJoy(self):
-		self.joyProcess.terminate()
+		self.joyProcess.kill()
 		print("Joystick Interface Process terminated.")
 
 # Activate window main loop.
