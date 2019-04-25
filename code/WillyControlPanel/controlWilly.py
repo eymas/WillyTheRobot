@@ -2,6 +2,7 @@ import Tkinter as tk
 import ttk
 import sys
 import os
+import signal
 import time
 import subprocess
 import threading
@@ -248,38 +249,38 @@ class ProcProc(object):
 
 	# Start the ROS Core
 	def startROS(self):
-		self.rosProcess = subprocess.Popen(["xterm", "-e", "/home/willy/Documents/controlWilly/startroscore.sh"])
+		self.rosProcess = subprocess.Popen(["xterm", "-e", "/home/willy/Documents/controlWilly/startroscore.sh"], preexec_fn=os.setpgrp)
 		# Create and start a thread for the ros vars monitor
 		self.rmonThread = multiprocessing.Process(target=CWListener, args=(self.queue,))
 		self.rmonThread.daemon = True
 		self.rmonThread.start()
-		print("ROS Core Process started.")
+		print("ROS Core Process started. PID: " + str(self.rosProcess.pid))
 
 	# Stop the ROS Core
 	def stopROS(self):
-		self.rosProcess.kill()
-		self.rmonThread.kill()
-		print("ROS Core Process terminated.")
+		os.killpg(os.getpgid(self.rosProcess.pid), signal.SIGTERM)
+		self.rmonThread.terminate()
+		print("ROS Core Process terminated. PID: " + str(self.rosProcess.pid))
 
 	# Start the motor controller
 	def startMC(self):
-		self.motorProcess = subprocess.Popen(["xterm", "-e", "/home/willy/Documents/controlWilly/startmotorcon.sh"])
-		print("Motor Controller Process started.")
+		self.motorProcess = subprocess.Popen(["xterm", "-e", "/home/willy/Documents/controlWilly/startmotorcon.sh"], preexec_fn=os.setpgrp)
+		print("Motor Controller Process started. PID: " + str(self.motorProcess.pid))
 
 	# Stop the motor controller
 	def stopMC(self):
-		self.motorProcess.kill()
-		print("Motor Controller Process terminated.")
+		os.killpg(os.getpgid(self.motorProcess.pid), signal.SIGTERM)
+		print("Motor Controller Process terminated. PID: " + str(self.motorProcess.pid))
 
 	# Start the joystick interface
 	def startJoy(self):
-		self.joyProcess = subprocess.Popen(["xterm", "-e", "/home/willy/Documents/controlWilly/startjoystick.sh"])
-		print("Joystick Interface Process started.")
+		self.joyProcess = subprocess.Popen(["xterm", "-e", "/home/willy/Documents/controlWilly/startjoystick.sh"], preexec_fn=os.setpgrp)
+		print("Joystick Interface Process started. PID: " + str(self.joyProcess.pid))
 
 	# Stop the joystick interface
 	def stopJoy(self):
-		self.joyProcess.kill()
-		print("Joystick Interface Process terminated.")
+		os.killpg(os.getpgid(self.joyProcess.pid), signal.SIGTERM)
+		print("Joystick Interface Process terminated. PID: " + str(self.joyProcess.pid))
 
 # Activate window main loop.
 def main(args):
