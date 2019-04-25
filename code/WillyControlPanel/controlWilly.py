@@ -5,7 +5,6 @@ import os
 import time
 import threading
 
-sys.path.insert(0, './cwpanel')
 import cwPanel
 import processManager
 import processMonitor
@@ -20,14 +19,14 @@ def main(args):
 	# Create and start a thread for the ping monitor
 	pingThread = threading.Thread(target=pingMonitor.pingMonitor(cwpanel))
 	pingThread.setDaemon(True)
-	pingThread.start()
 	# Create and start a thread for the process monitor
 	procThread = threading.Thread(target=processMonitor.processMonitor(cwpanel))
 	procThread.setDaemon(True)
-	procThread.start()
 	# Start the window's main loop
 	root.mainloop()
-	procMan = processManager.processManager()
+	pingThread.start()
+	procThread.start()
+
 
 # Runs on exit(ctrl+c or window x button)
 if __name__ == '__main__':
