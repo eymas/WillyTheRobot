@@ -140,7 +140,6 @@ The covariances are set, though for the magnetometer they are as of yet unknown.
 ROS uses 0.01 as a default value, since the covariance is not noted in any data-sheets, and the calculations to find them are almost a study onto themselves.
 
 The basic process is shown in figure \ref{fig::piDataReception}.
-In case a higher resolution is needed, the actual file will be included in the github repository.
 
 \begin{figure}[H]
 \centering
@@ -170,10 +169,10 @@ The message number is used to keep track of whether or not any packages are miss
 If the message number is the same, then another warning is shown because it is likely the arduino running the MPU9250 has crashed.
 
 An astute reader of the code may also notice that there are some multiplications that seem a mite random. 
-Take this line for example, \code{$double ayf = (accel_y.output_data  * 9.81 * (4.0f/65536.0f));$}
+Take this line for example, \code{$double\;ayf = (accel\_y.output\_data \cdot 9.81 \cdot (4.0f/65536.0f));$}
 While multiplying the output data by $9.81$ is a standard way of converting from $G$ to $ms^{-2}$, the multiplication by $4.0/65536$ is a bit less standard.
 This has to do with the amount of LSB's \ref{trm::LSB} per output unit, in this case G.
-These can be found in the datasheet \cite{MPU9250}.
+These can be found in the data sheet \cite{MPU9250}.
 This is done, as far as this group was able to figure out, to convert the data from raw measurement to useful values.
 Why this is not done by the library on the Arduino is not understood, but it seemed foolish to mess with something that was already working.
 \footnote{The author would like to make it known a lot of this code was based on pre-existing code from previous groups in the spirit of not discarding the work of predecessors and starting over.}
