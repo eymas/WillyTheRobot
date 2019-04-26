@@ -1,0 +1,411 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<diagram program="umlet" version="14.3.0">
+  <zoom_level>7</zoom_level>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>329</x>
+      <y>91</y>
+      <w>175</w>
+      <h>238</h>
+    </coordinates>
+    <panel_attributes>Sensor Node
+--
+IP: 192.168.0.13
+
+Username: Ubuntu
+
+IMU - Receives data from
+Arduino
+
+Sonars - receives data from 
+Arduino
+
+Transforms IMU data to ROS
+Messages
+(IMU &amp; Magnetic_Field)</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>518</x>
+      <y>91</y>
+      <w>175</w>
+      <h>203</h>
+    </coordinates>
+    <panel_attributes>Brain Node
+--
+
+IP: 192.168.0.12
+
+Runs single script, which
+reads status.
+
+Sets targets to drive to.
+
+Could track position via
+AprilMV tags,
+if the camera
+hadn't been removed</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>714</x>
+      <y>91</y>
+      <w>175</w>
+      <h>287</h>
+    </coordinates>
+    <panel_attributes>Laptop
+--
+IP: 192.168.0.10
+
+Runs RVIZ
+This program allows users
+to set WTR's position,
+and manually select a target
+for WTR to travel towards
+
+Runs MotorController
+The Arduino Mega 2560
+in the black box, near the
+batteries.
+
+Runs PS3 controller
+Allows for manual control of
+WTR, in case it needs to be
+moved with a bit more
+precision.
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1085</x>
+      <y>91</y>
+      <w>189</w>
+      <h>161</h>
+    </coordinates>
+    <panel_attributes>Router Node
+--
+192.168.0.1
+
+Allows for wireless connection
+to WTR.
+
+Should allow for Skylab
+connectivity as well, but this
+was not used by the 2019Q1&amp;2
+group.</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>903</x>
+      <y>91</y>
+      <w>168</w>
+      <h>140</h>
+    </coordinates>
+    <panel_attributes>SI Node
+--
+IP: 192.168.0.11
+
+Runs the screen &amp; mic
+
+The 2019 Q1&amp;2 group has
+not worked with this, so
+the information on the Wiki
+is probably the best bet.</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>413</x>
+      <y>7</y>
+      <w>399</w>
+      <h>98</h>
+    </coordinates>
+    <panel_attributes>lt=-</panel_attributes>
+    <additional_attributes>10.0;120.0;10.0;10.0;550.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>602</x>
+      <y>7</y>
+      <w>21</w>
+      <h>98</h>
+    </coordinates>
+    <panel_attributes>lt=-</panel_attributes>
+    <additional_attributes>10.0;120.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>791</x>
+      <y>7</y>
+      <w>21</w>
+      <h>98</h>
+    </coordinates>
+    <panel_attributes>lt=-</panel_attributes>
+    <additional_attributes>10.0;120.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>791</x>
+      <y>7</y>
+      <w>210</w>
+      <h>98</h>
+    </coordinates>
+    <panel_attributes>lt=-</panel_attributes>
+    <additional_attributes>10.0;10.0;280.0;10.0;280.0;120.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>980</x>
+      <y>7</y>
+      <w>238</w>
+      <h>98</h>
+    </coordinates>
+    <panel_attributes>lt=-</panel_attributes>
+    <additional_attributes>10.0;10.0;320.0;10.0;320.0;120.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>0</x>
+      <y>70</y>
+      <w>154</w>
+      <h>168</h>
+    </coordinates>
+    <panel_attributes>IMU arduino
+--
+Interfaces with the IMU,
+collects and processes
+the data into a datagram
+
+Sends over:
+ - accelerometer data
+ - gyroscope data
+ - magnetometer data
+ - Quaternion
+ - Message count</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>147</x>
+      <y>140</y>
+      <w>196</w>
+      <h>42</h>
+    </coordinates>
+    <panel_attributes>lt=-
+
+Serial (USB)</panel_attributes>
+    <additional_attributes>10.0;30.0;260.0;30.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>0</x>
+      <y>266</y>
+      <w>161</w>
+      <h>175</h>
+    </coordinates>
+    <panel_attributes>Sonar Arduino
+--
+Collects data from all 8
+Ultrasonic sensors
+
+Each is pinged in turn,
+which then returns the
+distance to nearest object
+
+Sends these all to the Pi</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>154</x>
+      <y>280</y>
+      <w>189</w>
+      <h>35</h>
+    </coordinates>
+    <panel_attributes>lt=-
+Serial(USB)</panel_attributes>
+    <additional_attributes>10.0;30.0;250.0;30.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>469</x>
+      <y>434</y>
+      <w>189</w>
+      <h>105</h>
+    </coordinates>
+    <panel_attributes>LIDAR
+--
+IP: 192.168.0.180
+
+Sends out light and measures
+response time,
+detecting obstacles
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>581</x>
+      <y>357</y>
+      <w>147</w>
+      <h>91</h>
+    </coordinates>
+    <panel_attributes>lt=-
+Ethernet (switch)</panel_attributes>
+    <additional_attributes>10.0;110.0;10.0;10.0;190.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>665</x>
+      <y>434</y>
+      <w>203</w>
+      <h>168</h>
+    </coordinates>
+    <panel_attributes>PS3 Dualshock controller
+--
+When the R1 button is pressed,
+WTR responds to the left joystick
+and moves accordingly.
+
+The PS button in the middle
+enables TURBO while pressed,
+increasing movement speed
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>763</x>
+      <y>371</y>
+      <w>112</w>
+      <h>77</h>
+    </coordinates>
+    <panel_attributes>lt=-
+USB/BlueTooth</panel_attributes>
+    <additional_attributes>10.0;90.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>875</x>
+      <y>434</y>
+      <w>224</w>
+      <h>231</h>
+    </coordinates>
+    <panel_attributes>Motor Controller
+--
+2 rotary encoders attached
+to front wheels
+These ensure the desired
+movement speed is reached as
+closely as possible, even when
+the desired speed is quite low.
+
+When receiving data from the 
+laptop, runs it through a feedback
+loop.
+After this, sends updated commands
+to black box on the bottom of WTR
+(original motor controller of the wheel
+chair)
+
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>882</x>
+      <y>364</y>
+      <w>203</w>
+      <h>84</h>
+    </coordinates>
+    <panel_attributes>lt=-
+Serial(USB)</panel_attributes>
+    <additional_attributes>170.0;100.0;170.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>903</x>
+      <y>224</y>
+      <w>56</w>
+      <h>35</h>
+    </coordinates>
+    <panel_attributes>lt=-
+HDMI</panel_attributes>
+    <additional_attributes>10.0;30.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>903</x>
+      <y>245</y>
+      <w>119</w>
+      <h>49</h>
+    </coordinates>
+    <panel_attributes>Screen
+--
+Self-explanatory</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>903</x>
+      <y>301</y>
+      <w>119</w>
+      <h>49</h>
+    </coordinates>
+    <panel_attributes>microphone
+--
+Self-explanatory</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1015</x>
+      <y>224</y>
+      <w>49</w>
+      <h>119</h>
+    </coordinates>
+    <panel_attributes>lt=-
+USB</panel_attributes>
+    <additional_attributes>10.0;150.0;50.0;150.0;50.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Text</id>
+    <coordinates>
+      <x>798</x>
+      <y>14</y>
+      <w>182</w>
+      <h>49</h>
+    </coordinates>
+    <panel_attributes>ROS (via Ethernet + switch)
+style=wordwrap</panel_attributes>
+    <additional_attributes/>
+  </element>
+</diagram>
