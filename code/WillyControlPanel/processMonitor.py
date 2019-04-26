@@ -41,5 +41,4 @@ class processMonitor:
 			self.window.JoybtnFrame.config(background="green")
 		else:
 			self.window.JoybtnFrame.config(background="red")
-		print("Processing")
 		self.root.after(5, self.run)

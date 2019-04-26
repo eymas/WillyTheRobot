@@ -4,7 +4,7 @@ import ttk
 # Class for the control panel and its many subcomponents and specific functions.
 class cwPanel():
 	# On initialization, the whole window and its contents will be drawn.
-	def __init__(self, parent):
+	def __init__(self, parent, procman):
 	###### WINDOW CREATION STARTS HERE ######
 		# Define root window settings
 		parent.geometry("645x355")
@@ -50,29 +50,29 @@ class cwPanel():
 		# Then define frame and buttons for each process
 		self.ROSbtnFrame = tk.LabelFrame(self.bottomleft_frame, text="ROS Master", relief="raised", width=190, height=40)
 		self.ROSbtnFrame.place(x=0,y=0)
-		self.startROSbtn = ttk.Button(self.ROSbtnFrame, text="Start")
+		self.startROSbtn = ttk.Button(self.ROSbtnFrame, text="Start", command=procman.startROS)
 		self.startROSbtn.pack(side="left")
-		self.stopROSbtn = ttk.Button(self.ROSbtnFrame, text="Stop")
+		self.stopROSbtn = ttk.Button(self.ROSbtnFrame, text="Stop", command=procman.stopROS)
 		self.stopROSbtn.pack(side="left")
 
 		self.MCbtnFrame = tk.LabelFrame(self.bottomleft_frame, text="Motor Controller", relief="raised", width=190, height=40)
 		self.MCbtnFrame.place(x=0,y=50)
-		self.startMCbtn = ttk.Button(self.MCbtnFrame, text="Start")
+		self.startMCbtn = ttk.Button(self.MCbtnFrame, text="Start", command=procman.startMotor)
 		self.startMCbtn.pack(side="left")
-		self.stopMCbtn = ttk.Button(self.MCbtnFrame, text="Stop")
+		self.stopMCbtn = ttk.Button(self.MCbtnFrame, text="Stop", command=procman.stopMotor)
 		self.stopMCbtn.pack(side="left")
 
 		self.JoybtnFrame = tk.LabelFrame(self.bottomleft_frame, text="Joystick interface", relief="raised", width=190, height=40)
 		self.JoybtnFrame.place(x=0,y=100)
-		self.startJoybtn = ttk.Button(self.JoybtnFrame, text="Start")
+		self.startJoybtn = ttk.Button(self.JoybtnFrame, text="Start", command=procman.startJoy)
 		self.startJoybtn.pack(side="left")
-		self.stopJoybtn = ttk.Button(self.JoybtnFrame, text="Stop")
+		self.stopJoybtn = ttk.Button(self.JoybtnFrame, text="Stop", command=procman.stopJoy)
 		self.stopJoybtn.pack(side="left")
 
 		###### Top left - Master switches
-		self.MasterOnBtn = ttk.Button(self.topleft_frame, text="Start All")
+		self.MasterOnBtn = ttk.Button(self.topleft_frame, text="Start All", command=procman.startAll)
 		self.MasterOnBtn.pack(side="left")
-		self.MasterOffBtn = ttk.Button(self.topleft_frame, text="Stop All")
+		self.MasterOffBtn = ttk.Button(self.topleft_frame, text="Stop All", command=procman.stopAll)
 		self.MasterOffBtn.pack(side="left")
 
 		###### Bottom right: ROSTopic outputs

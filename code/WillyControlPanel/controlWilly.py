@@ -6,7 +6,7 @@ import time
 import threading
 
 import cwPanel
-import processManager
+from processManager import processManager
 from processMonitor import processMonitor
 from pingMonitor import pingMonitor
 
@@ -15,7 +15,8 @@ from pingMonitor import pingMonitor
 def main(args):
 	# Create and define the root window and controlpanel class
 	root = tk.Tk()
-	cwpanel = cwPanel.cwPanel(root)
+	procman = processManager()
+	cwpanel = cwPanel.cwPanel(root, procman)
 	#pingMon = pingMonitor(root, cwpanel)
 	#pingMon.run()
 	procMon = processMonitor(root, cwpanel)

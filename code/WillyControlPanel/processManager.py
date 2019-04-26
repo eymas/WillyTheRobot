@@ -1,3 +1,10 @@
+import os
+import signal
+import psutil
+import subprocess
+from time import sleep
+
+
 # Class for ROS Core process control/monitoring
 class processManager():
 	def __init__(self):
@@ -21,26 +28,43 @@ class processManager():
 
 	# Start the ROS Core
 	def startROS(self):
-		self.rosProcess = subprocess.Popen("/home/willy/Documents/controlWilly/startroscore.sh", preexec_fn=os.setpgrp)
-		# Create and start a thread for the ros vars monitor
-		self.rmonThread = multiprocessing.Process(target=CWListener, args=(self.queue,))
-		self.rmonThread.daemon = True
-		self.rmonThread.start()
+		self.rosProcess = subprocess.Popen(["/home/willy/Documents/controlWilly/scripts/startroscore.sh"], preexec_fn=os.setpgrp)
 		print("ROS Core Process started. PID: " + str(self.rosProcess.pid))
 
+	def stopROS(self):
+		rp_pid = self.rosProcess.pid
+		print(jp_pid)
+		print(type(jp_pid))
+		self.kill_proc_tree(rp_pid)
+
 	# Start the motor controller
-	def startMC(self):
-		self.motorProcess = subprocess.Popen("/home/willy/Documents/controlWilly/startmotorcon.sh", preexec_fn=os.setpgrp)
+	def startMotor(self):
+		self.motorProcess = subprocess.Popen(["/home/willy/Documents/controlWilly/scripts/startmotorcon.sh"], preexec_fn=os.setpgrp)
 		print("Motor Controller Process started. PID: " + str(self.motorProcess.pid))
+
+	def stopMotor(self):
+		mc_pid = self.motorProcess.pid
+		print(jp_pid)
+		print(type(jp_pid))
+		self.kill_proc_tree(mc_pid)
 
 	# Start the joystick interface
 	def startJoy(self):
-		self.joyProcess = subprocess.Popen("/home/willy/Documents/controlWilly/startjoystick.sh", preexec_fn=os.setpgrp)
+		self.joyProcess = subprocess.Popen(["/home/willy/Documents/controlWilly/scripts/startjoystick.sh"], preexec_fn=os.setpgrp)
 		print("Joystick Interface Process started. PID: " + str(self.joyProcess.pid))
 
-	def stopProcess(self, process):
-		self.process = process
-		self.time_limit = 10
+	def stopJoy(self):
+		jp_pid = self.joyProcess.pid
+		print(jp_pid)
+		print(type(jp_pid))
+		self.kill_proc_tree(jp_pid)
 
-		sleep(self.time_limit)
-		os.kill(self.process.pid, SIGTERM)
+	def kill_proc_tree(self, pid, including_parent=True):    
+		parent = psutil.Process(pid)
+		children = parent.children(recursive=True)
+		for child in children:
+			child.kill()
+		gone, still_alive = psutil.wait_procs(children, timeout=5)
+		if including_parent:
+			parent.kill()
+			parent.wait(5)
