@@ -26,24 +26,24 @@ class cwPanel():
 
 		# Define widgets per frame
 
-		###### Top right - ping monitor to determine status of pi's and lidar
-		self.pingLabel = tk.Label(self.topright_frame, text="Components:")
-		self.pingLabel.grid(row=0, column=0, padx=3, pady=4, ipadx=0, ipady=0)
-		# LIDAR sensor label
-		self.pingLidar = tk.Label(self.topright_frame, text="LIDAR")
-		self.pingLidar.grid(row=0, column=1, padx=5, pady=4, ipadx=5, ipady=0)
-		# Sensor Pi label
-		self.pingSensorPi = tk.Label(self.topright_frame, text="Sensor Pi")
-		self.pingSensorPi.grid(row=0, column=2, padx=5, pady=4, ipadx=5, ipady=0)
-		# Social Interaction Pi label
-		self.pingSiPi = tk.Label(self.topright_frame, text="SI Pi")
-		self.pingSiPi.grid(row=0, column=3, padx=5, pady=4, ipadx=5, ipady=0)
-		# Brain Pi label
-		self.pingBrainPi = tk.Label(self.topright_frame, text="Brain Pi")
-		self.pingBrainPi.grid(row=0, column=4, padx=5, pady=4, ipadx=5, ipady=0)
-		# Router Pi label
-		self.pingRouterPi = tk.Label(self.topright_frame, text="Router Pi")
-		self.pingRouterPi.grid(row=0, column=5, padx=5, pady=4, ipadx=5, ipady=0)
+		####### Top right - ping monitor to determine status of pi's and lidar
+		#self.pingLabel = tk.Label(self.topright_frame, text="Components:")
+		#self.pingLabel.grid(row=0, column=0, padx=3, pady=4, ipadx=0, ipady=0)
+		## LIDAR sensor label
+		#self.pingLidar = tk.Label(self.topright_frame, text="LIDAR")
+		#self.pingLidar.grid(row=0, column=1, padx=5, pady=4, ipadx=5, ipady=0)
+		## Sensor Pi label
+		#self.pingSensorPi = tk.Label(self.topright_frame, text="Sensor Pi")
+		#self.pingSensorPi.grid(row=0, column=2, padx=5, pady=4, ipadx=5, ipady=0)
+		## Social Interaction Pi label
+		#self.pingSiPi = tk.Label(self.topright_frame, text="SI Pi")
+		#self.pingSiPi.grid(row=0, column=3, padx=5, pady=4, ipadx=5, ipady=0)
+		## Brain Pi label
+		#self.pingBrainPi = tk.Label(self.topright_frame, text="Brain Pi")
+		#self.pingBrainPi.grid(row=0, column=4, padx=5, pady=4, ipadx=5, ipady=0)
+		## Router Pi label
+		#self.pingRouterPi = tk.Label(self.topright_frame, text="Router Pi")
+		#self.pingRouterPi.grid(row=0, column=5, padx=5, pady=4, ipadx=5, ipady=0)
 
 		###### Bottom left - per-service start/stop/reboot buttons
 		# Initiate process manager for these

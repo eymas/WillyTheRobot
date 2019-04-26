@@ -16,10 +16,13 @@ def main(args):
 	# Create and define the root window and controlpanel class
 	root = tk.Tk()
 	cwpanel = cwPanel.cwPanel(root)
-	root.after(1000, pingMonitor, cwpanel)
+	#pingMon = pingMonitor(root, cwpanel)
+	#pingMon.run()
+	procMon = processMonitor(root, cwpanel)
+	procMon.run()
 	root.mainloop()
 	# Create and start a thread for the ping monitor
-	#processMonitor(cwpanel)
+	
 	# Start main window loop
 	
 		
