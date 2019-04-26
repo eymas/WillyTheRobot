@@ -1,4 +1,4 @@
-import Tkinter as tk
+from mttkinter import mtTkinter as tk
 import ttk
 import sys
 import os
@@ -7,8 +7,8 @@ import threading
 
 import cwPanel
 import processManager
-import processMonitor
-import pingMonitor
+from processMonitor import processMonitor
+from pingMonitor import pingMonitor
 
 ####### MAIN WINDOW LOOP #######
 # Activate window main loop.
@@ -16,17 +16,13 @@ def main(args):
 	# Create and define the root window and controlpanel class
 	root = tk.Tk()
 	cwpanel = cwPanel.cwPanel(root)
-	# Create and start a thread for the ping monitor
-	pingThread = threading.Thread(target=pingMonitor.pingMonitor(cwpanel))
-	pingThread.setDaemon(True)
-	# Create and start a thread for the process monitor
-	procThread = threading.Thread(target=processMonitor.processMonitor(cwpanel))
-	procThread.setDaemon(True)
-	# Start the window's main loop
+	root.after(1000, pingMonitor, cwpanel)
 	root.mainloop()
-	pingThread.start()
-	procThread.start()
-
+	# Create and start a thread for the ping monitor
+	#processMonitor(cwpanel)
+	# Start main window loop
+	
+		
 
 # Runs on exit(ctrl+c or window x button)
 if __name__ == '__main__':
