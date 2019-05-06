@@ -1,7 +1,7 @@
 \section{IMU}
 The IMU \ref{trm::imu} that was present on WTR before, the MPU6050, was broken when the current group started work on the project.
 As such, a replacement had to be chosen.
-Rather than go with a 6-axis IMU like the MPU6050, a 9-axis IMU seemed like the better option, so an analysis was done to determine the best device.
+Rather than go with a 6-axis IMU such as the MPU6050, a 9-axis IMU seemed the better option, so an analysis was done to determine the best device.
 
 The demands were as follows:
 \begin{enumerate}
@@ -72,18 +72,17 @@ GND        & ground  \\ \hline
 \subsubsection{Address}
 In the example code it is stated the the address of the MPU9250 should be \code{0x71}.
 This is not the case, and instead the address is \code{0x73}.
-The reason for this difference is not exactly clear, but it does not pose any problem other than the code used not matching the examples.
-The magnetometer, the AK8963, does still have the same address as mentioned in any documentation about it, as well as the example code.
+The reason for this difference is not clear, but it does not pose a problem other than the code used not matching the examples.
+The magnetometer, the AK8963, has the same address as mentioned in documentation about it, as well as the example code.
 
-\subsubsection{Positioning}
-During the development, a small issue was forgotten.
-When the word "small" is used, this is an understatement.
-A magnetometer is reliant on, as the name implies, magnetism.
-Since the frame is made of steel, it interferes with the magnetometer to a rather large extent.
+\subsubsection{Soft Iron Interference}
+During the development, a unforeseen consequence of a metal frame became apparent.
+A magnetometer is reliant on magnetism.
+Since the frame is made of steel, it interferes with the magnetometer.
 When the IMU is mounted to the frame, the quaternion it outputs is essentially always the same, since the magnetic values never change.
 If the robot turns, the magnetic field it produces turns with it.
-This is akin to using a compass with a powerful magnet held in front of it.
-Regardless of how you turn, the compass will always point towards the magnet, rather than the north.
+This is known as "soft iron interference".
+
 To combat this issue, there are two solutions.
 The first would be to somehow isolate the frame, electric motors and car batteries so that the magnetic field is contained.
 No one in the current group has the expertise or knowledge to do this, and it would probably also weigh down WTR so much the robot would become nearly immovable.
