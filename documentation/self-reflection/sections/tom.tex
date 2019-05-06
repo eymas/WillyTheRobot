@@ -1,37 +1,29 @@
 \section{Tom van den Noort}
 
 Being a student in Software Engineering, my tasks in the project focused upon learning the ins and outs of the Robot Operating System (ROS) and how the other software components would speak to the ROS ``Master'' and vice versa. 
-Along with how to fine-tune these components and/or write/modify them, I have had a broad variety of tasks to work on, learning all manner of things old and new in the process.
-
-\vspace{5mm}
+Along with how to fine-tune these components and/or write/modify them, I have had a broad variety of tasks to work on, learning all manner of things old and new in the process.\\
 
 A notable achievement with fine-tuning software is the replacement of the ``local planner'' that ROS uses for planning paths for autonomous navigation. 
 The old ``base local planner'' would define a path \textit{once} and try to reach the set goal. 
 Whenever an obstacle would block this path, the robot would spin in place until the obstacle was gone. 
 This was less than ideal for the robot as it is rather large and weighted.
-
 The new ``Timed Elastic Band`` or TEB Local Planner that I replaced the old one with would dynamically (re)calculate its path to the given goal, allowing it to navigate past obstacles with certain tolerances. 
 Shortly after installing and configuring the new planner, I only needed to change a few lines in the configuration and converting the planner's configuration file from the old to the new one. 
 When running the new component, we were given immediate results; the robot could now drive past obstacles and wouldn't stop in place any more. 
 This was a big achievement that we've reached early on in the project's runtime. 
-I was quite glad with this result, given that there was only little change needed for such a big leap.
-
-\vspace{5mm}
+I was quite glad with this result, given that there was only little change needed for such a big leap.\\
 
 This project has given me some insight in how robots work, but more importantly on how the separate software packages work together to make the robot drive on its own. 
 The framework that ROS made had inspired me to take over its principles to improve future software development projects. 
 At the start of the project, I was introduced to LaTeX, a different way of writing documents. 
 Comparing it to Microsoft Word, I found that it had many improvements that made it a blessing to work with LaTeX from this moment on for any documentation, since it only needs you to write the text and some special lines for embedding pictures, lists or tables. 
-More importantly; the layout is automatically generated and less prone to being shaken and stirred, which has caused Microsoft Word to annoy one a few times.
+More importantly; the layout is automatically generated and less prone to being shaken and stirred, which has caused Microsoft Word to annoy one a few times.\\
 
-\vspace{5mm}
+There are a few things to improve on however, such as keeping better track of our tasks and progress thereof. Although we're practising SCRUM, I've found that we put large user stories upon the board, but not the smaller ones that we've been doing. Considering that those tasks have come out of a whim, personally I think we should keep the board more up-to-date next time.
+I should have kept better track of what I have changed in each file, considering that once a module would cease to function; you don't have the original values to return to as you've overwritten those. By regularly making backups /textit{before} working on the files in question, I could potentially save trouble when the new edits cause improper behaviour.
+Similarly, documenting my findings immediately would help save time lest it has to be done near or at the end of the project. 
+I would consider using a journaling method for this; describe my findings in a lucrative way by writing them down as a diary of sorts.\\
 
-There are a few things to improve on however, such as keeping better track of our tasks and progress thereof. 
-I should have kept better track of what I have changed in each file, considering that once a module would cease to function; you don't have the original values to return to as you've overwritten those. 
-Similarly, documenting my findings immediately rather than to recall them on later points would save some time in the latter half of the project.
-
-\vspace{5mm}
-
-I'm positive about this project's results, and to close off the personal evaluation, I've done well in terms of exploring new software products and improving them, but there are some minor inconveniences I need to iron out.
+I'm positive about this project's results, and to close off the personal evaluation: I've done well in terms of exploring new software products and improving them, but there are some minor inconveniences I need to iron out as described earlier.
 
 \newpage
