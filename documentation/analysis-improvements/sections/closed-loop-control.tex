@@ -79,17 +79,17 @@ The chosen controller $(C(s))$ is discussed here \ref{sec::controller}
 \centering
 \begin{tabular}{|l|l|C{8cm}|c|c|}
 \hline
-\textbf{Nr.} 	& \textbf{Variable(s)}						&\textbf{Calculation}								& \textbf{Unit} 	\\ \hline
-1			& Turn\_ Input 							& - 											& [Rad/s] 		\\ \hline
-2			& Drive\_ Input 							& - 											& [m/s] 		\\ \hline
-3			& Speed\_ Sensor\_ Right 					& $ Rad/s \cdot Wheel Radius $ 						& [m/s] 		\\ \hline
-4			& Speed\_ Sensor\_ Left 					& $ Rad/s \cdot Wheel Radius $ 						& [m/s] 		\\ \hline
-5			& Turn\_ Speed							& $ (Speed\_ Sensor\_ Right - Speed\_ Sensor\_ Left)/0.6) $	& [Rad/s]		\\ \hline
-6			& Drive\_ Speed							& $ (Speed\_ Sensor\_ Right + Speed\_ Sensor\_ Left)/0.5) $ 	& [m/s]		\\ \hline
-5			& Turn\_ Error							& $ Turn\_ Input - Turn\_ Speed $						& [Rad/s]		\\ \hline
-6			& Drive\_ Error							& $ Drive\_ Input - Drive\_ Speed $ 					& [m/s]		\\ \hline
-7			& Turn\_ Output  						& $ Turn\_ Error \cdot Ct(s) $ 							& - 			\\ \hline
-8			& Drive\_ Output 						& $ Drive\_ Error \cdot Cd(s) $							& - 			\\ \hline
+\textbf{Nr.} 	& \textbf{Variable(s)}		&\textbf{Calculation}								         & \textbf{Unit} 	\\ \hline
+1			    & Turn\_Input 			    & - 											             & [Rad/s] 		\\ \hline
+2			    & Drive\_Input 				& - 											             & [m/s] 		    \\ \hline
+3			    & Speed\_Sensor\_Right 		& $ Rad/s \cdot Wheel Radius $ 					         & [m/s] 		\\ \hline
+4			    & Speed\_Sensor\_Left 		& $ Rad/s \cdot Wheel Radius $ 					         & [m/s] 		\\ \hline
+5			    & Turn\_Speed				& $ (Speed\_ Sensor\_ Right - Speed\_ Sensor\_ Left)/0.6) $	 & [Rad/s]		\\ \hline
+6			    & Drive\_Speed				& $ (Speed\_ Sensor\_ Right + Speed\_ Sensor\_ Left)/0.5) $ & [m/s]		    \\ \hline
+5			    & Turn\_Error				& $ Turn\_ Input - Turn\_ Speed $						     & [Rad/s]		\\ \hline
+6			    & Drive\_Error				& $ Drive\_ Input - Drive\_ Speed $ 					     & [m/s]		    \\ \hline
+7			    & Turn\_Output  				& $ Turn\_ Error \cdot Ct(s) $ 							 & - 			\\ \hline
+8			    & Drive\_Output 				& $ Drive\_ Error \cdot Cd(s) $							 & - 			\\ \hline
 
 \end{tabular}
 \caption{Overview of input and outputs in the closed loop system}
