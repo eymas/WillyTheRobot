@@ -30,27 +30,27 @@ The flow of the main program can be found in figure \ref{fig::MPF}.
 
 
 \subsection{Rotary encoders}
-The rotary encoders are of the quadrature type with 256 PPR. \todo{Maybe link to a source explaining what quadrature means}
+The rotary encoders are of the quadrature \ref{trm::quad} type with 256 PPR.
 Quadrature encoders are equipped with two channels from which one is phase shifted 90 degrees compared to the second, see figure \ref{fig::QuadEnc}.
-This allows a program to determine the direction in which the shaft is rotating, as well as increasing resolution.
+This allows a program to determine the direction in which the shaft is rotating, as well as the speed; with an increasing resolution 4 times the PPR \ref{trm::PPR}.
 
 \begin{figure}[H]
 \centering
 \includegraphics[width=12 cm]{QuadruatureEncoderOutput.png}
-\caption{Output from quardature encoder}
+\caption{Output from quadrature encoder}
 \label{fig::QuadEnc}
 \end{figure}
 
-
-Interrupts are generated for the rising edge and for the falling edge on the pulse train per channel and therefore increase the resolution to 1024 per revolution. 
-\todo{Interrupts are generated for both the rising and falling edge, which increases the resolution to 1024 pulses per revolution.}
-The speed is determined using code based on the structure which can be found in the the two flowcharts below, \ref{fig::PCF} and \ref{fig::SRC}. 
-The interrupt will trigger the direction determination and call a pulse change function, which stores timestamps and calculates the frequency of the pulses.
-This allows the code to track the speed, and make adjustments accordingly.
-This can be found in figure \ref{fig::PCF}.
-
-When the main program wants to know the speed, it will call a speed read function which will then calculate the speed accordingly. 
-This can be found in figure \ref{fig::SRC}.
+Interrupts are generated for both the rising and falling edge, which increases the resolution to 1024 pulses per revolution.
+The speed is determined using code based on the structure which can be found in the the two flowcharts below, \ref{fig::PCF} and \ref{fig::SRC}.
+\\
+The interrupts will trigger the direction determination function and a speed determination function.
+The direction is determined using the logic which can be seen at the left side of figure \ref{fig::PCF}.
+The speed is determined by using timers which return the period of the puls, this is converterd to frequency, rad/s and at the end the speed in m/s.
+This logic can be found in figure \ref{fig::PCF}.
+\\
+When the main program wants to know the speed, it will call a speed read function which will then calculate the speed accordingly. Using a read frequency higher then the frequency of the pulses the function will return 0.
+This read function can be found in figure \ref{fig::SRC}.
 
 \begin{figure}[H]
 \centering
@@ -68,10 +68,12 @@ This can be found in figure \ref{fig::SRC}.
 \end{figure}
 
 \subsection{Control loop}
-The control loop calculates the speed error \ref{trm::speederror} per wheel based on feedback of the encoders and a reference \ref{trm::refturn} turn and drive input. 
-This error is sent to \code{PIDCalculation()} which returns a turn and drive output. 
+The control loop receives an input for both turn and drive. 
+Based on the wheel speed received from the encoder class, the turn and drive speed of the robot are calculated. 
+Using the inputs and the actual data the turn and drive error are calculated.
+The errors are then being send to the turn and drive controllers.
 A detailed description of these calculations can be found in movement research. 
-The flow of this class can be found in figure \ref{fig::CLF}.
+The flow of the control loop class can be found in figure \ref{fig::CLF}.
 
 \begin{figure}[H]
 \centering
