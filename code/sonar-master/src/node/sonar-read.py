@@ -30,7 +30,7 @@ TopicDistance = tuple()
 # Init serial components
 socket = serial.Serial()
 socket.baudrate = 9600
-socket.port = '/dev/ttyACM1'
+socket.port = '/dev/ttyACM0'
 socket.timeout = 1
 socket.open()
 
@@ -42,8 +42,8 @@ def PostOnTopic(frameid, Distance):
 		message.header.stamp.nsecs = rospy.get_rostime().nsecs
 		message.header.frame_id = frameid
 		message.radiation_type = 0
-		message.field_of_view = 0.01
-		message.max_range = 5
+		message.field_of_view = 1
+		message.max_range = 2.0
 		message.min_range = 0.1
 		message.range = float(Distance) / 100
 		pubTopicInstance.publish(message)
@@ -57,12 +57,12 @@ while not rospy.is_shutdown():
 	print("--- \n Sonar outputs:")
 	print(topicMessage)
 
-	if(re.search(r"\d+\.\d+\|\d+\.\d+\|\d+\.\d+\|\d+\.\d+\|\d+\.\d+\|\d+\.\d+\|\d+\.\d+\|\d+\.\d+", topicMessage)):
-		PostOnTopic("/front_left",float(topicMessage.split("|")[0]))
+	if(re.search(r"\d+\|\d+\|\d+\|\d+\|\d+\|\d+\|\d+\|\d+", topicMessage)):
+		PostOnTopic("/front_right",float(topicMessage.split("|")[0]))
 		PostOnTopic("/front_middle",float(topicMessage.split("|")[1]))
-		PostOnTopic("/front_right",float(topicMessage.split("|")[2]))
-		PostOnTopic("/side_right",float(topicMessage.split("|")[3]))
-		PostOnTopic("/back_right",float(topicMessage.split("|")[4]))
+		PostOnTopic("/front_left",float(topicMessage.split("|")[2]))
+		PostOnTopic("/side_left",float(topicMessage.split("|")[3]))
+		PostOnTopic("/back_left",float(topicMessage.split("|")[4]))
 		PostOnTopic("/back_middle",float(topicMessage.split("|")[5]))
-		PostOnTopic("/back_left",float(topicMessage.split("|")[6]))
-		PostOnTopic("/side_left",float(topicMessage.split("|")[7]))
+		PostOnTopic("/back_right",float(topicMessage.split("|")[6]))
+		PostOnTopic("/side_right",float(topicMessage.split("|")[7]))

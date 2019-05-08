@@ -1,2 +1,3 @@
 #!/bin/bash
-python src/node/sonar-read.py
+
+python ~/catkin_ws/src/sonar/src/node/sonar-read.py
