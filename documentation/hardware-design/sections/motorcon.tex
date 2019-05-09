@@ -34,7 +34,8 @@ The rotary encoders have been socketed on the axles using a 3-d printed mount, u
 \label{fig::FCR}
 \end{figure}
 
-The full assembly is as shown in fig \ref{fig::REA}
+The full assembly is as shown in fig \ref{fig::REA}.
+This is mounted to the axles 
 
 \begin{figure}[H]
 \centering
@@ -46,17 +47,20 @@ The full assembly is as shown in fig \ref{fig::REA}
 The flexible coupling provides 5 degrees of freedom.
 The coupling allows the axis to move slightly in lateral directions as relative to the axle, as well as slightly towards and away from the axle.
 This has been tested in Solidworks, and a 10N force is enough to move the axle 0.5mm.
+The flexibility of the coupling prevents the axle from exerting too much lateral force on the rotary encoder, which could potentially bend the axle.
+That would cause interference in measurements, reducing their accuracy, and interfering with the PID-controller.
 
 \subsubsection{Wiring}
-The wiring for the encoders on the Arduino side was already in place, due to the old encoders that were since removed.
+The wiring for the encoders on the Arduino was already in place, due to the old encoders that were since removed.
 Figure \ref{fig::WD} shows the wiring.
+This was made by a previous group that used encoders.
+Since the wiring matched the requirements, no changes were made.
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=12cm]{something.image}
+\includegraphics[width=16cm]{motorconwiring.jpeg}
 \caption{The wiring of the rotary encoders}
 \label{fig::WD}
 \end{figure}
 
-
-
+\newpage
