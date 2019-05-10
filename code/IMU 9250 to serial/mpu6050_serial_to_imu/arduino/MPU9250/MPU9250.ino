@@ -160,13 +160,14 @@ void loop()
     
     // Now we'll calculate the accleration value into actual g's
     // This depends on scale being set
+    // Some vars are inverted because testing showed they were inverted.
     myIMU.ax = -((accel_avg[0] * myIMU.aRes) - myIMU.accelBias[0]);
-    myIMU.ay = (accel_avg[1] * myIMU.aRes) - myIMU.accelBias[1];
+    myIMU.ay = -((accel_avg[1] * myIMU.aRes) - myIMU.accelBias[1]);
     myIMU.az = (accel_avg[2] * myIMU.aRes) - myIMU.accelBias[2];
     // Calculate the gyro value into actual degrees per second
     // This depends on scale being set
     myIMU.gx = gyro_avg[0] * myIMU.gRes - myIMU.gyroBias[0];
-    myIMU.gy = gyro_avg[1] * myIMU.gRes - myIMU.gyroBias[1];
+    myIMU.gy = -(gyro_avg[1] * myIMU.gRes - myIMU.gyroBias[1]);
     myIMU.gz = -(gyro_avg[2] * myIMU.gRes - myIMU.gyroBias[2]);
 //#ifdef DEBUG
 //    Serial.print('(');
