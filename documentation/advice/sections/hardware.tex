@@ -1,0 +1,47 @@
+\section{Hardware}
+The physical aspect of WTR has massively improved through the use of 3-D printing.
+Previously, WTR consisted of a metal frame with wooden planks supporting the laptop and 4 Raspberry Pi's.
+This has since been changed to increase the ease of access to every part of WTR.
+There are still some parts which need to be updated, however.
+
+\subsection{Batteries}
+This group has unfortunately not yet had the chance to fix the battery situation.
+While the batteries used are only 24 volt, the idea of having the poles exposed during public expositions and events is not great.
+This was something we had planned to correct, but ever got around to.
+Some simple caps or covers would be a massive improvement to the current situation.
+
+Another issue that could do with correction is that they are essentially just held in place by weight.
+The downside of this is that WTR does not move in what can be described as a smooth fashion.
+The robot brakes pretty quickly, so the deceleration is pretty abrupt.
+If this happens too often, the batteries could potentially end up touching poles due to the shifting, as the two located under the laptop are on their side.
+This could be another issue, but our group did not know enough about electronics to say whether this presented an issue, and as such left it as is.
+The advice here is to either cover the poles, again, or create some way of fixing the batteries in place, such as a simple 3-D printed shunt, screwed to the wood.
+
+\subsection{Motor Controller}
+The motor controller is located in a black box, in the middle of WTR between several batteries.
+While the accessibility has been improved by removing the wooden frame that previously held the laptop and replacing that with a single plank that slots over the frame, it is still not easy to change parts or functionality of the device.
+It could be useful, if regular changed are needed, to find a way to move it to a new position, or change the box to not require tape to remain closed.
+
+\subsection{TV Screen}
+The current TV screen is already a low power model.
+However, its current size serves no practical purpose.
+Granted, the current group did not have to work with any social interaction, but even if it had been necessary, this screen would be considered overkill.
+The next group should consider changing to a smaller screen, if only for testing purposes.
+The size of the screen causes it to drain the battery quicker, so a small screen would allow for more rigorous testing.
+
+\subsection{Laptop}
+The laptop currently runs on its own battery, which is theoretically fine.
+It is capable of running RVIZ, and communicating with all the nodes.
+The downside of it running on a separate battery is that it does drain remarkably quickly.
+A simple drive from the innovation lab on T5 to the printer located on the other side of the bridge between the two sides of the building can drain the battery by as much as 50 percent, which is not desirable.
+In cupboard C, there is a transformer which could be attached to the batteries that allows the laptop charger to be plugged into it and power the laptop.
+The 2019 Q1\&Q2 group did not attach it, because the testing that was done did not require WTR to drive very far from the innovation lab.
+If more extensive testing is planned, this might be considered a smart move.
+
+\subsection{IMU}
+The IMU is located on top of the screen, as magnetic interference caused by the electrical motors and the steel frame would otherwise prevent the magnetometer from operating properly.
+It has been clipped there using a 3-D printed box, but during the design of that a few dimensions of the TV screen were forgotten, causing the IMU to be slightly misaligned.
+While this does not cause any major issues, the slightly inaccuracy in the design prevents the IMU from being as snugly fitted to the screen, allowing it to shake around a bit.
+A more tightly designed container would help increase the stability of the readings.
+
+\newpage

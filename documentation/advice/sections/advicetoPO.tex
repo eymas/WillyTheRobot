@@ -1,0 +1,37 @@
+\section{Advice to the Product Owner}
+Naturally, aside from advice to the following groups, there is also some feedback to the product owner.
+
+\subsection{Future Technology}
+As a part of the future technology, it is expected that the technology is somewhat experimental.
+Unfortunately, the system used here is actually starting to become rather antiquated.
+The developers of ROS have already released working versions of its successor, ROS 2.
+Another issue is that ROS 1 currently runs on Ubuntu 16.0.4, while at the time of writing, Ubuntu has released version 19 already.
+It could be worth asking a following group that works on the project to attempt to update any possible sections to those newer versions, since support for the current systems is likely to be dropped.
+
+\subsection{Ask For a Clear Inventory of Capabilities}
+More than once the current group ran into a bit of a sticking point when discussing what the target for WTR would be as a project.
+The goal that was set at the start was rather nebulous,  "Improve WTR's driving capabilities".
+This did not present a clear goal, though it was later refined a fair bit.
+The issue with the new goal, which was communicated to the group halfway through the project, was that it did not line up with the capabilities of WTR.
+The goal to have WTR drive at a person when it recognized one was unrealistic, since the way WTR deals with facial recognition is not usable in navigation.
+The summary of this advice would be to take a critical look at its functionality, and determine ahead of time what the goal would be so that it is possible for the group to work towards the same goal with a clear target in mind.
+In order to do this, create an inventory of current capabilities, such as driving to a pre-determined place, creating a new goal on the fly, or to track a human face in a better way than WTR currently does.
+
+\subsection{Social Interaction}
+As was mentioned in the introduction of this document \ref{sec::intro}, the only real problem area left for WTR is social interaction.
+The 2019 Q1\&Q2 group did not investigate this much, as it laid outside of our project scope, but from the casual investigation into the related capabilities, it became obvious that there is still room for improvement.
+
+\subsubsection{Boxes and Cupboards}
+While testing WTR, on startup it also launches its webcam and facial recognition software.
+It was greatly amusing to the group to find out what WTR considers a face.
+Among those options are:
+\begin{itemize}
+\item Cardboard boxes
+\item Whiteboards
+\item The racks for the first KBS (the ASRS system)
+\item empty space
+\item windows
+\item chairs
+\end{itemize}
+Facial recognition is of course a very complicated section of programming, as properly tracking several hundreds of faces is something the entire government of China has only recently achieved.
+
