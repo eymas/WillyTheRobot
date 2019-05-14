@@ -3,7 +3,6 @@ import roslib
 import rospy
 import actionlib
 from actionlib_msgs.msg import *
-from nav_msgs.msg import Odometry
 from geometry_msgs.msg import Pose, Point, Quaternion, Twist
 from move_base_msgs.msg import MoveBaseAction, MoveBaseGoal
 from tf.transformations import quaternion_from_euler
@@ -13,15 +12,18 @@ from math import radians, pi
 class MoveBaseSquare():
     def __init__(self):
         rospy.init_node('demo_move_script', anonymous=False)
-        rospy.Subscriber('/odom', Odometry, get_pose)
+        
         rospy.on_shutdown(self.shutdown)
         
         # How big is the square we want the robot to navigate?
         square_size = rospy.get_param("~square_size", 0.5) # meters
+        
         # Create a list to hold the target quaternions (orientations)
         quaternions = list()
+        
         # First define the corner orientations as Euler angles
         euler_angles = (pi/2, pi, 3*pi/2, 0)
+        
         # Then convert the angles to quaternions
         for angle in euler_angles:
             q_angle = quaternion_from_euler(0, 0, angle, axes='sxyz')
@@ -52,7 +54,9 @@ class MoveBaseSquare():
         
         # Subscribe to the move_base action server
         self.move_base = actionlib.SimpleActionClient("move_base", MoveBaseAction)
+        
         rospy.loginfo("Waiting for move_base action server...")
+        
         # Wait 60 seconds for the action server to become available
         self.move_base.wait_for_server(rospy.Duration(60))
         
@@ -85,28 +89,21 @@ class MoveBaseSquare():
             i += 1
         
     def move(self, goal):
-        # Send the goal pose to the MoveBaseAction server
-        self.move_base.send_goal(goal)
+            # Send the goal pose to the MoveBaseAction server
+            self.move_base.send_goal(goal)
             
-        # Allow 1 minute to get there
-        finished_within_time = self.move_base.wait_for_result(rospy.Duration(60)) 
+            # Allow 1 minute to get there
+            finished_within_time = self.move_base.wait_for_result(rospy.Duration(60)) 
             
-        # If we don't get there in time, abort the goal
-        if not finished_within_time:
-            self.move_base.cancel_goal()
-            rospy.loginfo("Timed out achieving goal")
-        else:
-            # We made it!
-            state = self.move_base.get_state()
-            if state == GoalStatus.SUCCEEDED:
-                rospy.loginfo("Goal succeeded!")
-
-    def get_pose(self, msg):
-        global roll, pitch, yaw
-        orientation_q = msg.pose.pose.orientation
-        orientation_list = [orientation_q.x, orientation_q.y, orientation_q.z, orientation_q.w]
-        (roll, pitch, yaw) = euler_from_quaternion (orientation_list)
-        print yaw
+            # If we don't get there in time, abort the goal
+            if not finished_within_time:
+                self.move_base.cancel_goal()
+                rospy.loginfo("Timed out achieving goal")
+            else:
+                # We made it!
+                state = self.move_base.get_state()
+                if state == GoalStatus.SUCCEEDED:
+                    rospy.loginfo("Goal succeeded!")
                     
     def init_markers(self):
         # Set up our waypoint markers
