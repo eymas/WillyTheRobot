@@ -22,6 +22,14 @@ The motor controller is located in a black box, in the middle of WTR between sev
 While the accessibility has been improved by removing the wooden frame that previously held the laptop and replacing that with a single plank that slots over the frame, it is still not easy to change parts or functionality of the device.
 It could be useful, if regular changes are needed, to find a way to move it to a new position, or change the box to not require tape to remain closed.
 
+\subsubsection{Rotary Encoders}
+At the time of writing, there is no implemented method of checking whether or not the rotary encoders are still connected.
+The risk that comes with this is that the feedback loop model would cause the system to continuously increase the force it outputs until it receives the desired signal.
+If the encoders are disconnected, that signal never comes.
+This would cause WTR to drive forward at maximum speed the moment it is told to start moving by RVIZ, or the controller.
+While the maximum speed is still limited, it will keep attempting to reach it in every motion it makes, especially during turns.
+It would be good to implement a method to check for a connection, so that WTR stops when it loses connection to the encoders.
+
 \subsection{TV Screen}
 The current TV screen is already a low power model.
 However, its current size serves no practical purpose.
