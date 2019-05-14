@@ -2,22 +2,25 @@
 import rospy
 import actionlib
 from move_base_msgs.msg import MoveBaseAction, MoveBaseGoal
+from nav_msgs.msg import Odometry
+from geometry_msgs.msg import Pose, Point, Quaternion
 
-def movebase_client():
+position1 = Pose(Point(0.7, 0.0, 0.0), Quaternion(0.0, 0.0, 0.99, 1.0))
+position2 = Pose(Point(0.0, 0.7, 0.0), Quaternion(0.0, 0.0, 0.5, 0.0))
+position2 = Pose(Point(-0.7, 0.0, 0.0), Quaternion(0.0, 0.0, -0.99, 0.0))
+position2 = Pose(Point(0.0, -0.7, 0.0), Quaternion(0.0, 0.0, 0.5, 0.0))
 
+def odom_callback(msg):
+    print(msg.pose.pose)
+
+def movebase_client(position):
     client = actionlib.SimpleActionClient('move_base',MoveBaseAction)
     client.wait_for_server()
 
     goal = MoveBaseGoal()
-    goal.target_pose.header.frame_id = "odom"
+    goal.target_pose.header.frame_id = "base_link"
     goal.target_pose.header.stamp = rospy.Time.now()
-    goal.target_pose.pose.position.x = 0.5
-    goal.target_pose.pose.position.y = 0.0
-    goal.target_pose.pose.position.z = 0.0
-    goal.target_pose.pose.orientation.x = 0.0
-    goal.target_pose.pose.orientation.y = 0.0
-    goal.target_pose.pose.orientation.z = 0.66
-    goal.target_pose.pose.orientation.w = 0.74
+    goal.target_pose.pose = position
 
     client.send_goal(goal)
     wait = client.wait_for_result()
@@ -30,8 +33,12 @@ def movebase_client():
 if __name__ == '__main__':
     try:
         rospy.init_node('movebase_client_py')
-        result = movebase_client()
-        if result:
+        rospy.Subscriber('odom', Odometry, odom_callback)
+        result1 = movebase_client(position1)
+        if result1:
+            print("First goal reached.")
+            result2 = movebase_client(position2)
+        if result2:
             rospy.loginfo("Goal execution done!")
     except rospy.ROSInterruptException:
         rospy.loginfo("Navigation test finished.")
