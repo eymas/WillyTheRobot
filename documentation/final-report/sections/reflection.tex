@@ -1,0 +1,53 @@
+\section{Reflections}
+\subsection{Jeroen van 't Hul}
+
+\newpage
+
+\subsection{Tom van den Noort}
+
+\newpage
+
+\subsection{Thomas Zwaanswijk}
+This project has been a mixed bag, in my honest opinion.
+Some parts went very well, such as integrating new data into ROS, or the accidental discoveries that made the project what it is today.
+Naturally, it wouldn't be a mixed bag if there were only positives, so to provide the counterpoint the IMU had to be very difficult to get right.
+I did end up learning a lot from this project, ranging from picking up where others left off, to complex mathematics I would never have thought I would use.
+
+\subsubsection{What Went Well?}
+Personally, I'm very happy with how the appearance of Willy has been improved.
+It went from being a jumble of cables leading to hard-to-access Raspberry Pi's to something that resembles a decently organized machine.
+Obviously, there is still room for improvement, but the simpler setup WTR has now really does allow for easier maintenance and upgrades.
+Removing the very wasteful massive cables has been great to do, as well as placing every device in an accessible location to allow easy maintenance.
+
+Another great point is that the 3D-printing adds to the concept of future technology very neatly.
+A lot of the improvement in the visual aspect of WTR comes from the fact that the previous layers of tape have been replaced by neat boxes containing all the sensors and components of WTR.
+I'm very happy with how some of those turned out, as at the beginning of WTR I did not have a lot of experience with 3D-modelling in Solidworks, but I learned a lot of neat new tricks throughout this project.
+
+\subsubsection{What Went Less Well?}
+But to the good must eventually come the bad, and in my case this is the IMU.
+I must have spent at least a week trying to understand the mathematical principles behind quaternions, though that did pay off in the end.
+Updating the code to work with the new MPU9250 was a nightmare.
+Having to work on code made by people who think \code{TeaPotPacket[]} is a descriptive variable name is a painful process, to say the least.
+Adding to this were the complexities that showed up when attempting to transmit floats on a serial communication system, which can only handle 8-bit integers.
+Eventually I got through it all, but I did waste a lot of time, which is my biggest regret of the project.
+
+I also ended up procrastinating a fair bit when code wouldn't work or I ran into issues I couldn't solve.
+Personally, I find it very demoralizing to have worked on some code for several hours only to find it's essentially useless because a minor technicality prevents it from working.
+I suppose this is also why it took me so long to get the IMU working.
+I have a bad habit of putting off the hard tasks until last, so I can at least have the feeling of having done something by finishing up some easy tasks.
+I did suppress this habit later on in the project, because I started feeling the pressure of the time limit approaching and I didn't have any choice but to get things done.
+
+\subsubsection{Multi-Discipline Work}
+It was also nice to work in a multi-disciplinary team, despite it also producing some unique challenges.
+I had to push quite a lot to get the group to adopt the use of \LaTeX, but in the end I'm very glad that I did since it makes keeping documentation up to date a lot easier.
+It was also nice to learn about some new ways of dealing with data from Jeroen, such as moving averages and feedback loops.
+Having never worked with these before, I ended up learning a fair bit about how to implement those systems and what benefits they offer.
+Another nice part of working in this team was that everybody had something to contribute.
+Tom was great at working with ROS, RVIZ and Linux, which probably would have taken me half the project to get to grips with.
+Jeroen, as I mentioned earlier, was great at working with the mechanical aspects, and his 3D-designs skills are top notch, which ended up teaching me a lot.
+The downside of this would be that I ended up learning less about the new systems than I would have if I had to work on them myself.
+But then again, if I'd had to do all this by myself, I would not even have gotten a third of the work done, so I'm quite happy with the end result.
+
+
+
+\newpage
