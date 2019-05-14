@@ -7,13 +7,13 @@ The team made their own repository for their code, which meant that there was a 
 Instead, consider forking the existing \href{https://github.com/Windesheim-Willy/}{repo}, so that the merging process can happen as a standard git pull request.
 
 \subsection{ROS}
-There are a lot of complexities to ROS, or Robotic Operating System.
+There are a lot of complexities to ROS \ref{trm::ros}, or Robotic Operating System.
 The first is that it is not exactly an operating system.
 It functions more akin to a bus that allows publishing and subscribing to topics.
 The mistake made by the group here was that we fundamentally misunderstood this for the first few weeks, and as such wasted time in how the system was changed.
 
 \subsubsection{Control Panel}
-The program used to plan the route WTR will take to a goal, as well as the system to set a goal, is called RVIZ.
+The program used to plan the route WTR will take to a goal, as well as the system to set a goal, is called RVIZ \ref{trm::rviz}.
 This can be accessed by using the command "startwilly" in a terminal on the laptop.
 The group attempted to make this an easier task, by creating a control panel to reduce this to a simple button press.
 The unfortunate side of this was that due to the way Python created and killed of tasks, memory leaks caused the laptop to crash if it ran for too long.
