@@ -3,7 +3,7 @@ import rospy
 import actionlib
 from move_base_msgs.msg import MoveBaseAction, MoveBaseGoal
 from nav_msgs.msg import Odometry
-from geometry_msgs.msg import PoseStamped, Pose, Point, Quaternion
+from geometry_msgs.msg import PoseWithCovarianceStamped, Pose, Point, Quaternion
 
 #Pose(Point(x, y, z), Quaternion(x, y, z, w)),
 #Pose(Point(1.0, 0.0, 0.0), Quaternion(0.0, 0.0, 0.99, 1.0)),
@@ -18,33 +18,35 @@ positions = []
 
 # Callback that gets run once amcl_pose publishes the current position of the robot
 def pose_callback(msg):
+    global posesub
     print(msg)
     # Put coordinates in shorter variable, faster to call coordinates this way
-    pose = msg.position
-    orientation = msg.orientation
+    pose = msg.pose.pose.position
+    orientation = msg.pose.pose.orientation
     print("-------------- current position --------------")
     print(pose)
     print(orientation)
     # Form new pose.
-    new_pose = Pose(Point(pose.x + 1.0, pose.y, pose.z), Quaternion(orientation.x, orientation.y, orientation.z, orientation.w))
+    new_pose = Pose(Point(pose.x + 3.0, pose.y, pose.z), Quaternion(orientation.x, orientation.y, orientation.z, orientation.w))
     print("-------------- new position     --------------")
     print(new_pose)
     # Keep on forging new poses until the cube's complete.
     npp1 = new_pose
-    new_pose2 = Pose(Point(npp1.position.x, npp1.position.y + 1.0, npp1.position.z), Quaternion(npp1.orientation.x, npp1.orientation.y, npp1.orientation.z - 0.7, npp1.orientation.w - 0.3))
+    new_pose2 = Pose(Point(npp1.position.x, npp1.position.y - 5.0, npp1.position.z), Quaternion(npp1.orientation.x, npp1.orientation.y, npp1.orientation.z - 0.7, npp1.orientation.w - 0.3))
     npp2 = new_pose2
-    new_pose3 = Pose(Point(npp2.position.x - 1.0, npp2.position.y, npp2.position.z), Quaternion(npp2.orientation.x, npp2.orientation.y, npp2.orientation.z + 1.7, npp2.orientation.w - 0.7))
+    new_pose3 = Pose(Point(npp2.position.x - 3.0, npp2.position.y, npp2.position.z), Quaternion(npp2.orientation.x, npp2.orientation.y, npp2.orientation.z + 1.7, npp2.orientation.w - 0.7))
     npp3 = new_pose3
-    new_pose4 = Pose(Point(npp3.position.x, npp3.position.y - 1.0, npp3.position.z), Quaternion(npp3.orientation.x, npp3.orientation.y, npp3.orientation.z - 0.3, npp3.orientation.w + 0.7))
+    new_pose4 = Pose(Point(npp3.position.x, npp3.position.y + 5.0, npp3.position.z), Quaternion(npp3.orientation.x, npp3.orientation.y, npp3.orientation.z - 0.3, npp3.orientation.w + 0.7))
     # Then throw them in an array for the movebase_client to process
     positions.extend([new_pose, new_pose2, new_pose3, new_pose4])
+    return posesub.unregister()
 
 def movebase_client(position):
     client = actionlib.SimpleActionClient('move_base',MoveBaseAction)
     client.wait_for_server()
 
     goal = MoveBaseGoal()
-    goal.target_pose.header.frame_id = "base_link"
+    goal.target_pose.header.frame_id = "map"
     goal.target_pose.header.stamp = rospy.Time.now()
     goal.target_pose.pose = position
 
@@ -63,8 +65,9 @@ def movebase_client(position):
 if __name__ == '__main__':
     try:
         rospy.init_node('movebase_client_py')
-        rospy.Subscriber('/pose_stamped', PoseStamped, pose_callback)
-        rospy.wait_for_message('/pose_stamped', PoseStamped)
+        global posesub
+        posesub = rospy.Subscriber('/amcl_pose', PoseWithCovarianceStamped, pose_callback)
+        rospy.wait_for_message('/amcl_pose', PoseWithCovarianceStamped)
         if positions >= 3:
             print("got here")
             print(positions)
