@@ -4,6 +4,37 @@
 \newpage
 
 \subsection{Tom van den Noort}
+At first, I was excited to start on this project considering the mixture between hardware and software. 
+This excitement had dwindled after our first in-depth examination of WTR. 
+A lot of improvements needed to be done and as such; we were slightly worried if we could achieve most of these, but we've exceeded our expectations.
+Integrating, Improving, swapping new software plugins into ROS. We've gone through a few options to discover how simple our additions were, but we were met with challenges throughout.
+
+\subsubsection{What went well?}
+The start had not been the greatest, with the existing documentation holding some incomplete parts, we learned how to start up some software plugins i.e. RViz, but how do you actually use and configure them? 
+Despite this, I've personally had no difficulty with absorbing the required information from the ROS wiki and other manuals to know the ins and outs of ROS itself. 
+A notable achievement had been my investigation into the local planner; that would design paths for the robot to follow.
+I've found that the one in the start of the project would just plan \textit{one} path and no other, which meant that if that path were to be blocked; the robot wouldn't know how to get past it, and spin in place, hoping the obstacle would be gone.
+On the wiki page of this local planner I had found references to other planners, and after asking myself: ``What if I used one of those alternatives?'' I've looked at how to implement one of those, and I was surprised at how simple the swap was. 
+More importantly; I was amazed by the great improvement of the new Timed Elastic Band Local Planner: It would dynamically recalculate the fastest path if an obstacle was thrown in front of it!
+
+\subsubsection{What didn't go well?}
+There was a downside to fiddling around with the software plugins and configuration files.
+I did keep track of either what values I would change nor the original state of those, meaning that if the plugin were to behave erratically or cease function all together; I had nothing to turn back to if it worked well before my meddling. 
+Although we did recover from such situations whenever they occurred, I did wish I would make a back-up of the files in question before changing them.
+Even if that will imply that there'd be an incremental back up every few minutes.
+Similarly, whenever there would be an issue we cannot resolve by ourselves, we lost the motivation to continue and wound up procrastinating. 
+This happened with the (re)integration of the IMU sensor. 
+We had already loathed the time wasted upon compiling the code and to discover that it would still function incorrectly made the stockpile even bigger, to the point we opted to take a break.
+In the end, it took us around four or more weeks to get the IMU to function and integrated within ROS.
+
+\subsubsection{What comes along for the ride?}
+It was a delight to work with students from other directions than Software Engineering or Business IT \& Management. 
+The knowledge we've shared had certainly helped us along the way with this project, including the usage of tools as \LaTeX, which Thomas has explained very well. Jeroen shared his mechanical designs and knowledge, notably of 3D printing and sensor diagnostics and was more than excited to do so.
+The three of us joined forces in the project and have learned much about algorithms, maths, C++, Python and the publisher/subscriber model which ROS is based off of.
+I myself have gotten interested in this model and might apply it in future projects.
+3D Printing is exciting, with plenty of possibilities, if it so happens that I would get involved with a project for Internet of Things devices, the skills I've been taught would be of great help.
+In terms of documentation, \LaTeX would save considerable time generating neatly designed reports without the instability of Microsoft Word templates.
+
 
 \newpage
 
