@@ -16,15 +16,24 @@ The mistake made by the group here was that we fundamentally misunderstood this 
 The program used to plan the route WTR will take to a goal, as well as the system to set a goal, is called RVIZ [\ref{trm::rviz}].
 This can be accessed by using the command "startwilly" in a terminal on the laptop.
 The group attempted to make this an easier task, by creating a control panel to reduce this to a simple button press.
-The unfortunate side of this was that due to the way Python created and killed of tasks, memory leaks caused the laptop to crash if it ran for too long.
+The unfortunate side of this was that due to the way Python created and terminated tasks, memory leaks caused the laptop to crash if it ran for too long.
 The concept itself is a very good idea, though.
-By creating a simple program that can be started up on boot, which allows users to activate or stop certain parts of WTR can mean that troubleshooting can be made much easier, as well as creating a simpler start-up process.
+By creating a simple program that can be started up on boot, which allows users to activate or stop certain parts of WTR can mean that troubleshooting can be made much easier, resulting in a less steep learning curve at the beginning of the project.
 
 \subsubsection{RVIZ and Plug-ins}
-In order to integrate all the different methods of tracking orientation and obstacles, many RVIZ plug-ins were installed.
+In order to integrate all the different methods of tracking orientation and obstacles, several RVIZ plug-ins were installed.
+The installed plug-ins are:
+\begin{itemize}
+\item \href{http://wiki.ros.org/teb_local_planner}{TEB Local Planner}
+\item \href{http://wiki.ros.org/multimaster_fkie}{Multi-master}
+\item \href{http://docs.ros.org/kinetic/api/robot_localization/html/index.html}{Robot localization (unused)}
+\item \href{http://wiki.ros.org/range_sensor_layer}{Range Sensor (pre-installed)}
+\item \href{http://wiki.ros.org/rviz_imu_plugin}{IMU plug-in}
+\end{itemize}
 It is worth reading up on these before editing variables or configuration files, as many of these have rather obfuscated names.
+Links to the plug-ins can be found by clicking on items in the list.
 An example of this can be found in the \code{RQTconfig} system, where several variables are named along the lines of \code{Alpha\_1}, or \code{Alpha\_2}.
-Most plugins conform to the ROS REP standards, which are also worth checking out, especially \href{https://www.ros.org/reps/rep-0103.html}{103}  and \href{https://www.ros.org/reps/rep-0105.html}{105}, which deal with the units data are measured in and the coordinate systems used in mobile platforms, respectively.
+Most plug-ins conform to the ROS REP standards, which are also worth checking out, especially \href{https://www.ros.org/reps/rep-0103.html}{103}  and \href{https://www.ros.org/reps/rep-0105.html}{105}, which deal with the units data are measured in and the coordinate systems used in mobile platforms, respectively.
 If these standards are not conformed to, ROS and RVIZ will start producing errors.
 
 \newpage
