@@ -8,12 +8,16 @@ The developers of ROS have already released working versions of its successor, R
 Another issue is that ROS 1 currently runs on Ubuntu 16.0.4, while at the time of writing, Ubuntu has released version 19 already.
 It could be worth asking a following group that works on the project to attempt to update any possible sections to those newer versions, since support for the current systems is likely to be dropped.
 
-\subsection{Ask For a Clear Inventory of Capabilities}
-More than once the current group ran into a bit of a sticking point when discussing what the target for WTR would be as a project.
+\subsection{Create a Clear Inventory of Capabilities}
+More than once the current group ran into a sticking point when discussing what the target for WTR would be as a project.
 The goal that was set at the start was rather nebulous,  "Improve WTR's driving capabilities".
-This did not present a clear goal, though it was later refined a fair bit.
+This did not present a clear goal, though it was later refined to a more well-defined goal.
 The issue with the new goal, which was communicated to the group halfway through the project, was that it did not line up with the capabilities of WTR.
-The goal to have WTR drive at a person when it recognized one was unrealistic, since the way WTR deals with facial recognition is not usable in navigation.
+The goal to have WTR drive at a person when it detects one is unrealistic, since the way WTR deals with facial recognition is not usable in navigation.
+WTR does not track people, it merely detects whether a face is present or not.
+If it was to be used in a way where it could drive at a single person, and track them, it would need an extensive overhaul to the way the facial detection is performed, as well as needing a way to store all the unique faces of guests at events.
+It would then need to be able to cross-reference a detected face with its stored data, which would take more processing power than a Raspberry Pi, if it collected a lot of data.
+
 The summary of this advice would be to take a critical look at its functionality, and determine ahead of time what the goal would be so that it is possible for the group to work towards the same goal with a clear target in mind.
 In order to do this, create an inventory of current capabilities, such as driving to a pre-determined place, creating a new goal on the fly, or to track a human face in a better way than WTR currently does.
 
