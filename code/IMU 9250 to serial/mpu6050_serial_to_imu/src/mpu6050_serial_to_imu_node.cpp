@@ -145,7 +145,8 @@ int main(int argc, char **argv) {
                                     zero_orientation = orientation;
                                     zero_orientation_set = true;
                                 }
-
+                                std::cout << "W: " << orientation.w << "X: " << orientation.X << "Y: " << orientation.y
+                                          << "Z: " << orientation.z
                                 //http://answers.ros.org/question/10124/relative-rotation-between-two-quaternions/
                                 tf::Quaternion differential_rotation;
                                 differential_rotation = zero_orientation.inverse() * orientation;
@@ -232,73 +233,68 @@ int main(int argc, char **argv) {
 //                                magfield.magnetic_field.x = gmx;
 //                                magfield.magnetic_field.y = gmy;
 //                                magfield.magnetic_field.z = gmz;
-                            magfield.magnetic_field_covariance[0] = -1;
-//                            magfield.magnetic_field_covariance[0] = 0;
-                            magfield.magnetic_field_covariance[4] = 0;
-                            magfield.magnetic_field_covariance[8] = 0;
-                            //magnetic covariance is unknown, so a 0 is sent in accordance with the MagneticField message documentation.
-                            }
-                            imu_pub.publish(imu);
+                                magfield.magnetic_field_covariance[0] = -1;
+//                              magfield.magnetic_field_covariance[0] = 0;
+                                magfield.magnetic_field_covariance[4] = 0;
+                                magfield.magnetic_field_covariance[8] = 0;
+                                //magnetic covariance is unknown, so a 0 is sent in accordance with the MagneticField message documentation.
+
+                                imu_pub.publish(imu);
 //                            mag_pub.publish(magfield);
 
-                            // publish tf transform
-                            if (broadcast_tf) {
-                                transform.setRotation(differential_rotation);
-                                tf_br.sendTransform(
-                                        tf::StampedTransform(transform, measurement_time, tf_parent_frame_id,
-                                                             tf_frame_id));
-                            }
-                            input.erase(0, data_packet_start + kBytesToReceive -
-                                           1); // delete everything up to and including the processed packet
-                        } else {
-                            if (input.length() >= data_packet_start + kBytesToReceive) {
-                                std::cout << "input erase on false packet";
-                                input.erase(0, data_packet_start +
-                                               1); // delete up to false data_packet_start character so it is not found again
+                                // publish tf transform
+                                if (broadcast_tf) {
+                                    transform.setRotation(differential_rotation);
+                                    tf_br.sendTransform(
+                                            tf::StampedTransform(transform, measurement_time, tf_parent_frame_id,
+                                                                 tf_frame_id));
+                                }
+                                input.erase(0, data_packet_start + kBytesToReceive -
+                                               1); // delete everything up to and including the processed packet
                             } else {
-                                std::cout << "input erase on incomplete package";
-                                // do not delete start character, maybe complete package has not arrived yet
-                                input.erase(0, data_packet_start);
+                                if (input.length() >= data_packet_start + kBytesToReceive) {
+                                    std::cout << "input erase on false packet";
+                                    input.erase(0, data_packet_start +
+                                                   1); // delete up to false data_packet_start character so it is not found again
+                                } else {
+                                    std::cout << "input erase on incomplete package";
+                                    // do not delete start character, maybe complete package has not arrived yet
+                                    input.erase(0, data_packet_start);
+                                }
                             }
+                        } else {
+                            std::cout << "input cleared: possibly no start character found.";
+                            // no start character found in input, so delete everything
+                            input.clear();
                         }
                     }
-                    else
-                    {
-                        std::cout << "input cleared: possibly no start character found.";
-                        // no start character found in input, so delete everything
-                        input.clear();
-                    }
+                }
+            } else {
+                // try and open the serial port
+                try {
+                    ser.setPort(port);
+                    ser.setBaudrate(38400);
+                    serial::Timeout to = serial::Timeout::simpleTimeout(1000);
+                    ser.setTimeout(to);
+                    ser.open();
+                }
+                catch (serial::IOException &e) {
+                    ROS_ERROR_STREAM("Unable to open serial port " << ser.getPort() << ". Trying again in 5 seconds.");
+                    ros::Duration(5).sleep();
+                }
+
+                if (ser.isOpen()) {
+                    ROS_DEBUG_STREAM("Serial port " << ser.getPort() << " initialized and opened.");
                 }
             }
         }
-        else
-        {
-            // try and open the serial port
-            try {
-                ser.setPort(port);
-                ser.setBaudrate(38400);
-                serial::Timeout to = serial::Timeout::simpleTimeout(1000);
-                ser.setTimeout(to);
-                ser.open();
-            }
-            catch (serial::IOException &e) {
-                ROS_ERROR_STREAM("Unable to open serial port " << ser.getPort() << ". Trying again in 5 seconds.");
-                ros::Duration(5).sleep();
-            }
-
-            if (ser.isOpen()) {
-                ROS_DEBUG_STREAM("Serial port " << ser.getPort() << " initialized and opened.");
-            }
+        catch (serial::IOException &e) {
+            ROS_ERROR_STREAM("Error reading from the serial port " << ser.getPort() << ". Closing connection.");
+            ser.close();
         }
+        ros::spinOnce();
+        r.sleep();
     }
-    catch (serial::IOException & e)
-    {
-        ROS_ERROR_STREAM("Error reading from the serial port " << ser.getPort() << ". Closing connection.");
-        ser.close();
-    }
-    ros::spinOnce();
-    r.sleep();
-}
 
 }
 
