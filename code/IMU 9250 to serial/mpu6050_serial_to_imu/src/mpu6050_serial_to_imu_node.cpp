@@ -11,6 +11,8 @@
 #include <iostream>
 #include <math.h>
 
+//#define PUBLISHRAW
+
 
 bool zero_orientation_set = false;
 const uint8_t kBytesToReceive = 46;
@@ -215,7 +217,12 @@ int main(int argc, char **argv) {
                                 magfield.header.frame_id = frame_id;
 
                                 quaternionTFToMsg(differential_rotation, imu.orientation);
-
+#ifndef PUBLISHRAW
+                                // set element 0 of covariance to -1 to disable measurement.
+                                imu.angular_velocity_covariance[0] = -1;
+                                imu.linear_acceleration_covariance[0] = -1;
+#endif
+#ifdef PUBLISHRAW
                                 imu.angular_velocity.x = gxf;
                                 imu.angular_velocity.y = gyf;
                                 imu.angular_velocity.z = gzf;
@@ -227,14 +234,16 @@ int main(int argc, char **argv) {
                                 magfield.magnetic_field.x = gmx;
                                 magfield.magnetic_field.y = gmy;
                                 magfield.magnetic_field.z = gmz;
+#endif
                             }
                             magfield.magnetic_field_covariance[0] = 0;
                             magfield.magnetic_field_covariance[4] = 0;
                             magfield.magnetic_field_covariance[8] = 0;
                             //magnetic covariance is unknown, so a 0 is sent in accordance with the MagneticField message documentation.
                             imu_pub.publish(imu);
+#ifdef PUBLISHRAW
                             mag_pub.publish(magfield);
-
+#endif
                             // publish tf transform
                             if (broadcast_tf) {
                                 transform.setRotation(differential_rotation);
