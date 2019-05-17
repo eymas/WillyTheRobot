@@ -47,7 +47,7 @@ The downside of it running on a separate battery is that it does drain rather qu
 A simple trip from the innovation lab on T5 to the printer located on the other side of the bridge between the two sides of the building can drain the battery by as much as 50 percent, which is not desirable.
 In cupboard C, there is a transformer which could be attached to the batteries that allows the laptop charger to be plugged into it and power the laptop.
 The 2019 Q1\&Q2 group did not attach it, because the testing that was done did not require WTR to drive very far from the innovation lab.
-If more extensive testing is planned, this might be considered a smart move.
+If more extensive testing is planned, consider attaching the charger.
 
 Another solution that could be considered would be to directly connect the charger to the power lines of the appropriate voltage, which are already present.
 This would allow the laptop to operate from the car batteries like the rest of WTR.
@@ -55,9 +55,15 @@ The reason this has not been done already is because the group currently only ha
 By attaching the charging port of the laptop to the batteries, it would be permanently charging.
 It is currently unknown whether or not the direct attachment solution could provide enough amps to ensure that the laptop would either remain at full battery, or whether it would merely slow the draining process, but either outcome would be an improvement to the current battery consumption.
 
+Doing so would involve taking the cable from the laptop charger which connects to the charging port of the laptop to the output of the transformer.
+After separating the cable from the transformer, the split parts of the wire could be attached to the appropriate output of the voltage transformer found at the back of WTR.
+The appropriate voltage is found on the label of the transformer, which is 19 volts.
+
+Another solution would be to splice the power cable for the TV, which also runs at 19V.
+
 
 \subsection{IMU}
-The IMU \ref{trm::imu} is located on top of the screen, as magnetic interference caused by the electrical motors and the steel frame would otherwise prevent the magnetometer from operating properly.
+The IMU [\ref{trm::imu}] is located on top of the screen, as magnetic interference caused by the electrical motors and the steel frame would otherwise prevent the magnetometer from operating properly.
 It has been clipped there using a 3-D printed box, but during the design of that a few dimensions of the TV screen were forgotten, causing the IMU to be slightly misaligned.
 While this does not cause any major issues, the slightly inaccuracy in the design prevents the IMU from being as snugly fitted to the screen, allowing it to shake around a bit.
 A more tightly designed container would help increase the stability of the readings.
