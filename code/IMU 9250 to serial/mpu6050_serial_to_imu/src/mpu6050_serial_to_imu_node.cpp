@@ -115,8 +115,7 @@ int main(int argc, char **argv) {
                             ROS_DEBUG("found possible start of data packet at position %d", data_packet_start);
                             if ((input.length() >= (data_packet_start + kBytesToReceive)) &&
                                 (input.compare((data_packet_start + kBytesToReceive - 1), 2, "\r\n") >=
-                                 0))  //check if positions 26,27 exist, then test values
-                            {
+                                 0)) {  //check if positions 26,27 exist, then test values
                                 std::cout << "reached processing stage" << "\n";
                                 ROS_DEBUG("seems to be a real data package: long enough and found end characters");
                                 // get quaternion values
@@ -145,8 +144,7 @@ int main(int argc, char **argv) {
                                     zero_orientation = orientation;
                                     zero_orientation_set = true;
                                 }
-                                std::cout << "W: " << orientation.w << "X: " << orientation.X << "Y: " << orientation.y
-                                          << "Z: " << orientation.z
+                                std::cout << orientation.normalized();
                                 //http://answers.ros.org/question/10124/relative-rotation-between-two-quaternions/
                                 tf::Quaternion differential_rotation;
                                 differential_rotation = zero_orientation.inverse() * orientation;
