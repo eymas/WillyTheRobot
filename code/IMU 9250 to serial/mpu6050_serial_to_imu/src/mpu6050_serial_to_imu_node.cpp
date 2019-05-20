@@ -186,7 +186,7 @@ int main(int argc, char **argv) {
 //                                std::cout << "GMX:" << gmx << " GMY:" << gmy << " GMZ:" << gmz << "\n";
 //                                std::cout << "package no. " << static_cast<int>(input[data_packet_start + 42])
 //                                          << "\r\n";
-//                                uint8_t received_message_number = static_cast<int>(input[data_packet_start + 42]);
+                                uint8_t received_message_number = static_cast<int>(input[data_packet_start + 42]);
 
                                 if (received_message) // can only check for continuous numbers if already received at least one packet
                                 {
