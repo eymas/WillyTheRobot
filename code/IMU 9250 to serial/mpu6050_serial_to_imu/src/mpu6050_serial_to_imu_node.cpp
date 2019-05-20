@@ -139,7 +139,7 @@ int main(int argc, char **argv) {
                                 tf::Quaternion orientation(xf, yf, zf, wf);
 
                                 orientation = orientation.normalize();
-                                std::cout << "X: " << orientation.x << "Y: " << orientation.y << "Z: " << orientation.z << "W: " << orientation.w;
+                                std::cout << "X: " << orientation.x() << "Y: " << orientation.y() << "Z: " << orientation.z() << "W: " << orientation.w();
                                 if (!zero_orientation_set) {
                                     zero_orientation = orientation;
                                     zero_orientation_set = true;
