@@ -70,7 +70,7 @@ void setup()
   // Read the WHO_AM_I register, this is a good test of communication
   byte c = myIMU.readByte(MPU9250_ADDRESS, WHO_AM_I_MPU9250);
 
-  if (c == 0x73) // WHO_AM_I should always be 0x71, but the chip used could be a knockoff - TODO document issues.
+  if (c == 0x73) // WHO_AM_I should always be 0x71, but the chip used could be a knockoff
   {
     // Start by performing self test
     myIMU.MPU9250SelfTest(myIMU.selfTest);
@@ -116,8 +116,6 @@ void setup()
 
 void loop()
 {
-
-
   for (uint8_t j = 0; j < 3; j++) {
     for (uint8_t i = 0; i < (kSamplesPerAverage-1); i++) {
       accel_data[j][i + 1] = accel_data[j][i];
@@ -238,12 +236,12 @@ void loop()
   // aircraft orientation standards! Pass gyro rate as rad/s
   // madgwick is more intensive, but more accurate. If the arduino cannot deal with the amount of calculations
   // switch to Mahony.
-  MadgwickQuaternionUpdate(axs, ays, azs, gxs * DEG_TO_RAD,
+//  MadgwickQuaternionUpdate(axs, ays, azs, gxs * DEG_TO_RAD,
+//                           gys * DEG_TO_RAD, gzs * DEG_TO_RAD, mys,
+//                           mxs, mzs, myIMU.deltat);
+  MahonyQuaternionUpdate(axs, ays, azs, gxs * DEG_TO_RAD,
                            gys * DEG_TO_RAD, gzs * DEG_TO_RAD, mys,
-                           mxs, mzs, myIMU.deltat);
-//  MahonyQuaternionUpdate(myIMU.ax, myIMU.ay, myIMU.az, myIMU.gx * DEG_TO_RAD,
-//                         myIMU.gy * DEG_TO_RAD, myIMU.gz * DEG_TO_RAD, myIMU.my,
-//                         myIMU.mx, myIMU.mz, myIMU.deltat);
+                           mxs, -mzs, myIMU.deltat);
 
   myIMU.count = millis();
 
@@ -264,7 +262,6 @@ void loop()
     Serial.print(*(getQ() +i));
 #endif
   }
-  //Serial.println();
   // transmit accelerometer data
   /*
       The data here is split into four bytes.
