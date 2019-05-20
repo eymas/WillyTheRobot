@@ -139,12 +139,11 @@ int main(int argc, char **argv) {
                                 tf::Quaternion orientation(xf, yf, zf, wf);
 
                                 orientation = orientation.normalize();
-
+                                std::cout << "X: " << orientation.x << "Y: " << orientation.y << "Z: " << orientation.z << "W: " << orientation.w;
                                 if (!zero_orientation_set) {
                                     zero_orientation = orientation;
                                     zero_orientation_set = true;
                                 }
-                                std::cout << orientation.normalized();
                                 //http://answers.ros.org/question/10124/relative-rotation-between-two-quaternions/
                                 tf::Quaternion differential_rotation;
                                 differential_rotation = zero_orientation.inverse() * orientation;
@@ -182,12 +181,12 @@ int main(int argc, char **argv) {
                                 double gmy = mag_y.output_data * pow(10, -7);
                                 double gmz = mag_z.output_data * pow(10, -7);
 
-                                std::cout << "AXF:" << axf << " AYF:" << ayf << " AZF:" << azf << "\n";
-                                std::cout << "GXF:" << gxf << " GYF:" << gyf << " GZF:" << gzf << "\n";
-                                std::cout << "GMX:" << gmx << " GMY:" << gmy << " GMZ:" << gmz << "\n";
-                                std::cout << "package no. " << static_cast<int>(input[data_packet_start + 42])
-                                          << "\r\n";
-                                uint8_t received_message_number = static_cast<int>(input[data_packet_start + 42]);
+//                                std::cout << "AXF:" << axf << " AYF:" << ayf << " AZF:" << azf << "\n";
+//                                std::cout << "GXF:" << gxf << " GYF:" << gyf << " GZF:" << gzf << "\n";
+//                                std::cout << "GMX:" << gmx << " GMY:" << gmy << " GMZ:" << gmz << "\n";
+//                                std::cout << "package no. " << static_cast<int>(input[data_packet_start + 42])
+//                                          << "\r\n";
+//                                uint8_t received_message_number = static_cast<int>(input[data_packet_start + 42]);
 
                                 if (received_message) // can only check for continuous numbers if already received at least one packet
                                 {
@@ -206,7 +205,7 @@ int main(int argc, char **argv) {
 
                                 // calculate measurement time
                                 ros::Time measurement_time = ros::Time::now() + ros::Duration(time_offset_in_seconds);
-                                std::cout << "measurement time is: " << measurement_time << "\n";
+                                //std::cout << "measurement time is: " << measurement_time << "\n";
 
                                 // publish imu message
                                 imu.header.stamp = measurement_time;
@@ -239,7 +238,6 @@ int main(int argc, char **argv) {
 
                                 imu_pub.publish(imu);
 //                            mag_pub.publish(magfield);
-
                                 // publish tf transform
                                 if (broadcast_tf) {
                                     transform.setRotation(differential_rotation);
