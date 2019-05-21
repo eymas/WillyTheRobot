@@ -31,7 +31,7 @@
 //#define DEBUG
 #define AHRS false         // Set to false for basic data read
 const int kQuaternionMultFact = 100;
-const int kBytesToSend = 45;
+const int kBytesToSend = 44;
 const int kSamplesPerAverage = 10;
 float accel_data[3][kSamplesPerAverage];
 float gyro_data[3][kSamplesPerAverage];
@@ -77,9 +77,6 @@ void setup()
 
     // Calibrate gyro and accelerometers, load biases in bias registers
     myIMU.calibrateMPU9250(myIMU.gyroBias, myIMU.accelBias);
-        Serial.println(myIMU.gyroBias[0]);
-        Serial.println(myIMU.gyroBias[1]);
-        Serial.println(myIMU.gyroBias[2]);
     myIMU.initMPU9250();
     // Initialize device for active mode read of acclerometer, gyroscope, and
     // temperature
@@ -142,19 +139,19 @@ void loop()
         gyro_avg[j]  += gyro_data[j][i];
         mag_avg[j]   += mag_data[j][i];
       }
-      //      #ifdef DEBUG
-      //      Serial.print("mavg = ");
-      //      Serial.println(mag_avg[j]);
-      //      #endif
+            #ifdef DEBUG
+            Serial.print("mavg = ");
+            Serial.println(mag_avg[j]);
+            #endif
     }
     for (uint8_t i = 0; i < 3; i++) {
       accel_avg[i] = accel_avg[i] / kSamplesPerAverage;
       gyro_avg[i] = (gyro_avg[i] / kSamplesPerAverage);
       mag_avg[i] = mag_avg[i] / kSamplesPerAverage;
-      //      #ifdef DEBUG
-      //      Serial.print("mavg/kSamplesPerAverage = ");
-      //      Serial.println(mag_avg[i]);
-      //      #endif
+            #ifdef DEBUG
+            Serial.print("mavg/kSamplesPerAverage = ");
+            Serial.println(mag_avg[i]);
+            #endif
     }
 
     // Now we'll calculate the accleration value into actual g's
@@ -168,15 +165,15 @@ void loop()
     myIMU.gx = (gyro_avg[0] * myIMU.gRes - myIMU.gyroBias[0]);
     myIMU.gy = -(gyro_avg[1] * myIMU.gRes - myIMU.gyroBias[1]);
     myIMU.gz = -(gyro_avg[2] * myIMU.gRes - myIMU.gyroBias[2]);
-    //#ifdef DEBUG
-    //    Serial.print('(');
-    //    Serial.print(myIMU.gx);
-    //    Serial.print(",");
-    //    Serial.print(myIMU.gy);
-    //    Serial.print(",");
-    //    Serial.print(myIMU.gz);
-    //    Serial.println(')');
-    //#endif
+    #ifdef DEBUG
+        Serial.print('(');
+        Serial.print(myIMU.gx);
+        Serial.print(",");
+        Serial.print(myIMU.gy);
+        Serial.print(",");
+        Serial.print(myIMU.gz);
+        Serial.println(')');
+    #endif
     // Calculate the magnetometer values in milliGauss
     // Include factory calibration per data sheet and user environmental
     // corrections
@@ -200,33 +197,33 @@ void loop()
                * myIMU.factoryMagCalibration[1] - myIMU.magBias[1];
     myIMU.mz = (float)mag_avg[2] * myIMU.mRes
                * myIMU.factoryMagCalibration[2] - myIMU.magBias[2];
-    //#ifdef DEBUG
-    //    Serial.print("accel(");
-    //    Serial.print(myIMU.ax);
-    //    Serial.print(",");
-    //    Serial.print(myIMU.ay);
-    //    Serial.print(",");
-    //    Serial.print(myIMU.az);
-    //    Serial.println(')');
-    //    Serial.print("gyro(");
-    //    Serial.print(myIMU.gx);
-    //    Serial.print(",");
-    //    Serial.print(myIMU.gy);
-    //    Serial.print(",");
-    //    Serial.print(myIMU.gz);
-    //    Serial.println(')');
-    //    Serial.print("mag(");
-    //    Serial.print(myIMU.mx);
-    //    Serial.print(",");
-    //    Serial.print(myIMU.my);
-    //    Serial.print(",");
-    //    Serial.print(myIMU.mz);
-    //    Serial.println(')');
-    //#endif
+    #ifdef DEBUG
+        Serial.print("accel(");
+        Serial.print(myIMU.ax);
+        Serial.print(",");
+        Serial.print(myIMU.ay);
+        Serial.print(",");
+        Serial.print(myIMU.az);
+        Serial.println(')');
+        Serial.print("gyro(");
+        Serial.print(myIMU.gx);
+        Serial.print(",");
+        Serial.print(myIMU.gy);
+        Serial.print(",");
+        Serial.print(myIMU.gz);
+        Serial.println(')');
+        Serial.print("mag(");
+        Serial.print(myIMU.mx);
+        Serial.print(",");
+        Serial.print(myIMU.my);
+        Serial.print(",");
+        Serial.print(myIMU.mz);
+        Serial.println(')');
+    #endif
   } // if (readByte(MPU9250_ADDRESS, INT_STATUS) & 0x01)
 
   // Must be called before updating quaternions!
-  myIMU.updateTime();
+  //myIMU.updateTime();
 
   // Sensors x (y)-axis of the accelerometer is aligned with the y (x)-axis of
   // the magnetometer; the magnetometer z-axis (+ down) is opposite to z-axis
@@ -240,11 +237,11 @@ void loop()
   // switch to Mahony.
   //  MadgwickQuaternionUpdate(axs, ays, azs, gxs * DEG_TO_RAD,
   //                           gys * DEG_TO_RAD, gzs * DEG_TO_RAD, mys,
-  //                           mxs, mzs, myIMU.deltat);
-  MahonyQuaternionUpdate(axs, ays, azs, gxs * DEG_TO_RAD,
-                         gys * DEG_TO_RAD, gzs * DEG_TO_RAD, mys,
-                         mxs, -mzs, myIMU.deltat);
-
+//  //                           mxs, mzs, myIMU.deltat);
+//  MahonyQuaternionUpdate(axs, ays, azs, gxs * DEG_TO_RAD,
+//                         gys * DEG_TO_RAD, gzs * DEG_TO_RAD, mys,
+//                         mxs, -mzs, myIMU.deltat);
+//
 
   myIMU.count = millis();
 
@@ -257,14 +254,14 @@ void loop()
      This allows for them to be transmitted as integers, without significant impact.
      Kind of a workaround, there is probably a neater method out there.
   */
-  for (uint8_t i = 0; i < 4; i++) {
-    int8_t quaternion_value = (*(getQ() + i)) * kQuaternionMultFact;
-    transmit_buffer[2 + i] = quaternion_value;
-#ifdef DEBUG
-    Serial.print("quatval: " );
-    Serial.print(*(getQ() + i));
-#endif
-  }
+//  for (uint8_t i = 0; i < 4; i++) {
+//    int8_t quaternion_value = (*(getQ() + i)) * kQuaternionMultFact;
+//    transmit_buffer[2 + i] = quaternion_value;
+//#ifdef DEBUG
+//    Serial.print("quatval: " );
+//    Serial.print(*(getQ() + i));
+//#endif
+//  }
   // transmit accelerometer data
   /*
       The data here is split into four bytes.
@@ -285,28 +282,28 @@ void loop()
   uint8_t *magnet_array_z = reinterpret_cast<uint8_t*>(&mag_avg[2]);
 
   for (uint8_t i = 0; i < 4; i++) {
-    transmit_buffer[6 + i] = accel_array_x[i];
-    transmit_buffer[10 + i] = accel_array_y[i];
-    transmit_buffer[14 + i] = accel_array_z[i];
-    transmit_buffer[18 + i] = gyro_array_x[i];
-    transmit_buffer[22 + i] = gyro_array_y[i];
-    transmit_buffer[26 + i] = gyro_array_z[i];
-    transmit_buffer[30 + i] = magnet_array_x[i];
-    transmit_buffer[34 + i] = magnet_array_y[i];
+    transmit_buffer[2 + i] = accel_array_x[i];
+    transmit_buffer[6 + i] = accel_array_y[i];
+    transmit_buffer[10 + i] = accel_array_z[i];
+    transmit_buffer[14 + i] = gyro_array_x[i];
+    transmit_buffer[18 + i] = gyro_array_y[i];
+    transmit_buffer[22 + i] = gyro_array_z[i];
+    transmit_buffer[26 + i] = magnet_array_x[i];
+    transmit_buffer[30 + i] = magnet_array_y[i];
     transmit_buffer[38 + i] = magnet_array_z[i];
-    //#ifdef DEBUG
-    //    Serial.print(myIMU.accelCount[0]);
-    //    Serial.print(">");
-    //    Serial.print(accel_avg[0]);
-    //    Serial.print("-->");
-    //    Serial.print(accel_array_x[i]);
-    //    Serial.print("&&");
-    //    Serial.println(transmit_buffer[6 + i]);
-    //#endif
+    #ifdef DEBUG
+        Serial.print(myIMU.accelCount[0]);
+        Serial.print(">");
+        Serial.print(accel_avg[0]);
+        Serial.print("-->");
+        Serial.print(accel_array_x[i]);
+        Serial.print("&&");
+        Serial.println(transmit_buffer[6 + i]);
+    #endif
   }
-  transmit_buffer[42] = message_count;
-  transmit_buffer[43] = '\r';
-  transmit_buffer[44] = '\n';  // terminating characters for the raspberry Pi
+  transmit_buffer[38] = message_count;
+  transmit_buffer[39] = '\r';
+  transmit_buffer[40] = '\n';  // terminating characters for the raspberry Pi
   Serial.write(transmit_buffer, kBytesToSend);
   message_count++;
 
