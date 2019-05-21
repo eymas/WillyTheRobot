@@ -16,6 +16,29 @@
 
 bool zero_orientation_set = false;
 const uint8_t kBytesToReceive = 46;
+const float kHalfCircle = 180.0f;
+const float kAdjustGyroBits = 131.0f / 65536.0f
+const float kGravity = 9.81f;
+const float kAdjustAccelBits = 4.0f / 65536.0f;
+
+
+//
+const uint8_t kQuaternionMultFact = 100;
+const uint8_t kBytesPerVar = 4;
+const uint8_t kQuatWPos = 2;
+const uint8_t kQuatXPos = 3;
+const uint8_t kQuatYPos = 4;
+const uint8_t kQuatZPos = 5;
+const uint8_t kAccelXIn = 6;
+const uint8_t kAccelYIn = kAccelXIn + kBytesPerVar;
+const uint8_t kAccelZIn = kAccelYIn + kBytesPerVar;
+const uint8_t kGyroXIn = kAccelZIn + kBytesPerVar;
+const uint8_t kGyroYIn = kGyroXIn + kBytesPerVar;
+const uint8_t kGyroZIn = kGyroYIn + kBytesPerVar;
+const uint8_t kMagXIn = kGyroZIn + kBytesPerVar;
+const uint8_t KMagYIn = kMagXIn + kBytesPerVar;
+const uint8_t kMagZIN = KMagYIn + kBytesPerVar;
+
 bool allow_store = false;
 bool allow_read = false;
 
@@ -119,73 +142,85 @@ int main(int argc, char **argv) {
                                 std::cout << "reached processing stage" << "\n";
                                 ROS_DEBUG("seems to be a real data package: long enough and found end characters");
                                 // get quaternion values
-                                int8_t w = (char) input[data_packet_start + 2];
-                                int8_t x = (char) input[data_packet_start + 3];
-                                int8_t y = (char) input[data_packet_start + 4];
-                                int8_t z = (char) input[data_packet_start + 5];
+                                int8_t w = (char) input[data_packet_start + kQuatWPos];
+                                int8_t x = (char) input[data_packet_start + kQuatXPos];
+                                int8_t y = (char) input[data_packet_start + kQuatYPos];
+                                int8_t z = (char) input[data_packet_start + kQuatZPos];
                                 double wf = w;
-                                wf = wf / 100;
-                                std::cout << wf << "\r\n";
+                                wf = wf / kQuaternionMultfact;
+                                std::cout << "Raw: "
+                                std::cout << "W: " << wf << "\r\n";
                                 double xf = x;
-                                xf = xf / 100;
-                                std::cout << xf << "\r\n";
+                                xf = xf / kQuaternionMultfact;
+                                std::cout << "X: " << xf << "\r\n";
                                 double yf = y;
-                                yf = yf / 100;
-                                std::cout << yf << "\r\n";
+                                yf = yf / kQuaternionMultfact;
+                                std::cout << "Y: " << yf << "\r\n";
                                 double zf = z;
-                                zf = zf / 100;
-                                std::cout << zf << "\r\n";
+                                zf = zf / kQuaternionMultfact;
+                                std::cout << "Z: " << zf << "\r\n";
 
                                 tf::Quaternion orientation(xf, yf, zf, wf);
 
                                 orientation = orientation.normalize();
-                                std::cout << "X: " << orientation.x() << "Y: " << orientation.y() << "Z: " << orientation.z() << "W: " << orientation.w();
+                                std::cout << "Normalized: "
+                                std::cout << "\r\nW: " << orientation.w() << "\r\nX: " << orientation.x();
+                                std::cout << "\r\nY: " << orientation.y() << "\r\nZ: " << orientation.z();
                                 if (!zero_orientation_set) {
                                     zero_orientation = orientation;
                                     zero_orientation_set = true;
                                 }
                                 //http://answers.ros.org/question/10124/relative-rotation-between-two-quaternions/
-                                tf::Quaternion differential_rotation;
-                                differential_rotation = zero_orientation.inverse() * orientation;
+//                                tf::Quaternion differential_rotation;
+//                                differential_rotation = zero_orientation.inverse() * orientation;
 
                                 union c_float accel_x, accel_y, accel_z, gyro_x, gyro_y, gyro_z, mag_x, mag_y, mag_z;
 
+                                // loop through input buffer and assign data to correct inputs
                                 for (uint8_t i = 0; i < 4; i++) {
-                                    accel_x.input_data[i] = static_cast<uint8_t>(input[data_packet_start + 6 + i]);
-                                    accel_y.input_data[i] = static_cast<uint8_t>(input[data_packet_start + 10 + i]);
-                                    accel_z.input_data[i] = static_cast<uint8_t>(input[data_packet_start + 14 + i]);
+                                    accel_x.input_data[i] = static_cast<uint8_t>(input[data_packet_start + kAccelXIn +
+                                                                                       i]);
+                                    accel_y.input_data[i] = static_cast<uint8_t>(input[data_packet_start + kAccelYIn +
+                                                                                       i]);
+                                    accel_z.input_data[i] = static_cast<uint8_t>(input[data_packet_start + kAccelZIn +
+                                                                                       i]);
 
-                                    gyro_x.input_data[i] = static_cast<uint8_t>(input[data_packet_start + 18 + i]);
-                                    gyro_y.input_data[i] = static_cast<uint8_t>(input[data_packet_start + 22 + i]);
-                                    gyro_z.input_data[i] = static_cast<uint8_t>(input[data_packet_start + 26 + i]);
+                                    gyro_x.input_data[i] = static_cast<uint8_t>(input[data_packet_start + kGyroXIn +
+                                                                                      i]);
+                                    gyro_y.input_data[i] = static_cast<uint8_t>(input[data_packet_start + kGyroYIn +
+                                                                                      i]);
+                                    gyro_z.input_data[i] = static_cast<uint8_t>(input[data_packet_start + kGyroZIn +
+                                                                                      i]);
 
-                                    mag_x.input_data[i] = static_cast<uint8_t>(input[data_packet_start + 30 + i]);
-                                    mag_y.input_data[i] = static_cast<uint8_t>(input[data_packet_start + 34 + i]);
-                                    mag_z.input_data[i] = static_cast<uint8_t>(input[data_packet_start + 38 + i]);
+                                    mag_x.input_data[i] = static_cast<uint8_t>(input[data_packet_start + kMagXIn + i]);
+                                    mag_y.input_data[i] = static_cast<uint8_t>(input[data_packet_start + KMagYIn + i]);
+                                    mag_z.input_data[i] = static_cast<uint8_t>(input[data_packet_start + kMagZIN + i]);
                                 }
                                 // calculate rotational velocities in rad/s
                                 // http://www.i2cdevlib.com/forums/topic/106-get-angular-velocity-from-mpu-6050/
                                 // FIFO frequency 100 Hz -> factor 10 ?
                                 //TODO: check / test if rotational velocities are correct
-                                double gxf = gyro_x.output_data * (M_PI / 180.0) * (131.0f / 65536.0f);
-                                double gyf = gyro_y.output_data * (M_PI / 180.0) * (131.0f / 65536.0f);
-                                double gzf = gyro_z.output_data * (M_PI / 180.0) * (131.0f / 65536.0f);
+
+                                double gxf = gyro_x.output_data * (M_PI / kHalfCircle) * (kAdjustGyroBits);
+                                double gyf = gyro_y.output_data * (M_PI / kHalfCircle) * (kAdjustGyroBits);
+                                double gzf = gyro_z.output_data * (M_PI / kHalfCircle) * (kAdjustGyroBits);
+
 
                                 // calculate accelerations in m/s²
-                                double axf = (accel_x.output_data * 9.81 * (4.0f / 65536.0f));
-                                double ayf = (accel_y.output_data * 9.81 * (4.0f / 65536.0f));// convert to ms^-2
-                                double azf = (accel_z.output_data * 9.81 * (4.0f / 65536.0f));
+                                double axf = (accel_x.output_data * kGravity * (kAdjustAccelBits));
+                                double ayf = (accel_y.output_data * kGravity * (kAdjustAccelBits));
+                                double azf = (accel_z.output_data * kGravity * (kAdjustAccelBits));
 
                                 double gmx = mag_x.output_data *
                                              pow(10, -7); // convert from milligauss to Tesla for the sake of ROS
                                 double gmy = mag_y.output_data * pow(10, -7);
                                 double gmz = mag_z.output_data * pow(10, -7);
 
-//                                std::cout << "AXF:" << axf << " AYF:" << ayf << " AZF:" << azf << "\n";
-//                                std::cout << "GXF:" << gxf << " GYF:" << gyf << " GZF:" << gzf << "\n";
-//                                std::cout << "GMX:" << gmx << " GMY:" << gmy << " GMZ:" << gmz << "\n";
-//                                std::cout << "package no. " << static_cast<int>(input[data_packet_start + 42])
-//                                          << "\r\n";
+                                std::cout << "AXF:" << axf << " AYF:" << ayf << " AZF:" << azf << "\n";
+                                std::cout << "GXF:" << gxf << " GYF:" << gyf << " GZF:" << gzf << "\n";
+                                std::cout << "GMX:" << gmx << " GMY:" << gmy << " GMZ:" << gmz << "\n";
+                                std::cout << "package no. " << static_cast<int>(input[data_packet_start + 42])
+                                          << "\r\n";
                                 uint8_t received_message_number = static_cast<int>(input[data_packet_start + 42]);
 
                                 if (received_message) // can only check for continuous numbers if already received at least one packet
@@ -216,28 +251,28 @@ int main(int argc, char **argv) {
 
                                 quaternionTFToMsg(orientation, imu.orientation);
                                 // set element 0 of covariance to -1 to disable measurement.
-                                imu.angular_velocity_covariance[0] = -1;
-                                imu.linear_acceleration_covariance[0] = -1;
+                                // imu.angular_velocity_covariance[0] = -1;
+                                // imu.linear_acceleration_covariance[0] = -1;
 
-//                                imu.angular_velocity.x = gxf;
-//                                imu.angular_velocity.y = gyf;
-//                                imu.angular_velocity.z = gzf;
-//
-//                                imu.linear_acceleration.x = axf;
-//                                imu.linear_acceleration.y = ayf;
-//                                imu.linear_acceleration.z = azf;
-//
-//                                magfield.magnetic_field.x = gmx;
-//                                magfield.magnetic_field.y = gmy;
-//                                magfield.magnetic_field.z = gmz;
-                                magfield.magnetic_field_covariance[0] = -1;
-//                              magfield.magnetic_field_covariance[0] = 0;
+                                imu.angular_velocity.x = gxf;
+                                imu.angular_velocity.y = gyf;
+                                imu.angular_velocity.z = gzf;
+
+                                imu.linear_acceleration.x = axf;
+                                imu.linear_acceleration.y = ayf;
+                                imu.linear_acceleration.z = azf;
+
+                                magfield.magnetic_field.x = gmx;
+                                magfield.magnetic_field.y = gmy;
+                                magfield.magnetic_field.z = gmz;
+                                // magfield.magnetic_field_covariance[0] = -1;
+                                magfield.magnetic_field_covariance[0] = 0;
                                 magfield.magnetic_field_covariance[4] = 0;
                                 magfield.magnetic_field_covariance[8] = 0;
                                 //magnetic covariance is unknown, so a 0 is sent in accordance with the MagneticField message documentation.
 
                                 imu_pub.publish(imu);
-//                            mag_pub.publish(magfield);
+                                mag_pub.publish(magfield);
                                 // publish tf transform
                                 if (broadcast_tf) {
                                     transform.setRotation(differential_rotation);
