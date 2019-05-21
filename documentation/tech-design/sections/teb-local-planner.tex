@@ -14,6 +14,7 @@ Several methods of correction have been attempted, itemized in a list here [\ref
 \item Editing the hierarchy of the Odometry and Map frames - \ref{subs::hier}
 \item Reset IMU orientation every 10 seconds to lower drift between base and IMU frames - \ref{subs::reset}
 \item Testing in different lighting conditions and areas - \ref{subs::light}
+\item Moving the calculation of the quaternion from the Arduino the the Pi - \ref{subs::pi}
 \end{itemize}
 A short explanation of each of these approaches will be given in their respective subsections
 
@@ -73,6 +74,17 @@ The group noticed the drift would become worse when attempting to drive WTR to t
 The prevailing theory is that the amount of light and reflections from the glass are interfering with the LIDAR, since that is a light-based sensor.
 Testing for this is tricky, as light from the environment is hard to get constant.
 Comparisons have been made comparing an overcast day to a bright day, and during the bright day the drift was worse, but it was still present during the overcast day.
+
+\subsubsection{Moving the Calculation}
+The currently used calculation, the Mahoney filter, is a less intensive quaternion calculation the the Madgwick filter.
+However, it is still a very complex calculation, and works best at very high speeds to eliminate drift.
+The Arduino is at the very bottom tier of calculation speeds, and barely able to do this as fast as needed.
+A Raspberry Pi on the other hand, has a quad-core 1GHz processor.
+This speed would be more than good enough to calculate the quaternion, and even use the more accurate Madgwick version.
+The problem is that the Arduino collects the data from the MPU9250, and then transmits the data to the Pi.
+The Pi does not receive the data fast enough to be able to accurately calculate the quaternion, regardless of the filter used.
+It results in an inaccurate quaternion which jumps around a lot due to the integration errors caused by the increased time-frame.
+This was tested and then reverted back to the original set-up.
 
 \subsection{Conclusion to the Tests}
 Unfortunately, the exact cause of the drift has not been found.
