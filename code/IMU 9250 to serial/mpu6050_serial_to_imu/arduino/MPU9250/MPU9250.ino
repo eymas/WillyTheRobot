@@ -59,10 +59,6 @@ void setup()
   Serial.begin(38400);
 
   while (!Serial) {};
-
-  // Set up the interrupt pin, its set as active high, push-pull
-  pinMode(intPin, INPUT);
-  digitalWrite(intPin, LOW);
   pinMode(myLed, OUTPUT);
   digitalWrite(myLed, HIGH);
 
@@ -244,8 +240,6 @@ void loop()
   MahonyQuaternionUpdate(axs, ays, azs, gxs * DEG_TO_RAD,
                          gys * DEG_TO_RAD, gzs * DEG_TO_RAD, mys,
                          mxs, -mzs, myIMU.deltat);
-
-
   myIMU.count = millis();
 
   uint8_t transmit_buffer[kBytesToSend];
