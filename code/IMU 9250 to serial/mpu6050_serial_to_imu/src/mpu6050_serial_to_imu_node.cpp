@@ -318,7 +318,7 @@ int main(int argc, char **argv) {
 
                                 updateTime();
                                 MadgwickQuaternionUpdate(axf, ayf, azf, gxf, gyf, gzf, gmy, gmx, -gmz, deltat);
-                                tf::Quaternion orientation(q[0], q[1], q[2], q[3]);
+                                tf::Quaternion orientation(q[1], q[2], q[3], q[0]);
 
                                 orientation = orientation.normalize();
                                 std::cout << "X: " << orientation.x() << "Y: " << orientation.y() << "Z: " << orientation.z() << "W: " << orientation.w();
