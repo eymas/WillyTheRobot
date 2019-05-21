@@ -1,3 +1,81 @@
 \section{Teb Local Planner}
 
+
+\subsection{Map Drift}
+One problem that has been present since the beginning of the project is something known as \textit{map drift}.
+A short explanation of this problem is that the map shifts in a way that WTR is not moving.
+The relative position of the map and the robot gets shifted, which throws off all planning and calculations WTR can perform.
+Several methods of correction have been attempted, itemized in a list here [\ref{solist}]
+\begin{itemize}
+\label{solist}
+\item Adding an MPU9250 - \ref{subs::mpu}
+\item Tweaking configuration files of AMCL - \ref{subs::AMCL}
+\item Adding plugins to RVIZ that deal with obstacle tracking and pose estimation - \ref{subs::plugins}
+\item Editing the hierarchy of the Odometry and Map frames - \ref{subs::hier}
+\item Reset IMU orientation every 10 seconds to lower drift between base and IMU frames - \ref{subs::reset}
+\item Testing in different lighting conditions and areas - \ref{subs::light}
+\end{itemize}
+A short explanation of each of these approaches will be given in their respective subsections
+
+\subsubsection{MPU9250}
+\label{subs::mpu}
+This part of the project is documented in the section [\ref{sec::IMU}].
+Another IMU model, the MPU6050 was previously used.
+The theory behind the implementation was that using the magnetometer, it would function to create a quaternion as well as work as a compass to give WTR a steady idea of where north is, so that it could keep better track of rotation.
+This partially works, but the quaternion is not accurate enough, and there is too much EM interference for this method to be reliable.
+
+\subsubsection{Tweaking AMCL config}
+\label{subs::AMCL}
+By tweaking variables such as refresh rate and the amount of rotation allowed before a rescan of obstacles, an attempt was made to reduce the drift.
+The downside of this approach was that many variables are not named very well, and did not have an easily accessible explanation available.
+As such, this resulted in only minor improvements.
+
+\subsubsection{Plugins} 
+\label{subs::plugins}
+Due to the complex nature of RVIZ, the easiest way to add new functionality is to utilize pre-made plugins and configure those to the needs of the project.
+The current set-up utilizes:
+\begin{enumerate}
+\item Transform (TF) tree:
+    \begin{itemize}
+    \item AMCL
+    \item laser\_scan\_matcher
+    \item laser\_filters
+\end{itemize}
+\item Navigation stack:
+\begin{itemize}
+\item move\_base
+\item move\_base\_simple
+\item map\_server
+\item navfn
+\item costmap\_2d
+\item global\_planner
+\item teb\_local\_planner
+\end{itemize}
+\end{enumerate}
+Testing was done with every plugin by itself, as well as exchanging AMCL and laser\_scan\_matcher with robot\_localization\_package.
+This did not result in any improvement, and as were left as is.
+
+\subsubsection{Hierarchy}
+\label{subs::hier}
+Another theory that appeared was that the problem could lie in the fact that the odometry frame in RVIZ does not move in relation to the robot, but only sporadically jumps around.
+After some investigation, it became clear that this is intended behaviour, and that the odometry frame is a leftover from a now obsolete system.
+As such, it seems that editing this configuration does not impact WTR, so it was left as is.
+
+\subsubsection{Resetting Orientation}
+\label{subs::reset}
+Since the IMU drifts apart slowly, the theory was to reduce the drift by resetting the current position to be the \textit{zero} position, or exactly aligned with WTR's current heading.
+This solution caused WTR to rotate on the map while driving straight ahead, and as such was quickly discarded.
+Theoretically, this could be explored further, but it seems improbable to yield more results.
+
+\subsubsection{Light Exposure}
+\label{subs::light}
+The group noticed the drift would become worse when attempting to drive WTR to the printer located on the bridge in T5.
+The prevailing theory is that the amount of light and reflections from the glass are interfering with the LIDAR, since that is a light-based sensor.
+Testing for this is tricky, as light from the environment is hard to get constant.
+Comparisons have been made comparing an overcast day to a bright day, and during the bright day the drift was worse, but it was still present during the overcast day.
+
+\subsection{Conclusion to the Tests}
+Unfortunately, the exact cause of the drift has not been found.
+Until the IMU runs well enough to be useful in the long term, turning it off in areas where the robot is far away from the odometry frame improves driving behaviour.
+
 \newpage
