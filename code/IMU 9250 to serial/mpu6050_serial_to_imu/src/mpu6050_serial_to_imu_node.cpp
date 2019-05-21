@@ -214,7 +214,7 @@ int main(int argc, char **argv) {
                                 magfield.header.stamp = measurement_time;
                                 magfield.header.frame_id = frame_id;
 
-                                quaternionTFToMsg(differential_rotation, imu.orientation);
+                                quaternionTFToMsg(orientation, imu.orientation);
                                 // set element 0 of covariance to -1 to disable measurement.
                                 imu.angular_velocity_covariance[0] = -1;
                                 imu.linear_acceleration_covariance[0] = -1;
