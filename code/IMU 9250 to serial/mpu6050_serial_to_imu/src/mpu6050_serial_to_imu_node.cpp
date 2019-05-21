@@ -17,14 +17,17 @@
 
 #define Kp 2.0f * 5.0f
 #define Ki 0.0f
-
+#define PI 3.1415927f
 bool zero_orientation_set = false;
 const uint8_t kBytesToReceive = 42;
 bool allow_store = false;
 bool allow_read = false;
-unsigned long timestamp = 0, init_time = 0;
 //=========================================================================
 // vars for calculating quaternions
+struct timeval tv;
+struct timeval init_time;
+
+
 uint32_t now = 0, lastUpdate = 0, firstUpdate = 0; // used to calculate integration interval
 uint32_t sumCount = 0; // control display output rate
 float sum = 0.0f;
@@ -153,8 +156,8 @@ void MadgwickQuaternionUpdate(float ax, float ay, float az, float gx, float gy, 
 
 
 void updateTime() {
-    now = time() - init_time;
-
+    gettimeofday(&tv,NULL);
+    now = tv.tv_usec - init_time.tv_usec;
     // set integration time by time elapsed since last filter update
     deltat = ((now - lastUpdate) / 1000000.0f);
     lastUpdate = now;
@@ -214,7 +217,7 @@ int main(int argc, char **argv) {
     ros::ServiceServer service = nh.advertiseService("set_zero_orientation", set_zero_orientation);
 
     ros::Rate r(200); // 200 hz
-    init-time  = time();
+    gettimeofday(&init_time,NULL);
     sensor_msgs::Imu imu;
     sensor_msgs::MagneticField magfield;
 
