@@ -17,7 +17,7 @@
 bool zero_orientation_set = false;
 const uint8_t kBytesToReceive = 46;
 const float kHalfCircle = 180.0f;
-const float kAdjustGyroBits = 131.0f / 65536.0f
+const float kAdjustGyroBits = 131.0f / 65536.0f;
 const float kGravity = 9.81f;
 const float kAdjustAccelBits = 4.0f / 65536.0f;
 
@@ -163,7 +163,7 @@ int main(int argc, char **argv) {
                                 tf::Quaternion orientation(xf, yf, zf, wf);
 
                                 orientation = orientation.normalize();
-                                std::cout << "Normalized: "
+                                std::cout << "Normalized: ";
                                 std::cout << "\r\nW: " << orientation.w() << "\r\nX: " << orientation.x();
                                 std::cout << "\r\nY: " << orientation.y() << "\r\nZ: " << orientation.z();
                                 if (!zero_orientation_set) {
@@ -273,13 +273,13 @@ int main(int argc, char **argv) {
 
                                 imu_pub.publish(imu);
                                 mag_pub.publish(magfield);
-                                // publish tf transform
-                                if (broadcast_tf) {
-                                    transform.setRotation(differential_rotation);
-                                    tf_br.sendTransform(
-                                            tf::StampedTransform(transform, measurement_time, tf_parent_frame_id,
-                                                                 tf_frame_id));
-                                }
+//                                // publish tf transform
+//                                if (broadcast_tf) {
+//                                    transform.setRotation(differential_rotation);
+//                                    tf_br.sendTransform(
+//                                            tf::StampedTransform(transform, measurement_time, tf_parent_frame_id,
+//                                                                 tf_frame_id));
+//                                }
                                 input.erase(0, data_packet_start + kBytesToReceive -
                                                1); // delete everything up to and including the processed packet
                             } else {
