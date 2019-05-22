@@ -251,8 +251,8 @@ int main(int argc, char **argv) {
 
                                 quaternionTFToMsg(orientation, imu.orientation);
                                 // set element 0 of covariance to -1 to disable measurement.
-                                // imu.angular_velocity_covariance[0] = -1;
-                                // imu.linear_acceleration_covariance[0] = -1;
+                                imu.angular_velocity_covariance[0] = -1;
+                                imu.linear_acceleration_covariance[0] = -1;
 
                                 imu.angular_velocity.x = gxf;
                                 imu.angular_velocity.y = gyf;
@@ -265,14 +265,14 @@ int main(int argc, char **argv) {
                                 magfield.magnetic_field.x = gmx;
                                 magfield.magnetic_field.y = gmy;
                                 magfield.magnetic_field.z = gmz;
-                                // magfield.magnetic_field_covariance[0] = -1;
-                                magfield.magnetic_field_covariance[0] = 0;
-                                magfield.magnetic_field_covariance[4] = 0;
-                                magfield.magnetic_field_covariance[8] = 0;
+                                 magfield.magnetic_field_covariance[0] = -1;
+                                //magfield.magnetic_field_covariance[0] = 0;
+                                //magfield.magnetic_field_covariance[4] = 0;
+                                //magfield.magnetic_field_covariance[8] = 0;
                                 //magnetic covariance is unknown, so a 0 is sent in accordance with the MagneticField message documentation.
 
                                 imu_pub.publish(imu);
-                                mag_pub.publish(magfield);
+                                //mag_pub.publish(magfield);
 //                                // publish tf transform
 //                                if (broadcast_tf) {
 //                                    transform.setRotation(differential_rotation);
