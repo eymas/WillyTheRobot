@@ -147,17 +147,17 @@ int main(int argc, char **argv) {
                                 int8_t y = (char) input[data_packet_start + kQuatYPos];
                                 int8_t z = (char) input[data_packet_start + kQuatZPos];
                                 double wf = w;
-                                wf = wf / kQuaternionMultfact;
-                                std::cout << "Raw: "
+                                wf = wf / kQuaternionMultFact;
+                                std::cout << "Raw: \r\n";
                                 std::cout << "W: " << wf << "\r\n";
                                 double xf = x;
-                                xf = xf / kQuaternionMultfact;
+                                xf = xf / kQuaternionMultFact;
                                 std::cout << "X: " << xf << "\r\n";
                                 double yf = y;
-                                yf = yf / kQuaternionMultfact;
+                                yf = yf / kQuaternionMultFact;
                                 std::cout << "Y: " << yf << "\r\n";
                                 double zf = z;
-                                zf = zf / kQuaternionMultfact;
+                                zf = zf / kQuaternionMultFact;
                                 std::cout << "Z: " << zf << "\r\n";
 
                                 tf::Quaternion orientation(xf, yf, zf, wf);
