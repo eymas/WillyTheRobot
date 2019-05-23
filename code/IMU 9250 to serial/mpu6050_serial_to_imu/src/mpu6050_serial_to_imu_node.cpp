@@ -50,7 +50,7 @@ bool set_zero_orientation(std_srvs::Empty::Request &,
 }
 
 union c_float {
-    uint8_t input_data[4];
+    uint8_t input_data[kBytesPerVar];
     float output_data;
 };
 
@@ -253,6 +253,7 @@ int main(int argc, char **argv) {
                                 // set element 0 of covariance to -1 to disable measurement.
                                 imu.angular_velocity_covariance[0] = -1;
                                 imu.linear_acceleration_covariance[0] = -1;
+                                magfield.magnetic_field_covariance[0] = -1;
 
                                 imu.angular_velocity.x = gxf;
                                 imu.angular_velocity.y = gyf;
@@ -265,10 +266,10 @@ int main(int argc, char **argv) {
                                 magfield.magnetic_field.x = gmx;
                                 magfield.magnetic_field.y = gmy;
                                 magfield.magnetic_field.z = gmz;
-                                 magfield.magnetic_field_covariance[0] = -1;
-                                //magfield.magnetic_field_covariance[0] = 0;
-                                //magfield.magnetic_field_covariance[4] = 0;
-                                //magfield.magnetic_field_covariance[8] = 0;
+
+                                //magfield.magnetic_field_covariance[0] = 0.0025;
+                                //magfield.magnetic_field_covariance[4] = 0.0025;
+                                //magfield.magnetic_field_covariance[8] = 0.0025;
                                 //magnetic covariance is unknown, so a 0 is sent in accordance with the MagneticField message documentation.
 
                                 imu_pub.publish(imu);
