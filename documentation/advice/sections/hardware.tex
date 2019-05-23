@@ -68,4 +68,10 @@ It has been clipped there using a 3-D printed box, but during the design of that
 While this does not cause any major issues, the slightly inaccuracy in the design prevents the IMU from being as snugly fitted to the screen, allowing it to shake around a bit.
 A more tightly designed container would help increase the stability of the readings.
 
+\subsection{Sonar Sensors}
+The current sensors, HC-SR04, have a very narrow viewing angle.
+This limits their effectiveness, since they are likely to miss a table leg or other narrow obstacle.
+While they are mostly meant for detecting glass walls, they are also used when reversing, since the LIDAR only has a 260\textdegree viewing angle.
+Switching to a parking sensor would allow for more accurate detection of obstacles while reversing, without needing a second LIDAR.
+
 \newpage
