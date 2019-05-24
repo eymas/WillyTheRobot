@@ -20,6 +20,10 @@
 *.docx
 *.doc
 *.tex.bak
+documentation/analysis-improvements/images/Thumbs.db
+documentation/movement-research/images/Thumbs.db
+documentation/self-reflection/images/Thumbs.db
+documentation/tech-design/MPU9250 mag bias.txt
 *.xml
 *.d
 *.txt
@@ -35,4 +39,3 @@
 *.json
 *.sqlite
 *.docx
-

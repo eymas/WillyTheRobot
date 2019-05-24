@@ -1,35 +1,43 @@
 \documentclass{article} % article doctype, possible font size range from 8pt to 20pt with not all being avaiable.
-\title{\huge Willy The Robot Hardware Design}
+\title{\huge Willy The Robot Self Reflections}
 \author{Jeroen van 't Hul\\S1139163  \and Thomas Zwaanswijk\\s1089273 \and Tom van den Noort\\s1101124}
 \date{\parbox{\linewidth}{\centering%
 	\today\endgraf\bigskip
-	Supervisor \hspace*{3cm} Main Stakeholder \endgraf\medskip
-	Mischa Mol \hspace*{3cm} Ilja Clabbers \endgraf\bigskip
-	Windesheim Zwolle\endgraf}} 
-
+	Supervisor \hspace*{3cm}	Main Stakeholder\endgraf\medskip
+	Mischa Mol \hspace*{3cm} Ilja Clabbers\endgraf\medskip
+	Windesheim Zwolle\endgraf}}
 
 % include packages
 \usepackage{graphicx}
 \usepackage{caption}
 \usepackage{mathabx}
 \usepackage{wrapfig}
+\usepackage{siunitx}
 \usepackage[margin=1.0in]{geometry} % sets page margin, 2.0in is default.
 \usepackage{titlesec}
-\usepackage{hyperref}
+%\usepackage{hyperref}
+\usepackage{textcomp}
+\usepackage{listings}
 \usepackage[table,xcdraw]{xcolor}
 \usepackage{float}
 \usepackage[export]{adjustbox}
 \usepackage{todonotes}
-\usepackage{indentfirst}
-\usepackage{blindtext}
-\usepackage{scrextend}
-\usepackage{apacite}
-%\usepackage{siunitx}
-%\usepackage{multirow}	% used for table multirow support
-%\usepackage{longtable} % Allows tables to roll over into a new page.
+\usepackage{multirow}	% used for table multirow support
 \usepackage[nottoc,numbib]{tocbibind} % Adds bibliography / references to TOC and numbers that section.
+
+\usepackage{indentfirst}
+\usepackage{eurosym}
+\usepackage{listings}
+
 \usepackage{array}
-\usepackage{footnote}
+\usepackage{comment}
+\usepackage{url}
+\usepackage[breaklinks]{hyperref}
+\usepackage{breakurl}
+
+
+\def\UrlBreaks{\do\/\do-}
+
 
 % ----- custom commands ----- %
 % Wrapper for paragraph command. Forces newline after paragraph title
@@ -42,18 +50,14 @@
 	\setcounter{tocdepth}{#1}%
 }
 
-\restylefloat{table}
 
 \newcolumntype{L}[1]{>{\raggedright\let\newline\\\arraybackslash\hspace{0pt}}m{#1}}
 \newcolumntype{C}[1]{>{\centering\let\newline\\\arraybackslash\hspace{0pt}}m{#1}}
 \newcolumntype{R}[1]{>{\raggedleft\let\newline\\\arraybackslash\hspace{0pt}}m{#1}}
 
-\makesavenoteenv{tabular}
-\makesavenoteenv{table}
-
 \setcounter{tocdepth}{2} % only part,chapters,sections, subsections appear in ToC
 
-\addtokomafont{labelinglabel}{\sffamily}
+
 
 \DeclareCaptionFormat{cancaption}{#1#2#3\par} % Normal format actually
 \DeclareCaptionLabelFormat{cancaptionlabel}{#1}
@@ -74,16 +78,12 @@
 \newpage
 
 % Sections
-\input{sections/IMU.tex}
-\input{sections/SONARS.tex}
-\input{sections/motorcon.tex}
-\input{sections/3dprint.tex}
-\appendix % all sections after this are appendices
-\input{sections/glossary.tex}
+\input{sections/thomas.tex}
+\input{sections/tom.tex}
+\input{sections/jeroen.tex}
 % Bibliography:
+
 \newpage
-\bibliographystyle{apacite}
-\bibliography{references}
 
 
 \end{document}
