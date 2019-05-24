@@ -11,7 +11,7 @@
 #include <iostream>
 #include <math.h>
 
-//#define PUBLISHRAW
+#define PUBLISHRAW
 
 
 bool zero_orientation_set = false;
@@ -132,7 +132,11 @@ int main(int argc, char **argv) {
                         // parse for data packets
                         std::cout << "reached while allow_read\n";
                         data_packet_start = input.find("$\x03");
-                        std::cout << "found start of data packet" << data_packet_start << "\n";
+                        if(data_packet_start == -1) {
+                            std::cout << "start not found\r\n";
+                        } else {
+                            std::cout << "found start of data packet: " << data_packet_start << "\n";
+                        }
                         if (data_packet_start != std::string::npos) {
                             std::cout << "found start of data packet: " << data_packet_start << "\n";
                             ROS_DEBUG("found possible start of data packet at position %d", data_packet_start);
@@ -251,9 +255,9 @@ int main(int argc, char **argv) {
 
                                 quaternionTFToMsg(orientation, imu.orientation);
                                 // set element 0 of covariance to -1 to disable measurement.
-                                imu.angular_velocity_covariance[0] = -1;
-                                imu.linear_acceleration_covariance[0] = -1;
-                                magfield.magnetic_field_covariance[0] = -1;
+                               // imu.angular_velocity_covariance[0] = -1;
+                               // imu.linear_acceleration_covariance[0] = -1;
+                               // magfield.magnetic_field_covariance[0] = -1;
 
                                 imu.angular_velocity.x = gxf;
                                 imu.angular_velocity.y = gyf;
@@ -267,9 +271,9 @@ int main(int argc, char **argv) {
                                 magfield.magnetic_field.y = gmy;
                                 magfield.magnetic_field.z = gmz;
 
-                                //magfield.magnetic_field_covariance[0] = 0.0025;
-                                //magfield.magnetic_field_covariance[4] = 0.0025;
-                                //magfield.magnetic_field_covariance[8] = 0.0025;
+                                magfield.magnetic_field_covariance[0] = 0.0025;
+                                magfield.magnetic_field_covariance[4] = 0.0025;
+                                magfield.magnetic_field_covariance[8] = 0.0025;
                                 //magnetic covariance is unknown, so a 0 is sent in accordance with the MagneticField message documentation.
 
                                 imu_pub.publish(imu);
