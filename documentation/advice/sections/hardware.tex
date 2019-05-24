@@ -5,17 +5,14 @@ This has since been changed to increase the ease of access to every part of WTR.
 There are still some parts which need to be updated, however.
 
 \subsection{Batteries}
-This group has unfortunately not yet had the chance to fix the battery situation.
-While the batteries used are only 24 volt batteries, the idea of having the poles exposed during public expositions and events is not great.
-This was something we had planned to correct, but ever got around to.
-Some simple caps or covers would be a massive improvement to the current situation.
+This group has removed two of the car batteries after an unfortunate incident in which a small part of WTR caught on fire.
+The removal has improved safety, as it also forced the group to completely re-work the electrical set-up, reducing the amount of batteries from 6 to 4, but also covering all the poles, adding a lid that blocks access to the batteries unless opened, and making sure all the fuses are limited to $5A$, rather than $30A$ or $15A$.
+An main power switch has also been installed to ensure the ability to instantly cut all power from the circuit.
+As such, most concerns about the safety have been addressed as the batteries can no longer shift.
 
-Another issue that could do with correction is that they are essentially just held in place by weight.
-The downside of this is that WTR does not move in what can be described as a smooth fashion.
-The robot brakes pretty quickly, so the deceleration is pretty abrupt.
-If this happens too often, the batteries could potentially end up touching poles due to the shifting, as the two located under the laptop are on their side.
-This could be another issue, but our group did not know enough about electronics to say whether this presented an issue, and as such left it as is.
-The advice here is to either cover the poles, again, or create some way of fixing the batteries in place, such as a simple 3-D printed shunt, screwed to the wood.
+The removal of the 2 batteries does mean that the operational range has been reduced.
+Should this prove a problem, it could be worth re-installing the batteries.
+They were put inside of the frame for WTR found in the innovation lab in T5.
 
 \subsection{Motor Controller}
 The motor controller is located in a black box, in the middle of WTR between several batteries.
@@ -45,11 +42,9 @@ The laptop currently runs on its own battery, which is \textit{theoretically} fi
 It is capable of running RVIZ, and communicating with all the nodes.
 The downside of it running on a separate battery is that it does drain rather quickly.
 A simple trip from the innovation lab on T5 to the printer located on the other side of the bridge between the two sides of the building can drain the battery by as much as 50 percent, which is not desirable.
-In cupboard C, there is a transformer which could be attached to the batteries that allows the laptop charger to be plugged into it and power the laptop.
-The 2019 Q1\&Q2 group did not attach it, because the testing that was done did not require WTR to drive very far from the innovation lab.
-If more extensive testing is planned, consider attaching the charger.
 
-Another solution that could be considered would be to directly connect the charger to the power lines of the appropriate voltage, which are already present.
+
+A solution that could be considered would be to directly connect the charger to the power lines of the appropriate voltage, which are already present.
 This would allow the laptop to operate from the car batteries like the rest of WTR.
 The reason this has not been done already is because the group currently only has one charger for the laptop, so if this broke any further testing would have to wait until a new one could be ordered.
 By attaching the charging port of the laptop to the batteries, it would be permanently charging.
@@ -59,7 +54,7 @@ Doing so would involve taking the cable from the laptop charger which connects t
 After separating the cable from the transformer, the split parts of the wire could be attached to the appropriate output of the voltage transformer found at the back of WTR.
 The appropriate voltage is found on the label of the transformer, which is 19 volts.
 
-Another solution would be to splice the power cable for the TV, which also runs at 19V.
+Another solution would be to splice the power cable for the TV, which also runs at $19V$.
 
 
 \subsection{IMU}
