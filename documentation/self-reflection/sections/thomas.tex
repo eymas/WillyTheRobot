@@ -1,0 +1,54 @@
+\section{Thomas Zwaanswijk}
+My role in the project has been divided between working on the MPU9250 and working on documentation.
+I advocated within the group to work with \LaTeX , which took some convincing.
+The professional looking result, along with the ease of which a single standard can be enforced, adds to the productivity of the group, in my opinion.
+Another advantage is that it works really well with Git/GitHub, as the unique file structure allows for a segmented approach to a document, thus preventing or reducing conflicts in documentation.
+
+Another task I took upon myself was updating and correcting the Willy Wiki.
+This is a repository of all the information on the project, or at least it's supposed to be.
+As it stands, however, the information is either outdated, not relevant, or written in very poor English.
+This is still a work in progress, but it's getting better day by day.
+
+As mentioned previously, I worked on the MPU9250.
+While it's an interesting little device, I do wish that it would be a little simpler to work with.
+In the spirit of the project, I tried to re-use as much of the code as possible.
+This was unfortunately impossible for the arduino, due to the structure of the MPU9250 being different enough from the MPU6050 that was previously used.
+The code on the Raspberry Pi was re-used, albeit updated to accommodate the added measurements given by the magnetometer.
+This is still presenting issues, since the data is transmitted and being used, but for some reason I've not been able to figure out, lateral translation causes rotation in the quaternion values.
+
+I do think I've learned new things, ranging from quaternions to working with CatKin and ROS.
+Not all of them will be useful later on in life.
+Complex math is interesting, and if I want to work with automation in the future, that will be useful.
+CatKin and ROS, on the other hand, might be slightly less so.
+Again, that might be relevant, but might not be.
+Both of those systems are so specific they might only be relevant to this specific project, or maybe very similar projects.
+
+Learning to work on projects that have been managed less than optimally, to put it politely, has been valuable.
+It's very difficult to not throw out everything and start again, though that is very tempting.
+If the stories are to be believed, we're actually quite lucky with how the project was left to us, as the previous group has actually been willing to communicate with us and provide information about the robot.
+
+What was less than stellar was that there seem to be no technical design documents or anything explaining the code itself.
+While the Wiki does cover the base idea of most features, it seems that actual details of anything were not important enough to document.
+I'm being a bit harsh here, since the previous group was a part-time study group.
+They wouldn't have had enough time to work on everything, but not all the previous group have that excuse.
+
+To conclude, I'm happy, for the most part, with our performance.
+Willy is driving more smoothly, albeit a bit slowly.
+The work I delivered is done to my ability, and it does help the robot.
+The documentation we're delivering should be up to par as well, as all functionality and code is properly explained, either in comment or documents.
+The downside is that I think we've wasted a lot of time doing things that we shouldn't have had to do.
+The documentation we got should have been up to par, I shouldn't have had to spend a day trying to find sources for some claims, or discover what exactly the purpose of the variable \code{TeaPotPacket[]} does.
+
+Where I personally have room for improvement is not getting distracted when problems with my work arise.
+I know I have a tendency to distract myself from issues, and bury my head in the sand until I have no choice but to confront them.
+If instead I tackle them when they pop up, it would improve my work-flow.
+
+Another issue I need to get on top of is being lax when enforcing SCRUM rituals.
+For a while, we ignored the daily stand-up, which I think has been detrimental to our efficiency and knowledge of what we are all working on.
+This has been rectified, but I do think we need to formalize the retrospective and planning sessions a little more, and I should be more adamant about that.
+I could take the lead and use some of the practices I've learned during the previous project and apply them here, such as using trello and having everybody drop cards in 4 columns, about what were issues that slowed us down, sped us along or issues we need to talk about.
+This would allow us to air some grievances, if we have any, without having to immediately become confrontational about them.
+
+
+
+\newpage
