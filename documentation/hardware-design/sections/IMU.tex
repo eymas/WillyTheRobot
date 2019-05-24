@@ -62,8 +62,8 @@ The pins used on the arduino are as follows:
 \begin{tabular}{|c|c|}
 \hline
 \textbf{Pin} & \textbf{Function} \\ \hline
-Analogue 4 & SDA \\ \hline
-Analogue 5 & SCL \\ \hline
+Analogue 4 & SDA     \\ \hline
+Analogue 5 & SCL     \\ \hline
 GND        & ground  \\ \hline
 3.3V       & VDD     \\ \hline
 \end{tabular}
@@ -76,10 +76,9 @@ The reason for this difference is not exactly clear, but it does not pose any pr
 The magnetometer, the AK8963, does still have the same address as mentioned in any documentation about it, as well as the example code.
 
 \subsubsection{Positioning}
-During the development, a small issue was forgotten.
-When the word "small" is used, this is an understatement.
+During the development, a problem came up.
 A magnetometer is reliant on, as the name implies, magnetism.
-Since the frame is made of steel, it interferes with the magnetometer to a rather large extent.
+Since the frame is made of steel, it interferes with the magnetometer.
 When the IMU is mounted to the frame, the quaternion it outputs is essentially always the same, since the magnetic values never change.
 If the robot turns, the magnetic field it produces turns with it.
 This is akin to using a compass with a powerful magnet held in front of it.
