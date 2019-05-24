@@ -1,19 +1,19 @@
 \section{Knowledge}
 Since ROS is a very academically focussed system, a lot of knowledge is shared on-line.
-When the group ran into issues and went to the ROS version of stackoverflow, \href{https://answers.ros.org/questions/}{ROS answers}, any questions asked generally received an answer very quickly.
+When the group ran into issues and went to the ROS version of stackoverflow, \href{https://answers.ros.org/questions/}{ROS Q\&A}, any questions asked generally received an answer very quickly.
 This is worth checking out if anyone gets stuck trying to integrate new functionality in the system, or is confused about how certain parts are implemented.
 
 \subsection{Community Q\&A}
 As mentioned earlier, we did make use of the ROS answers site to gain input on some errors that the team could not decipher. 
 To satisfy the community requirements, we'd need to provide an explanation adhering to the SMART principle, along with the configuration files of the affected modules.
-In example, if faced with an issue with localization, you would need to provide the configuration files of move\_base, laser\_scan\_matcher and AMCL. \ref{trm::amcl}
+In example, if faced with an issue with localization, you would need to provide the configuration files of move\_base, laser\_scan\_matcher and AMCL [\ref{trm::amcl}].
 The answers to the questions have arrived fairly quickly, though not all issues could fully be resolved, nevertheless the input that was  received helped the team get closer to a supposed solution or further optimizations. 
 \footnote{Coincidentally, most of the input received had been from someone in the Technical University of Delft}
 
 
 \subsection{The ROS wiki}
-ROS has a ``Wiki'' \cite{site_ros_wiki} on their website, hosting many articles about each available component, its parameters and other useful snippets. 
-Through the Wiki, the team has also discovered alternative packages like the TEB \ref{trm::teb} Local Planner, which has replaced the Base Local Planner in the first month of the project as the result of a quick  ``what-if'' experiment, even if the original intent was to learn more about the Base Local Planner.
+ROS has a ``Wiki'' \cite{roswiki} on their website, hosting many articles about each available component, its parameters and other useful snippets. 
+Through the Wiki, the team has also discovered alternative packages like the TEB [\ref{trm::teb}] Local Planner, which has replaced the Base Local Planner in the first month of the project as the result of a quick  ``what-if'' experiment, even if the original intent was to learn more about the Base Local Planner.
 
 The wiki has further assisted the group in coding projects, with extensive albeit hard-to-navigate API documentation and various tutorials centred around the catkin build environment. 
 These are of importance when writing scripts in C++, for smaller scripts, python would suffice to allow for quickly hooking into ROS its publisher/subscriber model.
