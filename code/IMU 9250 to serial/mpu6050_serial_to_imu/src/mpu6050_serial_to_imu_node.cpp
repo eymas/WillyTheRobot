@@ -11,9 +11,6 @@
 #include <iostream>
 #include <math.h>
 
-#define PUBLISHRAW
-
-
 bool zero_orientation_set = false;
 const uint8_t kBytesToReceive = 46;
 const float kHalfCircle = 180.0f;
@@ -255,10 +252,7 @@ int main(int argc, char **argv) {
                                 magfield.header.frame_id = frame_id;
 
                                 quaternionTFToMsg(orientation, imu.orientation);
-                                // set element 0 of covariance to -1 to disable measurement.
-                               // imu.angular_velocity_covariance[0] = -1;
-                               // imu.linear_acceleration_covariance[0] = -1;
-                               // magfield.magnetic_field_covariance[0] = -1;
+
 
                                 imu.angular_velocity.x = gxf;
                                 imu.angular_velocity.y = gyf;
@@ -275,7 +269,11 @@ int main(int argc, char **argv) {
                                 magfield.magnetic_field_covariance[0] = 0.0025;
                                 magfield.magnetic_field_covariance[4] = 0.0025;
                                 magfield.magnetic_field_covariance[8] = 0.0025;
-                                //magnetic covariance is unknown, so a 0 is sent in accordance with the MagneticField message documentation.
+
+                                // set element 0 of covariance to -1 to disable measurement.
+                                imu.angular_velocity_covariance[0] = -1;
+                                imu.linear_acceleration_covariance[0] = -1;
+                                magfield.magnetic_field_covariance[0] = -1;
 
                                 imu_pub.publish(imu);
                                 //mag_pub.publish(magfield);
