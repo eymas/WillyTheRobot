@@ -75,9 +75,10 @@ This is not the case, and instead the address is \code{0x73}.
 The reason for this difference is not clear, but it does not pose a problem other than the code used not matching the examples.
 The magnetometer, the AK8963, has the same address as mentioned in documentation about it, as well as the example code.
 
-\subsubsection{Positioning}
-During the development, a problem came up.
-A magnetometer is reliant on, as the name implies, magnetism.
+
+\subsubsection{Soft Iron Interference}
+During the development, a unforeseen consequence of a metal frame became apparent.
+A magnetometer is reliant on magnetism.
 Since the frame is made of steel, it interferes with the magnetometer.
 When the IMU is mounted to the frame, the quaternion it outputs is essentially always the same, since the magnetic values never change.
 If the robot turns, the magnetic field it produces turns with it.
