@@ -8,7 +8,7 @@ After that has processed the data into a ROS standard message, it sends the data
 
 \subsection{Collecting data} \label{sec::collect}
 The main controller for collecting the data is an Arduino Uno, which uses I$^{2}$C for communication with the MPU9250.
-The clock is set at 400000, and the address uses the \code{MPU9250\_ADDRESS\_AD0}, a macro which determines the supposed address.
+The clock is set at 400000, and the address uses the \code{MPU9250\_ADDRESS\_AD0}, a macro which determines the I$^{2}$C address.
 In section \ref{sec::set-up}, the curiosities of the address are further explained.
 The Arduino takes the raw data, and uses \href{https://github.com/sparkfun/SparkFun_MPU-9250_Breakout_Arduino_Library}{this library} to process the data.
 This is needed because the MPU does not output quaternions by default.
@@ -25,7 +25,7 @@ After that, it calibrates itself and stores those values as well.
 Following that, it is fully initialized using the \code{initMPU9250} function.
 
 After that, it checks what the address of the AK8693 (the magnetometer), and if that is not 0x48, it cancels the entire system.
-Thankfully, this address does match the default in the library provided.
+This address does match the default in the library provided.
 The AK8963 is initialized, and the resolutions of the 3 different sensors are fetched using \code{getAres(), getGres(), and getMres()}.
 This concludes the set-up.
 
@@ -34,17 +34,18 @@ This concludes the set-up.
 The core concept of the loop is relatively simple, were it not for some of the quaternion calculations.
 First it reads the data gathered by the IMU, and stores it in 3 arrays, one per sensor.
 These are then averaged after five measurements, and used to calculate a moving average.
-An explanation of this concept can be found on Investopedia, which explains it uses in the business world \cite{movingavg}.
+An explanation of this concept can be found on Investopedia, which explains its uses in the business world \cite{movingavg} using the example of a stock market.
 The moving average is mainly used to smooth out the sudden peaks and jumps that might occur, since WTR is meant to be moving.
 A shock, like a small collision, could cause the sensor to give out false readings, which are mitigated by the moving average.
 
-Since the data obtained here is just the raw data, it servers no purpose yet.
+Since the data obtained here is just the raw data, it serves no purpose yet.
 In order to have it be useful, it needs to be turned into data with actual units behind it.
-The accelerometer data is changed to acceleration in $G$, and the gyroscopic data is calculated into degrees per second.
+The accelerometer data is changed to acceleration in $G$, and the gyroscopic data is calculated into $degrees per second,  ^{\circ}/S $.
 At the same time, the biases are removed from both pieces of data.
 The magnetometer data is calculate in milliGauss, and the scale and biases are applied.
 
-This data is then calculated into a quaternion, using the Madgwick calculation.
+This data is then calculated into a quaternion, using the Mahoney calculation.
+An alternative to this is the Madgwick calculation, but this is too intensive for an Arduino.
 This is very complicated, and better to be considered as a black box.
 Should you wish to learn about them anyway, consider checking out \href{http://www.ijcee.org/vol10/974-T4004.pdf}{this link}.
 This does require an understanding of imaginary numbers, complex numbers, and matrix calculations.

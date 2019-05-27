@@ -54,7 +54,7 @@ The current set-up utilizes:
 \end{itemize}
 \end{enumerate}
 Testing was done with every plugin by itself, as well as exchanging AMCL and laser\_scan\_matcher with robot\_localization\_package.
-This did not result in any improvement, and as were left as is.
+This did not result in any improvement, and the plug-ins were left as is.
 
 \subsubsection{Hierarchy}
 \label{subs::hier}
@@ -76,6 +76,7 @@ Testing for this is tricky, as light from the environment is hard to get constan
 Comparisons have been made comparing an overcast day to a bright day, and during the bright day the drift was worse, but it was still present during the overcast day.
 
 \subsubsection{Moving the Calculation}
+\label{subs::pi}
 The currently used calculation, the Mahoney filter, is a less intensive quaternion calculation the the Madgwick filter.
 However, it is still a very complex calculation, and works best at very high speeds to eliminate drift.
 The Arduino is at the very bottom tier of calculation speeds, and barely able to do this as fast as needed.
