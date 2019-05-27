@@ -1,0 +1,40 @@
+\section{Security}
+\label{sec::security}
+There are essentially two aspects to the security of WTR.
+The first is the risk a malicious third party could pose to WTR if they wanted to abuse it.
+The second is the risk WTR poses to the world around it.
+
+\subsection{Vulnerabilities}
+Ideally, WTR should be an air-gapped robot, with no possibility of wireless access, since it is going to be driving around at public events.
+If WTR is broadcasting a network, then it would be possible to enter that and start commanding WTR to drive into people, for example.
+Since this is unfortunately not possible as several social interaction features require an internet connection to some degree.
+
+The likelihood of someone wanting to abuse WTR is quite small.
+It has no connection to the network at the time of writing, and does not track any personal data.
+There is essentially nothing of value to be gained by hacking WTR, so if it was done, it would most likely happen for the sake of a joke or prestige.
+It would not exactly be difficult to hack either, due to the standardized nature of ROS.
+ROS has set formats for every message, so a spoofed message to the \code{cmd\_vel} topic could cause WTR to over-accelerate, or drive straight into a wall.
+
+Another vulnerability is that if someone has physical access to the switch, they could start spoofing messages and causing WTR to either crash or start behaving anomalously.
+In order to prevent this, a small cover or physical protection could be used, such as a plexiglass cover that allows the internals of WTR to remain visible while preventing undesired physical access.
+
+It would be advisable, however, to ensure that WTR gets an upgrade to its passwords.
+Unfortunately, this group did not have the time to do this, but many of the passwords are vulnerable to botnets or other malicious attacks that exploit default passwords.
+Many passwords are very weak, and could do with some updates.
+
+\subsection{Danger to Others}
+At the moment, WTR is a lot less dangerous to the world around it than it was at the start of the project.
+Previously, it had several sharp edges that ended up costing a member of the team a pair of jeans, so the issue had to be taken care of.
+
+Since then, it has had covers placed over all sharp edges that could hit someone while WTR is moving.
+There are still some sharp bits, but due to a lack of angle grinder this group was unable to fix this.
+
+The batteries are still only kept in place due to their weight, so a sudden stop due to a collision or abrupt stop signal could shift the batteries, potentially snapping cables or such.
+As is noted in the advice document, this needs updating.
+Another point mentioned is the exposed parts, which while not life-threatening as the batteries only run at 24 volt, are still not exactly good to have exposed.
+Again, refer to the advice document for the group opinion on how to solve these issues.
+
+During the last week of work from the 2019 Q1\&Q2 group, WTR unfortunately caught fire and broke a transformer located in the plastic box on the back.
+As such, a rewiring had to be done.
+
+\newpage
