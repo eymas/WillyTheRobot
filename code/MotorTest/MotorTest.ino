@@ -8,6 +8,10 @@
  *  -The control value is send to the motorcontroller.
  *  -Repeat
  *  
+ *  Optional:
+ *  A program is available called: PID_GUI which reads out serial 2 from the motor controller and
+ *  shows graphs of varias data which can be used to tune various variables.
+ *  
  *  Revision 3
  *  6-3-2019
  */
@@ -24,14 +28,17 @@ std_msgs::Bool emergency;
 //Data used for controlling the motorcontroller.
 int analogValue;
 float volatile irun, iturn;
+unsigned long time_stamp;
 unsigned char data[6];
 
-/*  Turn and drive variables are read out from ros and stored in irun and idrive.
- */
+//Turn and drive variables are read out from ros and stored in irun and idrive.
 void messageCb(const geometry_msgs::Twist& twistMsg)
 {
-  irun = twistMsg.linear.x * 6;
-  iturn = twistMsg.angular.z * -6;
+  irun = twistMsg.linear.x;
+  iturn = twistMsg.angular.z;
+      
+  // store time at which message was received so old instructions are not repeated.
+  time_stamp = millis();
 }
 
 ros::Subscriber<geometry_msgs::Twist> sub("/cmd_vel", &messageCb);
@@ -46,10 +53,9 @@ const int LeftPulseInputB = 21;
 const int RightPulseInputA = 2;
 const int RightPulseInputB = 3;
 
-//Controlloop with 2 PID. One for turning and one for driving.
-//Values represent: turn Kp, turn Ki, turn Kd, drive Kp, drive Ki, drive Kd, Diff (Diff is used to change the reference speed for turning if needed)
-ControlLoop Willy(40, 0, 0, 40, 0, 0, 0.5);
-
+//Controlloop with 2 PID controllers. One for turning and one for driving.
+//Values represent: turn Kp, turn Ki, turn Kd, drive Kp, drive Ki, drive Kd
+ControlLoop Willy(80, 10, 0, 150, 15, 0);
 
 //used to lower the frequency of the PID loop.
 int PIDTrig = 0;                
@@ -79,18 +85,16 @@ void RightPulsBChange()
   RightWheel.BChange();
 }
 
-/* Main setup
- */
+// Main setup
 void setup() {
   nh.initNode();
   nh.subscribe(sub);
   nh.advertise(pub);
-
-  //serial communication to motorcontroller
+  
+  //Serial communication to motorcontroller
   Serial1.begin(19200, SERIAL_8E1);
-
-  Serial2.begin(115200, SERIAL_8E1);
-
+  //Serial communication to external laptop for testing and tuning purposes
+  Serial2.begin(9600);
   //Set up interrupts for encoders
   pinMode(LeftPulseInputA, INPUT);
   pinMode(LeftPulseInputB, INPUT);
@@ -111,22 +115,6 @@ void SendToMotor(int Setdrive, int Setturn)
   int drive = Setdrive;                                                       //Set value from ros to motorcontroller
   int turn = Setturn;                                                       //Set value from ros to motorcontroller
 
-  //limit values to max 100 and min -100.
-  if (drive > 100) {
-    drive = 100;
-  }
-
-  if (drive < -100) {
-    drive = -100;
-  }
-
-  if (turn > 100) {
-    turn = 100;
-  }
-  if (turn < -100) {
-    turn = -100;
-  }
-
   //Create data array
   data[0] = 0x6A;                                            //-Datagram always start with 0x6A
   data[1] = drive;                                           //-Drive +-100
@@ -140,40 +128,18 @@ void SendToMotor(int Setdrive, int Setturn)
   {
     Serial1.write(data[i]);                                 
   }
-
-//  String turn_string = String(turn);
-//  String drive_string = String(drive);
-//  String iturn_string = String(iturn, 5);
-//  String irun_string = String (irun, 5);
-//  Serial2.write("From PC");
-//  Serial2.write("           ");
-//  Serial2.write("to motor");
-//  Serial2.write('\r');
-//  Serial2.write('\n');
-//  Serial2.write("iturn");
-//  writeString(iturn_string);
-//  Serial2.write("   ");
-//  Serial2.write("irun");
-//  writeString(irun_string);
-//  Serial2.write('\t');
-//  Serial2.write("turn");
-//  writeString(turn_string);
-//  Serial2.write('\t');
-//  Serial2.write("drive");
-//  writeString(drive_string);
-//  Serial2.write('\r');
-//  Serial2.write('\n');
-
 }
 
-void writeString(String stringData) { // Used to serially push out a String with Serial2.write()
+// Used to serially push out a String with Serial2.write()
+void writeString(String stringData) {
 
   for (int i = 0; i < stringData.length(); i++)
   {
-    Serial2.write(stringData[i]);   // Push each char 1 by 1 on each loop pass
+    // Push each char 1 by 1 on each loop pass
+    Serial2.write(stringData[i]);
   }
 
-}// end writeString
+}
 
 /*  Activate PID
  *  Read out sensors
@@ -183,30 +149,74 @@ void ActivatePID()
 {
     Willy.SetInputRef(iturn, irun, LeftWheel.GetSpeed(), RightWheel.GetSpeed());
 
-
     PIDTurn = (int)Willy.Turn_Output;
     PIDDrive = (int)Willy.Drive_Output;
 
     PIDTrig = 0;
 }
 
+//For tuning/read out purpuses.
+void SendSerial()
+{
+    String TI = String(iturn,5);   //Turn input
+    String DI = String(irun,5);    //Drive input
+
+    String TS = String(Willy.Turn_Speed,5);  //Turn speed
+    String DS = String(Willy.Drive_Speed,5);  //Drive speed
+
+    String TO = String(Willy.Turn_Output,5);  //Turn output
+    String DO = String(Willy.Drive_Output,5);  //Drive output
+    
+    Serial2.println(TI + ";" + DI + ";" + TS + ";" + DS + ";" + TO + ";" + DO);
+}
+
+//safety
+void Stop()
+{
+    irun = 0;
+    iturn = 0;
+    SendToMotor(0, 0);
+}
+
 /* Main loop 
  * Run at 50Hz.
  */
 void loop() {
+
+  //Time out to make sure robot stops when nothing is reiced whitin time.
+  if((millis() - time_stamp) > 750) {
+    Stop();
+  }
+  
+  //used to lower PID frequency
   PIDTrig++;
 
-  //Run only at 10Hz.
-  if (PIDTrig > 5)
-  {
-    ActivatePID();
-  }
+    //Run only at 10Hz.
+    if (PIDTrig > 5)
+    {
+     ActivatePID();
+     SendSerial(); //for tuning
+    }
 
-  SendToMotor(PIDDrive, PIDTurn);
+    SendToMotor(PIDDrive, PIDTurn);
 
-  pub.publish(&emergency);
+    analogValue = analogRead(A8);
 
-  nh.spinOnce();
-  Serial.flush();
-  delay(20);
+    if (analogValue > 500) 
+    {
+      //emergency stop active/pressed 
+      emergency.data = false;
+    } 
+    else 
+    {
+      //emergency stop non active
+      Stop();
+      emergency.data = true;
+    }
+
+    pub.publish(&emergency);
+  
+    nh.spinOnce();
+
+    delay(20);
 }

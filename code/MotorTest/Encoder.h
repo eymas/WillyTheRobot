@@ -1,50 +1,55 @@
-/* This class is intended to decode a quadruature encoder in order to get a speed value in rad/s
+/* This class is intended to decode a quadruature encoder in order to get a speed value in m/s
  * Revision 1
  * 1-3-2019
  */
 
 class Encoder {
   private:
+    
+    const float Pi = 3.14159265359;            
+    const float pulsesPerRotation = 1024;        
+    const float WheelRadius = 0.16;               
 
-    const float Pi = 3.14159265359;               //Pi
-    const float PulsesPerRotation = 1024;          //amount of pulses per rotation
-
+    //used to inverse result which is needed because one sensors is mounted mirrored
     bool Inverse = false;
 
+    //bool used for direction of rotation
     bool CCW = false;
+    
     bool SpeedRead = false;
     float counts = 0;
 
-    long int PulsTrainStartTime = 0;    //Time stamp of start point from current puls train
-    long int LastPulsTrainPeriod = 0;   //Period since Puls train has started
-    long int LastPulsTime = 0;          //Time stamp of last measered puls
+    long int pulseTrainStartTime = 0;    //Time stamp of start point from current pulse train
+    long int LastpulseTrainPeriod = 0;   //Period since pulse train has started
+    long int LastpulseTime = 0;          //Time stamp of last measered pulse
 
-    int PulseInputA;
-    int PulseInputB;
+    int pulseInputA;
+    int pulseInputB;
 
     float SpeedCalculation()
     {
       float Speed = 0;
-      Speed = LastPulsTrainPeriod;                      //period in microseconds
+      Speed = LastpulseTrainPeriod;                     //period in microseconds
       Speed = Speed / 1000000;                          //period in seconds
       Speed = 1 / Speed;                                //frequenty in hz
-      Speed = Speed / (PulsesPerRotation / counts);     //Rotations per second
-      Speed = Speed * 2 * Pi;                         //Radians per second
+      Speed = Speed / (pulsesPerRotation / counts);     //Rotations per second
+      Speed = Speed * 2 * Pi;                           //Radians per second
+      Speed = Speed * WheelRadius;                      //m/s
       return Speed;
     }
 
-    void PulsChange() {
+    void pulseChange() {
 
-      if (SpeedRead)                        //Speed has been read so the puls train can be reset
+      if (SpeedRead)                        //Speed has been read so the pulse train can be reset
       {
-        PulsTrainStartTime = LastPulsTime;  //Save the last puls time as it being the start of this new puls train
+        pulseTrainStartTime = LastpulseTime;  //Save the last pulse time as it being the start of this new pulse train
         counts = 0;                         //Reset the counts to zero
         SpeedRead = false;                  //Reset the SpeedRead flag
       }
 
       counts++;                                             //update the amount of pulses
-      LastPulsTrainPeriod = micros() - PulsTrainStartTime;  //calculate the puls train period = current time stamp - time stamp of the start of the puls train
-      LastPulsTime = micros();                              //update the last puls time in case it is needed when this is the last puls of the train
+      LastpulseTrainPeriod = micros() - pulseTrainStartTime;  //calculate the pulse train period = current time stamp - time stamp of the start of the pulse train
+      LastpulseTime = micros();                              //update the last pulse time in case it is needed when this is the last pulse of the train
     }
 
   public:
@@ -53,25 +58,25 @@ class Encoder {
     {
       Inverse = Invert;
       
-      PulseInputA = A;
-      PulseInputB = B;
+      pulseInputA = A;
+      pulseInputB = B;
 
-      pinMode(PulseInputA, INPUT);
-      pinMode(PulseInputB, INPUT);
+      pinMode(pulseInputA, INPUT);
+      pinMode(pulseInputB, INPUT);
     }
 
     float GetSpeed()
     {
       float Speed = 0;
 
-      if (SpeedRead)                        //There is no new puls received, thus estimate the speed.
+      if (SpeedRead)                        //There is no new pulse received, thus estimate the speed.
       {
         Speed = 0;
       }
-      else                                  //There is at least one new puls received, thus the speed can be calculated.
+      else                                  //There is at least one new pulse received, thus the speed can be calculated.
       {
         Speed = SpeedCalculation();
-        SpeedRead = true;                   //update this variable when the speed has been read so the puls train can be resetted.
+        SpeedRead = true;                   //update this variable when the speed has been read so the pulse train can be resetted.
       }
 
       if (CCW)
@@ -87,20 +92,16 @@ class Encoder {
       {
         Speed = 0;
       }
-      else
-      {
-        return Speed;
-      }
 
-      
+      return Speed;
     }
 
     //Determine the direction
     void AChange()
     {
-      PulsChange();
+      pulseChange();
 
-      if (digitalRead(PulseInputA) + digitalRead(PulseInputB) == 1)
+      if (digitalRead(pulseInputA) + digitalRead(pulseInputB) == 1)
       {
         CCW = false;
       }
@@ -113,9 +114,9 @@ class Encoder {
     //Determine the direction
     void BChange()
     {
-      PulsChange();
+      pulseChange();
 
-      if (digitalRead(PulseInputA) + digitalRead(PulseInputB) == 1)
+      if (digitalRead(pulseInputA) + digitalRead(pulseInputB) == 1)
       {
         CCW = true;
       }

@@ -1,0 +1,47 @@
+\section{Advice to the Product Owner}
+Naturally, aside from advice to the following groups, there is also some feedback to the product owner.
+
+\subsection{Future Technology}
+As a part of the future technology, it is expected that the technology is somewhat experimental.
+Unfortunately, the system used here is actually starting to become rather antiquated.
+The developers of ROS have already released working versions of its successor, ROS 2.
+Another issue is that ROS 1 currently runs on Ubuntu 16.0.4, while at the time of writing, Ubuntu has released version 19 already.
+It could be worth asking a following group that works on the project to attempt to update any possible sections to those newer versions, since support for the current systems is likely to be dropped.
+
+\subsection{Create a Clear Inventory of Capabilities}
+More than once the current group ran into a sticking point when discussing what the target for WTR would be as a project.
+The goal that was set at the start was rather nebulous,  "Improve WTR's driving capabilities".
+This did not present a clear goal, though it was later refined to a more well-defined goal.
+The issue with the new goal, which was communicated to the group halfway through the project, was that it did not line up with the capabilities of WTR.
+The goal to have WTR drive at a person when it detects one is unrealistic, since the way WTR deals with facial recognition is not usable in navigation.
+WTR does not track people, it merely detects whether a face is present or not.
+If it was to be used in a way where it could drive at a single person, and track them, it would need an extensive overhaul to the way the facial detection is performed, as well as needing a way to store all the unique faces of guests at events.
+It would then need to be able to cross-reference a detected face with its stored data, which would take more processing power than a Raspberry Pi, if it collected a lot of data.
+
+The summary of this advice would be to take a critical look at its functionality, and determine ahead of time what the goal would be so that it is possible for the group to work towards the same goal with a clear target in mind.
+In order to do this, create an inventory of current capabilities, such as driving to a pre-determined place, creating a new goal on the fly, or to track a human face in a better way than WTR currently does.
+
+\subsection{Social Interaction}
+As was mentioned in the introduction of this document [\ref{sec::intro}], the only real problem area left for WTR is social interaction.
+The 2019 Q1\&Q2 group did not investigate this much, as it laid outside of our project scope, but from the casual investigation into the related capabilities, it became obvious that there is still room for improvement.
+
+\subsection{Change The Name}
+In the Netherlands, Willy is not a very strange name, or at least it does not have any other meanings as far as this group is aware.
+Unfortunately, in English Willy has some different connotations, since it can be used to refer to male genitalia.
+\textit{Giving someone a Wet Willy} is another less reputable concept that Willy could be related to, which involves sticking a wet finger in someone's ear.
+As such, changing the name to \textit{Winnie} would prevent such connotations from being related to WTR.
+
+\subsubsection{Boxes and Cupboards}
+While testing WTR, on startup it also launches its webcam and facial recognition software.
+It was greatly amusing to the group to find out what WTR considers a face.
+Among those options are:
+\begin{itemize}
+\item Cardboard boxes
+\item Whiteboards
+\item The racks for the first KBS [\ref{trm::kbs}] (the ASRS [\ref{trm::asrs}] system)
+\item empty space
+\item windows
+\item chairs
+\end{itemize}
+Facial recognition is of course a very complicated section of programming, as properly tracking several hundreds of faces is something the entire government of China has only recently achieved.
+

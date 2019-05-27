@@ -1,0 +1,74 @@
+\section{Hardware}
+The physical aspect of WTR has massively improved through the use of 3-D printing.
+Previously, WTR consisted of a metal frame with wooden planks supporting the laptop and 4 Raspberry Pi's.
+This has since been changed to increase the ease of access to every part of WTR.
+There are still some parts which need to be updated, however.
+
+\subsection{Batteries}
+This group has removed two of the car batteries after an unfortunate incident in which a small part of WTR caught on fire.
+The removal has improved safety, as it also forced the group to completely re-work the electrical set-up, reducing the amount of batteries from 6 to 4, but also covering all the poles, adding a lid that blocks access to the batteries unless opened, and making sure all the fuses are limited to $5A$, rather than $30A$ or $15A$.
+An main power switch has also been installed to ensure the ability to instantly cut all power from the circuit.
+As such, most concerns about the safety have been addressed as the batteries can no longer shift.
+
+The removal of the 2 batteries does mean that the operational range has been reduced.
+Should this prove a problem, it could be worth re-installing the batteries.
+They were put inside of the frame for WTR found in the innovation lab in T5.
+
+\subsection{Motor Controller}
+The motor controller is located in a black box, in the middle of WTR between several batteries.
+While the accessibility has been improved by removing the wooden frame that previously held the laptop and replacing that with a single plank that slots over the frame, it is still not easy to change parts or functionality of the device.
+It could be useful, if regular changes are needed, to find a way to move it to a new position, or change the box to not require tape to remain closed.
+
+\subsubsection{Rotary Encoders}
+At the time of writing, there is no implemented method of checking whether or not the rotary encoders are still connected.
+The risk that comes with this is that the feedback loop model would cause the system to continuously increase the force it outputs until it receives the desired signal.
+If the encoders are disconnected, that signal never comes.
+This would cause WTR to drive forward at maximum speed the moment it is told to start moving by RVIZ, or the controller.
+While the maximum speed is still limited, it will keep attempting to reach it in every motion it makes, especially during turns.
+It would be good to implement a method to check for a connection, so that WTR stops when it loses connection to the encoders.
+
+\subsection{TV Screen}
+The current TV screen is already a low power model.
+However, its current size serves no practical purpose.
+Granted, the current group did not have to work with any social interaction, but even if it had been necessary, this screen would be considered overkill.
+The next group should consider changing to a smaller screen, if only for testing purposes.
+The size of the screen causes it to drain the battery quicker, so a small screen would allow for more rigorous testing.
+
+The 2018 Q3\&Q4 group recommended a touch screen, and this group supports that decision.
+A smaller touch screen allows for a longer battery life, while simultaneously increasing the options for interacting with WTR.
+
+\subsection{Laptop}
+The laptop currently runs on its own battery, which is \textit{theoretically} fine.
+It is capable of running RVIZ, and communicating with all the nodes.
+The downside of it running on a separate battery is that it does drain rather quickly.
+A simple trip from the innovation lab on T5 to the printer located on the other side of the bridge between the two sides of the building can drain the battery by as much as 50 percent, which is not desirable.
+
+
+
+A solution that could be considered would be to directly connect the charger to the power lines of the appropriate voltage, which are already present.
+This would allow the laptop to operate from the car batteries like the rest of WTR.
+The reason this has not been done already is because the group currently only has one charger for the laptop, so if this broke any further testing would have to wait until a new one could be ordered.
+By attaching the charging port of the laptop to the batteries, it would be permanently charging.
+It is currently unknown whether or not the direct attachment solution could provide enough amps to ensure that the laptop would either remain at full battery, or whether it would merely slow the draining process, but either outcome would be an improvement to the current battery consumption.
+
+Doing so would involve taking the cable from the laptop charger which connects to the charging port of the laptop to the output of the transformer.
+After separating the cable from the transformer, the split parts of the wire could be attached to the appropriate output of the voltage transformer found at the back of WTR.
+The appropriate voltage is found on the label of the transformer, which is 19 volts.
+
+Another solution would be to splice the power cable for the TV, which also runs at $19V$.
+
+
+\subsection{IMU}
+The IMU [\ref{trm::imu}] is located on top of the screen, as magnetic interference caused by the electrical motors and the steel frame would otherwise prevent the magnetometer from operating properly.
+It has been clipped there using a 3-D printed box, but during the design of that a few dimensions of the TV screen were forgotten, causing the IMU to be slightly misaligned.
+While this does not cause any major issues, the slightly inaccuracy in the design prevents the IMU from being as snugly fitted to the screen, allowing it to shake around a bit.
+A more tightly designed container would help increase the stability of the readings.
+
+
+\subsection{Sonar Sensors}
+The current sensors, HC-SR04, have a very narrow viewing angle.
+This limits their effectiveness, since they are likely to miss a table leg or other narrow obstacle.
+While they are mostly meant for detecting glass walls, they are also used when reversing, since the LIDAR only has a 260\textdegree viewing angle.
+Switching to a parking sensor would allow for more accurate detection of obstacles while reversing, without needing a second LIDAR.
+
+\newpage

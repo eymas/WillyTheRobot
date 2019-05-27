@@ -1,0 +1,161 @@
+\section{Reflections}
+
+\subsection{Jeroen van 't Hul}
+
+\subsubsection{Introduction}
+As being a mechatronics student from Saxion following the Minor Future Technology I tried to apply my knowledge of mechatronics into our project, and share it with my team members. 
+My role in the project group is being the project leader, this mainly includes keeping in contact with various stakeholders and other members of Future Technology. 
+As for the project itself the role was less visible as my team members kept initiative very well. 
+In this reflection I will discuss the results I've achieved and make a conclusion afterwards.
+
+
+\subsubsection{Results}
+Throughout the project I've worked on various beneficial parts. 
+
+Mechanically I've improved the wheel mounting/suspension of the robot, designed and realised various mountings for sonar sensors, the lidar sensor, rotary encoders, IMU and Arduino's. My design knowledge also inspired Thomas to learn 3D modelling and 3D printing.
+
+Electrically I designed a wire harness for the rotary encoders and for the sonar sensors. 
+The harness is compact and provided with connectors which is a huge improvement over the previous sonar setup.
+
+On the programming side, the motor controller code is drastically changed to read out rotary encoders, include two PID loops and one controller. 
+In order to check the control loop and tune the PID parameters I designed a viewer with charts, which also turned out to be very useful in understanding the drive and turn messages from ROS, and tuning accordingly.
+For the 9 axis IMU I also designed a 3D viewer to get a better understanding on the output of the sensors.
+The code for the sonar sensors on the Arduino and the Pi was drastically changed. Now RVIZ shows the sonar data individually on the map.
+I also spent a lot of time in tuning parameters for the AMCL. This unfortunately did not gave the appropriate results. 
+
+Documentation was written and updated on various parts. 
+I updated the wiki on the parts I've worked on. 
+New parts were written in analysis-improvements, tech design and hardware design on the parts I've worked on. 
+I tried to support the text by means of self-explanatory flow charts, tables and wiring diagrams, which can be a great way in understanding more complex parts of WTR. 
+
+\subsubsection{Conclusion}
+Being a multidisciplined project I've learned a lot during this project, also from my other team members.
+From them I got a basic understanding of GitHub, learned to document with \LaTeX, got insight into ROS and Linux. 
+Personal 3D printing and CAD drawing skills have improved. 
+I also had to heavily apply knowledge from control engineering to be able to get the robot to drive smoothly with the control loop.
+
+On the other hand I failed to fix the drift issue in the AMCL on which I spent too much time, this was a bit demotivating and this motivation reflects on the team. This is something to look out for personally. 
+Also the task dividing was very specific, it will help to get faster to good and complex solutions but it prevents us from being able to take over all possible tasks from each other. 
+For example it would be better if I had spend more time in understanding ROS and RVIZ to be able to contribute on that part. 
+Now this part was solely handled by Tom.
+
+\newpage
+
+\subsection{Tom van den Noort}
+At first, I was excited to start on this project considering the mixture between hardware and software. 
+This excitement had dwindled after our first in-depth examination of WTR. 
+A lot of improvements needed to be done and as such; we were slightly worried if we could achieve most of these, but we've exceeded our expectations.
+Integrating, improving, swapping new software plugins into ROS. We've gone through a few options to discover how simple our additions were, but we were met with challenges throughout.
+
+\subsubsection{What went well?}
+The start had not been the greatest, with the existing documentation having some incomplete parts, we learned how to start up some software plugins i.e. RViz, but how do you actually use and configure them?
+Despite this, I've personally had no difficulty with absorbing the required information from the ROS wiki and other manuals to know the ins and outs of ROS itself. 
+A notable achievement had been my investigation into the local planner; that would design paths for the robot to follow.
+I've found that the one in the start of the project would just plan \textit{one} path and no other, which meant that if that path were to be blocked; the robot wouldn't know how to get past it, and spin in place, hoping the obstacle would be gone.
+On the wiki page of this local planner I had found references to other planners, and after asking myself: ``What if I used one of those alternatives?'' I've looked at how to implement one of those, and I was surprised at how simple the swap was. 
+More importantly; I was amazed by the great improvement of the new Timed Elastic Band Local Planner: It would dynamically recalculate the fastest path if an obstacle was thrown in front of it!
+
+\subsubsection{What didn't go well?}
+There was a downside to fiddling around with the software plugins and configuration files.
+I did keep track of either what values I would change nor the original state of those, meaning that if the plugin were to behave erratically or cease function all together; I had nothing to turn back to if it worked well before my meddling. 
+Although we did recover from such situations whenever they occurred, I did wish I would have made a back-up of the files in question before changing them.
+Even if that will imply that there'd be an incremental back up every few minutes.
+Similarly, whenever there would be an issue we cannot resolve by ourselves, we lost the motivation to continue and wound up procrastinating. 
+This happened with the (re)integration of the IMU sensor. 
+We had already loathed the time wasted upon compiling the code and to discover that it would still function incorrectly made the stockpile even bigger, to the point we opted to take a break.
+In the end, it took us around four or more weeks to get the IMU to function and integrated within ROS.
+
+\subsubsection{What Have I learned?}
+It was a delight to work with students from other directions than Software Engineering or Business IT \& Management. 
+The knowledge we've shared had certainly helped us along the way with this project, including the usage of tools as \LaTeX, which Thomas has explained very well. 
+Jeroen shared his mechanical designs and knowledge, notably of 3D printing and sensor diagnostics and was more than excited to do so.
+The three of us joined forces in the project and have learned much about algorithms, maths, C++, Python and the publisher/subscriber model which ROS is based off of.
+I myself have gotten interested in this model and might apply it in future projects.
+3D Printing is exciting, with plenty of possibilities, if it so happens that I would get involved with a project for Internet of Things devices, the skills I've been taught would be of great help.
+In terms of documentation, \LaTeX would save considerable time generating neatly designed reports without the instability of Microsoft Word templates.
+
+
+\newpage
+
+\subsection{Thomas Zwaanswijk}
+This project has been a mixed bag, in my honest opinion.
+Some parts went very well, such as integrating new data into ROS, or the accidental discoveries that made the project what it is today.
+Naturally, it wouldn't be a mixed bag if there were only positives, so to provide the counterpoint the IMU had to be very difficult to get right.
+I did end up learning a lot from this project, ranging from picking up where others left off, to complex mathematics I would never have thought I would use.
+
+\subsubsection{What Went Well?}
+Personally, I'm very happy with how the appearance of Willy has been improved.
+It went from being a jumble of cables leading to hard-to-access Raspberry Pi's to something that resembles a decently organized machine.
+Obviously, there is still room for improvement, but the simpler setup WTR has now really does allow for easier maintenance and upgrades.
+Removing the very wasteful massive cables has been great to do, as well as placing every device in an accessible location to allow easy maintenance.
+
+Another great point is that the 3D-printing adds to the concept of future technology very neatly.
+A lot of the improvement in the visual aspect of WTR comes from the fact that the previous layers of tape have been replaced by neat boxes containing all the sensors and components of WTR.
+I'm very happy with how some of those turned out, as at the beginning of WTR I did not have a lot of experience with 3D-modelling in Solidworks, but I learned a lot of neat new tricks throughout this project.
+
+\subsubsection{What Went Less Well?}
+But to the good must eventually come the bad, and in my case this is the IMU.
+I must have spent at least a week trying to understand the mathematical principles behind quaternions, though that did pay off in the end.
+Updating the code to work with the new MPU9250 was a nightmare.
+Having to work on code made by people who think \code{TeaPotPacket[]} is a descriptive variable name is a painful process, to say the least.
+Adding to this were the complexities that showed up when attempting to transmit floats on a serial communication system, which can only handle 8-bit integers.
+Eventually I got through it all, but I did waste a lot of time, which is my biggest regret of the project.
+
+I also ended up procrastinating a fair bit when code wouldn't work or I ran into issues I couldn't solve.
+Personally, I find it very demoralizing to have worked on some code for several hours only to find it's essentially useless because a minor technicality prevents it from working.
+I suppose this is also why it took me so long to get the IMU working.
+I have a bad habit of putting off the hard tasks until last, so I can at least have the feeling of having done something by finishing up some easy tasks.
+I did suppress this habit later on in the project, because I started feeling the pressure of the time limit approaching and I didn't have any choice but to get things done.
+
+\subsubsection{Multi-Discipline Work}
+It was also nice to work in a multi-disciplinary team, despite it also producing some unique challenges.
+I had to push quite a lot to get the group to adopt the use of \LaTeX, but in the end I'm very glad that I did since it makes keeping documentation up to date a lot easier.
+It was also nice to learn about some new ways of dealing with data from Jeroen, such as moving averages and feedback loops.
+Having never worked with these before, I ended up learning a fair bit about how to implement those systems and what benefits they offer.
+Another nice part of working in this team was that everybody had something to contribute.
+Tom was great at working with ROS, RVIZ and Linux, which probably would have taken me half the project to get to grips with.
+Jeroen, as I mentioned earlier, was great at working with the mechanical aspects, and his 3D-designs skills are top notch, which ended up teaching me a lot.
+The downside of this would be that I ended up learning less about the new systems than I would have if I had to work on them myself.
+But then again, if I'd had to do all this by myself, I would not even have gotten a third of the work done, so I'm quite happy with the end result.
+
+\newpage
+
+\subsection{Group Reflection}
+As a group, we are pleased by the product we have created.
+WTR is now capable of much more refined movement than it was capable of at the start of the project.
+We have yet to test it in a situation like would be present at Winnovation, but the testing done on T5 has already shown that the current WTR is capable of avoiding humans and obstacles that were not present during the initial planning phase.
+
+That is not to say that this project was without any strife.
+There were periods of lacking motivation, such as when the IMU would not work or the map kept drifting away from reality.
+This was a trap we fell into more than once, which just goes to show how de-motivating parts of this project were.
+
+On the other hand, the feeling of finally getting parts working together and slowly seeing WTR turn from a large mess of cables on wheels that crashed after driving 15cm into something that we can almost be proud of that drives autonomously is a very rewarding indeed.
+At the end of the project when testing its navigation, we did not even feel the need to continually stand next to it hovering our hand over the emergency stop, as we did in the beginning.
+We'd just sit at our desks and watch as Tom set goals through a VNC/Remote desktop solution.
+
+There were a variety of tools used to achieve the product, such as:
+\begin{itemize}
+\item Github - Version Control
+\item Catkin - Compilation of code on the Raspberry Pi's
+\item C++ - although we did not use a standard IDE within the group, we all ended up programming a fair bit in C++ in order to work with received data on the Pi, or in order to control the Arduinos
+\item Python - Many scripts were written in Python as the simplicity of them did not necessitate delicate control over data-types or such
+\item ROS - The backbone of the product, which supports and links all of the existing parts together
+\item SOLIDWORKS - a 3D-modelling tool, licenses provided by Windesheim if necessary for study
+\end{itemize}
+Not all of these tools were exactly appreciated, such as ROS, which while useful as a standardized tool, also has some really obfuscated documentation at times.
+Another issue with ROS was that we misunderstood the way it worked at the beginning, which caused us to waste a week or so investigating the wrong things, such as believing code to be in places it wasn't.
+
+Catkin caused quite a headache at times as well.
+The raspberry Pi does not have a lot of RAM \ref{trm::RAM}, so compiling on just that system is a challenge, especially since Catkin also performs a lot of additional tasks, such as tracking dependencies and building files.
+This had us stumped for a few days, since we couldn't get our heads around cross-compiling.
+Eventually, we ended up making a swap-drive, which allowed the raspberry pi to use that as RAM and compile nonetheless.
+
+On the whole, however, this was a valuable learning experience.
+Having to pick up the project from other students was a great learning experience, showing just how important proper documentation is and how much value that can add to other contributors to a project.
+This is something that has to be learned from experience, rather than being taught in a lesson.
+
+We're all quite happy with how tasks were divided, but it would have been good to involve each other slightly more in some of the more crucial bits of each separate part.
+As it stands, none of us could explain every part of the project to a complete outsider.
+This is something we ran into because we all focused on our specialised parts, which means that they got done quicker, but it did limit the spread of information a bit.
+
+\newpage

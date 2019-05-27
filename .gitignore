@@ -20,7 +20,7 @@
 *.docx
 *.doc
 *.tex.bak
-<<<<<<< HEAD
+
 *.xml
 *.d
 *.txt
@@ -34,3 +34,22 @@
 *.txt
 *.xml
 
+documentation/analysis-improvements/images/Thumbs.db
+documentation/movement-research/images/Thumbs.db
+documentation/self-reflection/images/Thumbs.db
+documentation/tech-design/MPU9250 mag bias.txt
+*.xml
+*.d
+*.txt
+*.iml
+*.a
+*.hex
+*.eep
+*.cbp
+*.check_cache
+*.bin
+*.db
+*.suo
+*.json
+*.sqlite
+*.docx

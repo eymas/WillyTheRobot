@@ -9,46 +9,30 @@ class ControlLoop {
 
   private:
   
-    float Diff_Factor = 0;
-    float Error_R = 0;
-    float Error_L = 0;
-
     //include PID's for both inputs/outputs.
     PIDCalculation DriveController;
     PIDCalculation TurnController;
 
-    //Calculate the drive error.
-    Drive(float Error_Right, float Error_Left)
-    {
-      //Calculate error
-      float Drive_Error;
-      Drive_Error = 0.5 * (Error_Left + Error_Right);
-      Drive_Output = DriveController.Get(Drive_Error);
-    }
-
-    //Calculate the turn error.
-    Turn(float Error_Right, float Error_Left)
-    {
-      //Calculate error
-      float Turn_Error;
-      Turn_Error = 0.5 * (Error_Left - Error_Right);
-      Turn_Output = TurnController.Get(Turn_Error);
-    }
-    
   public: 
 
+    //SPEED
+    float Turn_Speed;   //unit:  [rad/s]
+    float Drive_Speed;  //unit:  [m/s]
+  
+    //ERROR
+    float Turn_Error = 0;  //unit:  [rad/s]
+    float Drive_Error = 0; //unit:  [m/s]
+    
     //OUTPUTS
-    float Turn_Output = 0;  
+    float Turn_Output = 0; 
     float Drive_Output = 0;  
 
     //CONSTRUCTOR
-    ControlLoop::ControlLoop(float Kpt, float Kit, float Kdt, float Kpd, float Kid, float Kdd, float Diff)
+    ControlLoop::ControlLoop(float Kpt, float Kit, float Kdt, float Kpd, float Kid, float Kdd)
     {
       //initialize both controllers
       DriveController.Initialize(Kpd,Kid,Kdd);
       TurnController.Initialize(Kpt,Kit,Kdt);
-      
-      Diff_Factor = Diff;
     }
 
     //Function sets reference, calculates error, then activate the calculation of outputs by the turn and drive functions.
@@ -59,11 +43,19 @@ class ControlLoop {
         DriveController.Reset();
         TurnController.Reset();
       }
-      
-      float Error_Left = Turn_Input * Diff_Factor + Drive_Input - Speed_Sensor_L;
-      float Error_Right = -Turn_Input * Diff_Factor + Drive_Input - Speed_Sensor_R;
 
-      Drive(Error_Left,Error_Right);
-      Turn(Error_Left,Error_Right);
+      //calculate speed at which the robot is rotating, unit:  [rad/s]. 0.6 is the distance between the wheels in meters.
+      Turn_Speed = (Speed_Sensor_R - Speed_Sensor_L)/0.6; 
+
+      //calculate the speed at which the robot is moving, unit:  [m/s]. 0.5 is used to provide an average between both wheels.
+      Drive_Speed = (Speed_Sensor_R + Speed_Sensor_L)*0.5; 
+
+      //calculate errors.
+      Turn_Error = Turn_Input - Turn_Speed;
+      Drive_Error = Drive_Input - Drive_Speed;
+
+      //errors are send to both controllers to get an output signal.
+      Turn_Output = TurnController.Get(Turn_Error);
+      Drive_Output = DriveController.Get(Drive_Error);
     }
 };

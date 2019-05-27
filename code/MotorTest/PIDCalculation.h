@@ -24,9 +24,6 @@ class PIDCalculation {
 
     float Get(float Error)
     {
-      float Output = Error * K_P;
-      return Output;
-      /*
       //Calculate Output with PID in velocity form.
       float Output = 0;
       Output = Output_1 + K_P * (Error - Error_1);
@@ -37,9 +34,18 @@ class PIDCalculation {
       Output_1 = Output;
       Error_2 = Error_1;
       Error_1 = Error;
-            
+
+      //limit output to max 100 and min -100
+      if (Output > 100)
+      {
+        Output = 100;
+      }
+      if (Output < -100)
+      {
+        Output = -100;
+      }
+
       return Output;
-      */
     }
 
     void Reset()
