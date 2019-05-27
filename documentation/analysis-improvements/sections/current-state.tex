@@ -29,12 +29,12 @@ This map can then be manually edited to seal off certain areas where WTR should 
 After this, WTR can be calibrated to start in a certain position, and then be set to drive autonomously to a chosen goal in the predesignated area.
 
 One note that should be considered is that the local planner has been changed from what might be stated in other documentation.
-As of 28/02/2019, the planner used has been changed from \code{base\_ local\_ planner} to \code{teb\_ local \_ planner}, which offers more options when it comes to robot shapes, sizes and methods of steering.
+As of 28/02/2019, the planner used has been changed from \code{base\_local\_planner} to \code{teb\_local\_planner}, which offers more options when it comes to robot shapes, sizes and methods of steering.
 These approximate WTR's situation more closely, and as such the change has been made.
 In the current iteration, WTR can drive relatively smoothly, although it does still experience some small issues in terms of movement speed, which the \code{teb} planner judges on the lower side, so it at times lacks the power to move forward.
 
 \subsubsection{Executing Instructions}
-Another issue with the autonomous driving is that the ROS move\_ base uses default recovery/emergency behaviours [\ref{trm::recpat}].
+Another issue with the autonomous driving is that the ROS move\_base uses default recovery/emergency behaviours [\ref{trm::recpat}].
 These are based on robots which can move in a different manner from WTR.
 Most of them assume that the robot can rotate along a center axis which is located in the exact center of the robot, meaning that when it turns in a circle, no parts stick out in any direction more than the default state.
 WTR turns around on an axis located in between the two front wheels, meaning the rear sticks out further than expected, causing unwanted collisions.

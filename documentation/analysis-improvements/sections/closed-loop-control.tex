@@ -39,6 +39,7 @@ These two variables are \code{drive} output and \code{turn} output, both limited
 These input are sent directly from the Arduino Mega, which applied the limits to the received values.
 An overview can be found in table~\ref{tab::varoverview}
 \begin{figure}[H]
+\centering
 \begin{tabular}{|l|l|c|c|l|l|}
 \hline
 \textbf{Nr.} & \textbf{Variable(s)} & \textbf{Left(+)} & \textbf{Right(-)} & \textbf{Min} & \textbf{Max} \\ \hline
@@ -84,12 +85,12 @@ The chosen controller $(C(s))$ is discussed here \ref{sec::controller}
 2			    & Drive\_Input 				& - 											             & [m/s] 		    \\ \hline
 3			    & Speed\_Sensor\_Right 		& $ Rad/s \cdot Wheel Radius $ 					         & [m/s] 		\\ \hline
 4			    & Speed\_Sensor\_Left 		& $ Rad/s \cdot Wheel Radius $ 					         & [m/s] 		\\ \hline
-5			    & Turn\_Speed				& $ (Speed\_ Sensor\_ Right - Speed\_ Sensor\_ Left)/0.6) $	 & [Rad/s]		\\ \hline
-6			    & Drive\_Speed				& $ (Speed\_ Sensor\_ Right + Speed\_ Sensor\_ Left)/0.5) $ & [m/s]		    \\ \hline
-5			    & Turn\_Error				& $ Turn\_ Input - Turn\_ Speed $						     & [Rad/s]		\\ \hline
-6			    & Drive\_Error				& $ Drive\_ Input - Drive\_ Speed $ 					     & [m/s]		    \\ \hline
-7			    & Turn\_Output  				& $ Turn\_ Error \cdot Ct(s) $ 							 & - 			\\ \hline
-8			    & Drive\_Output 				& $ Drive\_ Error \cdot Cd(s) $							 & - 			\\ \hline
+5			    & Turn\_Speed				& $ (Speed\_Sensor\_Right - Speed\_Sensor\_Left)/0.6) $	 & [Rad/s]		\\ \hline
+6			    & Drive\_Speed				& $ (Speed\_Sensor\_Right + Speed\_Sensor\_Left)/0.5) $ & [m/s]		    \\ \hline
+5			    & Turn\_Error				& $ Turn\_Input - Turn\_Speed $						     & [Rad/s]		\\ \hline
+6			    & Drive\_Error				& $ Drive\_Input - Drive\_Speed $ 					     & [m/s]		    \\ \hline
+7			    & Turn\_Output  				& $ Turn\_Error \cdot Ct(s) $ 							 & - 			\\ \hline
+8			    & Drive\_Output 				& $ Drive\_Error \cdot Cd(s) $							 & - 			\\ \hline
 
 \end{tabular}
 \caption{Overview of input and outputs in the closed loop system}
@@ -101,7 +102,7 @@ The chosen controller $(C(s))$ is discussed here \ref{sec::controller}
 \subsection{Controller}
 \label{sec::controller}
 The speed will be controlled by a PID-controller [\ref{trm::PIcontroller}], as shown in figure \ref{fig::picontrol}.
-The initial gain will be controlled by the proportional factor $K\_ p$ and the long term error by the integrating action$K\_ i$. The $K\_ i$ action has to be limited in order to prevent integral wind-up, and the $K\_ p$ action has to be chosen so that it will not introduce too much overshoot and very little oscillation.
+The initial gain will be controlled by the proportional factor $K\_p$ and the long term error by the integrating action $K\_i$. The $K\_i$ action has to be limited in order to prevent integral wind-up, and the $K\_p$ action has to be chosen so that it will not introduce too much overshoot and very little oscillation.
 
 \begin{figure}[H]
 \centering
