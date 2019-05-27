@@ -44,9 +44,9 @@ This allows a program to determine the direction in which the shaft is rotating,
 Interrupts are generated for both the rising and falling edge, which increases the resolution to 1024 pulses per revolution.
 The speed is determined using code based on the structure which can be found in the the two flowcharts below, \ref{fig::PCF} and \ref{fig::SRC}.
 \\
-The interrupts will trigger the direction determination function and a speed determination function.
+The interrupts will trigger a direction determination function and a speed determination function.
 The direction is determined using the logic which can be seen at the left side of figure \ref{fig::PCF}.
-The speed is determined by using timers which return the period of the puls, this is converterd to frequency, rad/s and at the end the speed in m/s.
+The speed is determined by using timers which return the period of the pulse, this is converterd to frequency, rad/s and at the end the speed in m/s.
 This logic can be found in figure \ref{fig::PCF}.
 \\
 When the main program wants to know the speed, it will call a speed read function which will then calculate the speed accordingly. Using a read frequency higher then the frequency of the pulses the function will return 0.
@@ -72,7 +72,7 @@ The control loop receives an input for both turn and drive.
 Based on the wheel speed received from the encoder class, the turn and drive speed of the robot are calculated. 
 Using the inputs and the actual data the turn and drive error are calculated.
 The errors are then being send to the turn and drive controllers.
-A detailed description of these calculations can be found in movement research. 
+A detailed description of these calculations can be found in the analysis and improvements document. 
 The flow of the control loop class can be found in figure \ref{fig::CLF}.
 
 \begin{figure}[H]
@@ -82,3 +82,4 @@ The flow of the control loop class can be found in figure \ref{fig::CLF}.
 \label{fig::CLF}
 \end{figure}
 
+\newpage
