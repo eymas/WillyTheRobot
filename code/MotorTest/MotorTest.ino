@@ -93,10 +93,8 @@ void setup() {
   
   //Serial communication to motorcontroller
   Serial1.begin(19200, SERIAL_8E1);
-
   //Serial communication to external laptop for testing and tuning purposes
   Serial2.begin(9600);
-  
   //Set up interrupts for encoders
   pinMode(LeftPulseInputA, INPUT);
   pinMode(LeftPulseInputB, INPUT);
