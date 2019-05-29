@@ -1,0 +1,7 @@
+<launch>
+	<node name="master_discovery" pkg="master_discovery_fkie" type="master_discovery" args="_mcast_group:=224.0.0.1" />
+	<node name="master_sync" pkg="master_sync_fkie" type="master_sync" />
+
+	<node name="IMU" pkg="mpu6050_serial_to_imu" type="mpu6050_serial_to_imu_node" />
+	<node name="sonar" pkg="sonar" type="start_sonar.sh" />
+</launch>
