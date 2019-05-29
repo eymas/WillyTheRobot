@@ -59,7 +59,7 @@ class processManager():
 		print(type(jp_pid))
 		self.kill_proc_tree(jp_pid)
 
-	def kill_proc_tree(self, pid, including_parent=True):    
+	def kill_proc_tree(pid, including_parent=True):    
 		parent = psutil.Process(pid)
 		children = parent.children(recursive=True)
 		for child in children:
