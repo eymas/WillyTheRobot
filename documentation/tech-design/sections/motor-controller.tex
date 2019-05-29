@@ -1,9 +1,9 @@
 \section{Motor controller}
 
 \subsection{Integration of closed loop}
-In order to improve the driveability of Willy the robot a closed loop controller has to be integrated inside the motor controller. 
-This implies adding code to read out two quadrature rotary encoders, adding a the controller itself and combine it in the model of control.
-The model of control is explained in movement research 3.5, this section will describe how the code itself is designed.
+In order to improve the driving capability of WTR, a closed loop controller has to be integrated in the motor controller. 
+This means adding code to integrate two quadrature rotary encoders, adding the controller itself and combining it in a control model.
+The control model is explained in the analysis of the current situation section 3.5.
 
 The architecture of the software in the arduino Mega motor controller can be seen in figure \ref{fig::Motorconarc}.
 
@@ -15,38 +15,47 @@ The architecture of the software in the arduino Mega motor controller can be see
 \end{figure}
 
 \subsection{Arduino Mega Code}
-The main program combines the classes together. It will also send the commands to the actual motor controller via serial bus. The commands send to the motor are refreshed at a higher frequency than the control loop is called. The flow of the main program can be found in figure \ref{fig::MPF}.
+The main program combines sends the commands to the actual motor controller via serial bus. 
+While one part of the motor controller has been made by the group, a secondary part is a pre-existing part of the original wheelchair WTR is based on.
+This is considered a black box, which simply turns the brakes on and off in accordance with the commands sent from the Arduino Mega 2560.
+The commands sent to the motor are refreshed at a higher frequency than the control loop is called. %why?
+The flow of the main program can be found in figure \ref{fig::MPF}.
 
 \begin{figure}[H]
 \centering
 \includegraphics[width=12 cm]{MainProgramFlow.png}
-\caption{Main program flow.}
+\caption{Main program flow}
 \label{fig::MPF}
 \end{figure}
 
 
 \subsection{Rotary encoders}
-The rotary encoders are of the quadrature type with 256 PPR. 
-Quadruature encoders are equiped with two channels from which one is phase shifted 90 degrees over the other, see figure \ref{fig::QuadEnc}.
-This allows to determine the direction in which the shaft is rotating and to increase resolution.
+The rotary encoders are of the quadrature \ref{trm::quad} type with 256 PPR.
+Quadrature encoders are equipped with two channels from which one is phase shifted 90 degrees compared to the second, see figure \ref{fig::QuadEnc}.
+This allows a program to determine the direction in which the shaft is rotating, as well as the speed; with an increasing resolution 4 times the PPR \ref{trm::PPR}.
 
 \begin{figure}[H]
 \centering
 \includegraphics[width=12 cm]{QuadruatureEncoderOutput.png}
-\caption{Output from quardature encoder.}
+\caption{Output from quadrature encoder}
 \label{fig::QuadEnc}
 \end{figure}
 
-
-Interrupts are generated for the rising egde an for the falling egde on the puls train per channel and therefore increase the resolution to 1024 per revolution. 
-The speed is determined using the analogy which can be found in the the two flowcharts below. The interrupts will trigger the direction determination and call an puls change function which stores timestamps and calculation of periods. This can be found in figure \ref{fig::PCF}.
-
-When the main program wants to now the speed, it will call a speed read function which will then calculate the speed accordingly. This can be found in figure \ref{fig::SRC}.
+Interrupts are generated for both the rising and falling edge, which increases the resolution to 1024 pulses per revolution.
+The speed is determined using code based on the structure which can be found in the the two flowcharts below, \ref{fig::PCF} and \ref{fig::SRC}.
+\\
+The interrupts will trigger a direction determination function and a speed determination function.
+The direction is determined using the logic which can be seen at the left side of figure \ref{fig::PCF}.
+The speed is determined by using timers which return the period of the pulse, this is converterd to frequency, rad/s and at the end the speed in m/s.
+This logic can be found in figure \ref{fig::PCF}.
+\\
+When the main program wants to know the speed, it will call a speed read function which will then calculate the speed accordingly. Using a read frequency higher then the frequency of the pulses the function will return 0.
+This read function can be found in figure \ref{fig::SRC}.
 
 \begin{figure}[H]
 \centering
 \includegraphics[width=16 cm]{Speed_determinator-Page-1.png}
-\caption{Puls change interrupt flow.}
+\caption{Pulse change interrupt flow}
 \label{fig::PCF}
 \end{figure}
 
@@ -54,20 +63,23 @@ When the main program wants to now the speed, it will call a speed read function
 \begin{figure}[H]
 \centering
 \includegraphics[width=6 cm]{Speed_determinator-Page-2.png}
-\caption{Speed read call.}
+\caption{Speed read call}
 \label{fig::SRC}
 \end{figure}
 
 \subsection{Control loop}
-The control loop calculates the speed error per wheel based on feedback of the encoders and a reference turn and drive input. 
-This error is send to the PIDCalculation which returns a turn and drive output. 
-A detailed description of these calculations can be found in movement research. 
-The flow of this class can be found in figure \ref{fig::CLF}.
+The control loop receives an input for both turn and drive. 
+Based on the wheel speed received from the encoder class, the turn and drive speed of the robot are calculated. 
+Using the inputs and the actual data the turn and drive error are calculated.
+The errors are then being send to the turn and drive controllers.
+A detailed description of these calculations can be found in the analysis and improvements document. 
+The flow of the control loop class can be found in figure \ref{fig::CLF}.
 
 \begin{figure}[H]
 \centering
 \includegraphics[width=6 cm]{ControlLoop.png}
-\caption{Control loop flow.}
+\caption{Control loop flow}
 \label{fig::CLF}
 \end{figure}
 
+\newpage

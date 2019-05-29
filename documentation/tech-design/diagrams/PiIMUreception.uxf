@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <diagram program="umlet" version="14.3.0">
-  <zoom_level>4</zoom_level>
+  <zoom_level>7</zoom_level>
   <element>
     <id>UMLInterface</id>
     <coordinates>
-      <x>408</x>
-      <y>16</y>
-      <w>24</w>
-      <h>28</h>
+      <x>287</x>
+      <y>7</y>
+      <w>42</w>
+      <h>49</h>
     </coordinates>
     <panel_attributes>Start</panel_attributes>
     <additional_attributes/>
@@ -15,10 +15,10 @@
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>444</x>
-      <y>20</y>
-      <w>68</w>
-      <h>20</h>
+      <x>350</x>
+      <y>14</y>
+      <w>119</w>
+      <h>35</h>
     </coordinates>
     <panel_attributes>Initialize ROS
 messages</panel_attributes>
@@ -27,10 +27,10 @@ messages</panel_attributes>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>444</x>
-      <y>56</y>
-      <w>68</w>
-      <h>20</h>
+      <x>350</x>
+      <y>77</y>
+      <w>119</w>
+      <h>35</h>
     </coordinates>
     <panel_attributes>Set covariances as
 unknown (0)</panel_attributes>
@@ -39,10 +39,10 @@ unknown (0)</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>432</x>
-      <y>140</y>
-      <w>44</w>
-      <h>40</h>
+      <x>329</x>
+      <y>224</y>
+      <w>77</w>
+      <h>70</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;&lt;-
 Open</panel_attributes>
@@ -51,10 +51,10 @@ Open</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>492</x>
-      <y>140</y>
-      <w>56</w>
-      <h>36</h>
+      <x>434</x>
+      <y>224</y>
+      <w>98</w>
+      <h>63</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;&lt;-
 Not open</panel_attributes>
@@ -63,10 +63,10 @@ Not open</panel_attributes>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>500</x>
-      <y>168</y>
-      <w>80</w>
-      <h>16</h>
+      <x>448</x>
+      <y>273</y>
+      <w>140</w>
+      <h>28</h>
     </coordinates>
     <panel_attributes>Open Serial Port
 </panel_attributes>
@@ -75,10 +75,10 @@ Not open</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>504</x>
-      <y>116</y>
-      <w>68</w>
-      <h>60</h>
+      <x>455</x>
+      <y>182</y>
+      <w>119</w>
+      <h>105</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;&lt;-
 </panel_attributes>
@@ -87,10 +87,10 @@ Not open</panel_attributes>
   <element>
     <type>CustomElementImpl</type>
     <coordinates>
-      <x>448</x>
-      <y>100</y>
-      <w>65</w>
-      <h>65</h>
+      <x>357</x>
+      <y>154</y>
+      <w>113</w>
+      <h>113</h>
     </coordinates>
     <panel_attributes>// Modify the text below and
 // observe the element preview.
@@ -128,10 +128,10 @@ drawPolygon(p);
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>428</x>
-      <y>228</y>
-      <w>40</w>
-      <h>44</h>
+      <x>322</x>
+      <y>378</y>
+      <w>70</w>
+      <h>77</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;&lt;-
 available</panel_attributes>
@@ -140,10 +140,10 @@ available</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>464</x>
-      <y>124</y>
-      <w>184</w>
-      <h>84</h>
+      <x>385</x>
+      <y>196</y>
+      <w>322</w>
+      <h>147</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;&lt;-
 not available</panel_attributes>
@@ -152,10 +152,10 @@ not available</panel_attributes>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>396</x>
-      <y>264</y>
-      <w>84</w>
-      <h>20</h>
+      <x>266</x>
+      <y>441</y>
+      <w>147</w>
+      <h>35</h>
     </coordinates>
     <panel_attributes>Read data from input
 &amp; store it in String</panel_attributes>
@@ -164,10 +164,10 @@ not available</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>476</x>
-      <y>264</y>
-      <w>40</w>
-      <h>12</h>
+      <x>406</x>
+      <y>441</y>
+      <w>70</w>
+      <h>21</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;&lt;-</panel_attributes>
     <additional_attributes>80.0;10.0;10.0;10.0</additional_attributes>
@@ -175,28 +175,23 @@ not available</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>504</x>
-      <y>116</y>
-      <w>100</w>
-      <h>164</h>
+      <x>455</x>
+      <y>182</y>
+      <w>175</w>
+      <h>287</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;&lt;-
 
-
-
-
-not
-enough 
-data</panel_attributes>
+</panel_attributes>
     <additional_attributes>10.0;30.0;230.0;30.0;230.0;390.0</additional_attributes>
   </element>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>548</x>
-      <y>300</y>
-      <w>80</w>
-      <h>56</h>
+      <x>532</x>
+      <y>504</y>
+      <w>140</w>
+      <h>98</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;&lt;-
 enough data present</panel_attributes>
@@ -205,10 +200,10 @@ enough data present</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>576</x>
-      <y>344</y>
-      <w>168</w>
-      <h>44</h>
+      <x>581</x>
+      <y>581</y>
+      <w>294</w>
+      <h>77</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;-
 No start characters found</panel_attributes>
@@ -217,10 +212,10 @@ No start characters found</panel_attributes>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>632</x>
-      <y>336</y>
-      <w>40</w>
-      <h>12</h>
+      <x>679</x>
+      <y>567</y>
+      <w>70</w>
+      <h>21</h>
     </coordinates>
     <panel_attributes>Clear input</panel_attributes>
     <additional_attributes/>
@@ -228,10 +223,10 @@ No start characters found</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>504</x>
-      <y>124</y>
-      <w>156</w>
-      <h>220</h>
+      <x>455</x>
+      <y>196</y>
+      <w>273</w>
+      <h>385</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;&lt;-</panel_attributes>
     <additional_attributes>10.0;10.0;370.0;10.0;370.0;530.0</additional_attributes>
@@ -239,10 +234,10 @@ No start characters found</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>464</x>
-      <y>364</y>
-      <w>68</w>
-      <h>32</h>
+      <x>385</x>
+      <y>616</y>
+      <w>119</w>
+      <h>56</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;&lt;-
 start
@@ -253,10 +248,10 @@ found</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>436</x>
-      <y>404</y>
-      <w>48</w>
-      <h>52</h>
+      <x>336</x>
+      <y>686</y>
+      <w>84</w>
+      <h>91</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;&lt;-
 end
@@ -267,10 +262,10 @@ found</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>464</x>
-      <y>392</y>
-      <w>136</w>
-      <h>64</h>
+      <x>385</x>
+      <y>665</y>
+      <w>238</w>
+      <h>112</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;-
 No end characters found</panel_attributes>
@@ -279,10 +274,10 @@ No end characters found</panel_attributes>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>568</x>
-      <y>432</y>
-      <w>80</w>
-      <h>32</h>
+      <x>567</x>
+      <y>735</y>
+      <w>140</w>
+      <h>56</h>
     </coordinates>
     <panel_attributes>Delete input
 up to and including
@@ -292,10 +287,10 @@ false start characters</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>504</x>
-      <y>124</y>
-      <w>288</w>
-      <h>336</h>
+      <x>455</x>
+      <y>196</y>
+      <w>504</w>
+      <h>588</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;&lt;-
 No end characters found</panel_attributes>
@@ -304,10 +299,10 @@ No end characters found</panel_attributes>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>392</x>
-      <y>448</y>
-      <w>92</w>
-      <h>20</h>
+      <x>259</x>
+      <y>763</y>
+      <w>161</w>
+      <h>35</h>
     </coordinates>
     <panel_attributes>Read Quaternion values
 divided by 100</panel_attributes>
@@ -316,10 +311,10 @@ divided by 100</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>420</x>
-      <y>12</y>
-      <w>32</w>
-      <h>20</h>
+      <x>308</x>
+      <y>0</y>
+      <w>56</w>
+      <h>35</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;&lt;-
 </panel_attributes>
@@ -328,10 +323,10 @@ divided by 100</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>476</x>
-      <y>36</y>
-      <w>12</w>
-      <h>28</h>
+      <x>406</x>
+      <y>42</y>
+      <w>21</w>
+      <h>49</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;&lt;-
 </panel_attributes>
@@ -340,10 +335,10 @@ divided by 100</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>476</x>
-      <y>72</y>
-      <w>12</w>
-      <h>36</h>
+      <x>406</x>
+      <y>105</y>
+      <w>21</w>
+      <h>63</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;&lt;-
 </panel_attributes>
@@ -352,10 +347,10 @@ divided by 100</panel_attributes>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>392</x>
-      <y>484</y>
-      <w>96</w>
-      <h>24</h>
+      <x>259</x>
+      <y>826</y>
+      <w>168</w>
+      <h>42</h>
     </coordinates>
     <panel_attributes>Update quaternion
 orientation in ROS message</panel_attributes>
@@ -364,10 +359,10 @@ orientation in ROS message</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>436</x>
-      <y>464</y>
-      <w>12</w>
-      <h>28</h>
+      <x>336</x>
+      <y>791</y>
+      <w>21</w>
+      <h>49</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;&lt;-
 </panel_attributes>
@@ -376,10 +371,10 @@ orientation in ROS message</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>436</x>
-      <y>504</y>
-      <w>12</w>
-      <h>36</h>
+      <x>336</x>
+      <y>861</y>
+      <w>21</w>
+      <h>63</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;&lt;-
 </panel_attributes>
@@ -388,10 +383,10 @@ orientation in ROS message</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>452</x>
-      <y>564</y>
-      <w>40</w>
-      <h>32</h>
+      <x>364</x>
+      <y>966</y>
+      <w>70</w>
+      <h>56</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;&lt;-
 no</panel_attributes>
@@ -400,10 +395,10 @@ no</panel_attributes>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>464</x>
-      <y>588</y>
-      <w>80</w>
-      <h>32</h>
+      <x>385</x>
+      <y>1008</y>
+      <w>140</w>
+      <h>56</h>
     </coordinates>
     <panel_attributes>Set current values
 as zero orientation</panel_attributes>
@@ -412,10 +407,10 @@ as zero orientation</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>416</x>
-      <y>580</y>
-      <w>72</w>
-      <h>84</h>
+      <x>301</x>
+      <y>994</y>
+      <w>126</w>
+      <h>147</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;&lt;-
 yes</panel_attributes>
@@ -424,10 +419,10 @@ yes</panel_attributes>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>480</x>
-      <y>648</y>
-      <w>76</w>
-      <h>20</h>
+      <x>413</x>
+      <y>1113</y>
+      <w>133</w>
+      <h>35</h>
     </coordinates>
     <panel_attributes>Update differential
 rotation</panel_attributes>
@@ -436,10 +431,10 @@ rotation</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>496</x>
-      <y>616</y>
-      <w>12</w>
-      <h>40</h>
+      <x>441</x>
+      <y>1057</y>
+      <w>21</w>
+      <h>70</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;&lt;-</panel_attributes>
     <additional_attributes>10.0;80.0;10.0;10.0</additional_attributes>
@@ -447,10 +442,10 @@ rotation</panel_attributes>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>588</x>
-      <y>648</y>
-      <w>88</w>
-      <h>20</h>
+      <x>602</x>
+      <y>1113</y>
+      <w>154</w>
+      <h>35</h>
     </coordinates>
     <panel_attributes>Read MPU/AK values
 for Accel, gyro &amp; mag</panel_attributes>
@@ -459,10 +454,10 @@ for Accel, gyro &amp; mag</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>552</x>
-      <y>644</y>
-      <w>44</w>
-      <h>20</h>
+      <x>539</x>
+      <y>1106</y>
+      <w>77</w>
+      <h>35</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;&lt;-
 </panel_attributes>
@@ -471,10 +466,10 @@ for Accel, gyro &amp; mag</panel_attributes>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>592</x>
-      <y>592</y>
-      <w>84</w>
-      <h>28</h>
+      <x>609</x>
+      <y>1015</y>
+      <w>147</w>
+      <h>49</h>
     </coordinates>
     <panel_attributes>Convert values to
 ROS accepted units
@@ -484,10 +479,10 @@ ROS accepted units
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>632</x>
-      <y>616</y>
-      <w>12</w>
-      <h>40</h>
+      <x>679</x>
+      <y>1057</y>
+      <w>21</w>
+      <h>70</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;&lt;-
 </panel_attributes>
@@ -496,10 +491,10 @@ ROS accepted units
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>620</x>
-      <y>572</y>
-      <w>12</w>
-      <h>28</h>
+      <x>658</x>
+      <y>980</y>
+      <w>21</w>
+      <h>49</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;&lt;-
 </panel_attributes>
@@ -508,10 +503,10 @@ ROS accepted units
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>616</x>
-      <y>488</y>
-      <w>132</w>
-      <h>32</h>
+      <x>651</x>
+      <y>833</y>
+      <w>231</w>
+      <h>56</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;&lt;-
 </panel_attributes>
@@ -520,10 +515,10 @@ ROS accepted units
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>652</x>
-      <y>544</y>
-      <w>96</w>
-      <h>20</h>
+      <x>714</x>
+      <y>931</y>
+      <w>168</w>
+      <h>35</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;&lt;-
 no</panel_attributes>
@@ -532,10 +527,10 @@ no</panel_attributes>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>740</x>
-      <y>548</y>
-      <w>76</w>
-      <h>16</h>
+      <x>868</x>
+      <y>938</y>
+      <w>133</w>
+      <h>28</h>
     </coordinates>
     <panel_attributes>Send ROS warning</panel_attributes>
     <additional_attributes/>
@@ -543,10 +538,10 @@ no</panel_attributes>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>740</x>
-      <y>492</y>
-      <w>76</w>
-      <h>16</h>
+      <x>868</x>
+      <y>840</y>
+      <w>133</w>
+      <h>28</h>
     </coordinates>
     <panel_attributes>Transmit messages</panel_attributes>
     <additional_attributes/>
@@ -554,10 +549,10 @@ no</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>776</x>
-      <y>528</y>
-      <w>72</w>
-      <h>28</h>
+      <x>931</x>
+      <y>903</y>
+      <w>126</w>
+      <h>49</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;&lt;-</panel_attributes>
     <additional_attributes>160.0;10.0;10.0;10.0;10.0;50.0</additional_attributes>
@@ -565,10 +560,10 @@ no</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>776</x>
-      <y>504</y>
-      <w>72</w>
-      <h>36</h>
+      <x>931</x>
+      <y>861</y>
+      <w>126</w>
+      <h>63</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;&lt;-</panel_attributes>
     <additional_attributes>160.0;70.0;10.0;70.0;10.0;10.0</additional_attributes>
@@ -576,10 +571,10 @@ no</panel_attributes>
   <element>
     <id>UMLClass</id>
     <coordinates>
-      <x>840</x>
-      <y>528</y>
-      <w>64</w>
-      <h>12</h>
+      <x>1043</x>
+      <y>903</y>
+      <w>112</w>
+      <h>21</h>
     </coordinates>
     <panel_attributes>Clear input</panel_attributes>
     <additional_attributes/>
@@ -587,10 +582,10 @@ no</panel_attributes>
   <element>
     <id>Relation</id>
     <coordinates>
-      <x>504</x>
-      <y>124</y>
-      <w>376</w>
-      <h>412</h>
+      <x>455</x>
+      <y>196</y>
+      <w>658</w>
+      <h>721</h>
     </coordinates>
     <panel_attributes>lt=&lt;&lt;&lt;-</panel_attributes>
     <additional_attributes>10.0;10.0;920.0;10.0;920.0;1010.0</additional_attributes>
@@ -598,10 +593,10 @@ no</panel_attributes>
   <element>
     <type>CustomElementImpl</type>
     <coordinates>
-      <x>396</x>
-      <y>168</y>
-      <w>77</w>
-      <h>69</h>
+      <x>266</x>
+      <y>273</y>
+      <w>134</w>
+      <h>120</h>
     </coordinates>
     <panel_attributes>// Modify the text below and
 // observe the element preview.
@@ -640,10 +635,10 @@ drawPolygon(p);
   <element>
     <type>CustomElementImpl</type>
     <coordinates>
-      <x>504</x>
-      <y>232</y>
-      <w>97</w>
-      <h>77</h>
+      <x>455</x>
+      <y>385</y>
+      <w>169</w>
+      <h>134</h>
     </coordinates>
     <panel_attributes>// Modify the text below and
 // observe the element preview.
@@ -683,10 +678,10 @@ drawPolygon(p);
   <element>
     <type>CustomElementImpl</type>
     <coordinates>
-      <x>520</x>
-      <y>344</y>
-      <w>65</w>
-      <h>69</h>
+      <x>483</x>
+      <y>581</y>
+      <w>113</w>
+      <h>120</h>
     </coordinates>
     <panel_attributes>// Modify the text below and
 // observe the element preview.
@@ -724,10 +719,10 @@ drawPolygon(p);
   <element>
     <type>CustomElementImpl</type>
     <coordinates>
-      <x>416</x>
-      <y>352</y>
-      <w>65</w>
-      <h>69</h>
+      <x>301</x>
+      <y>595</y>
+      <w>113</w>
+      <h>120</h>
     </coordinates>
     <panel_attributes>// Modify the text below and
 // observe the element preview.
@@ -765,10 +760,10 @@ drawPolygon(p);
   <element>
     <type>CustomElementImpl</type>
     <coordinates>
-      <x>388</x>
-      <y>528</y>
-      <w>85</w>
-      <h>69</h>
+      <x>252</x>
+      <y>903</y>
+      <w>148</w>
+      <h>120</h>
     </coordinates>
     <panel_attributes>// Modify the text below and
 // observe the element preview.
@@ -806,10 +801,10 @@ drawPolygon(p);
   <element>
     <type>CustomElementImpl</type>
     <coordinates>
-      <x>568</x>
-      <y>508</y>
-      <w>109</w>
-      <h>73</h>
+      <x>567</x>
+      <y>868</y>
+      <w>190</w>
+      <h>127</h>
     </coordinates>
     <panel_attributes>// Modify the text below and
 // observe the element preview.
@@ -843,5 +838,17 @@ drawPolygon(p);
 
 
 </custom_code>
+  </element>
+  <element>
+    <id>Text</id>
+    <coordinates>
+      <x>616</x>
+      <y>371</y>
+      <w>70</w>
+      <h>49</h>
+    </coordinates>
+    <panel_attributes>Not enough data
+style=wordwrap</panel_attributes>
+    <additional_attributes/>
   </element>
 </diagram>

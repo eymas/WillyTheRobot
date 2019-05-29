@@ -1,0 +1,39 @@
+\section{Software}
+No project in an IT minor could be complete without a considerable amount of software.
+The 2019 Q1\&Q2 team made a few a mistakes in handling it, which caused avoidable issues.
+
+\subsection{GitHub}
+The team made their own repository for their code, which meant that there was a more complex merging process than was exactly necessary.
+Instead, consider forking the existing \href{https://github.com/Windesheim-Willy/}{repo}, so that the merging process can happen as a standard git pull request.
+
+\subsection{ROS}
+There are a lot of complexities to ROS [\ref{trm::ros}], or Robotic Operating System.
+The first is that it is not exactly an operating system.
+It functions more akin to a bus that allows publishing and subscribing to topics.
+The mistake made by the group here was that we fundamentally misunderstood this for the first few weeks, and as such wasted time in how the system was changed.
+
+\subsubsection{Control Panel}
+The program used to plan the route WTR will take to a goal, as well as the system to set a goal, is called RVIZ [\ref{trm::rviz}].
+This can be accessed by using the command "startwilly" in a terminal on the laptop.
+The group attempted to make this an easier task, by creating a control panel to reduce this to a simple button press.
+The unfortunate side of this was that due to the way Python created and terminated tasks, memory leaks caused the laptop to crash if it ran for too long.
+The concept itself is a very good idea, though.
+By creating a simple program that can be started up on boot, which allows users to activate or stop certain parts of WTR can mean that troubleshooting can be made much easier, resulting in a less steep learning curve at the beginning of the project.
+
+\subsubsection{RVIZ and Plug-ins}
+In order to integrate all the different methods of tracking orientation and obstacles, several RVIZ plug-ins were installed.
+The installed plug-ins are:
+\begin{itemize}
+\item \href{http://wiki.ros.org/teb_local_planner}{TEB Local Planner}
+\item \href{http://wiki.ros.org/multimaster_fkie}{Multi-master}
+\item \href{http://docs.ros.org/kinetic/api/robot_localization/html/index.html}{Robot localization (unused)}
+\item \href{http://wiki.ros.org/range_sensor_layer}{Range Sensor (pre-installed)}
+\item \href{http://wiki.ros.org/rviz_imu_plugin}{IMU plug-in}
+\end{itemize}
+It is worth reading up on these before editing variables or configuration files, as many of these have rather obfuscated names.
+Links to the plug-ins can be found by clicking on items in the list.
+An example of this can be found in the \code{RQTconfig} system, where several variables are named along the lines of \code{Alpha\_1}, or \code{Alpha\_2}.
+Most plug-ins conform to the ROS REP standards, which are also worth checking out, especially \href{https://www.ros.org/reps/rep-0103.html}{103}  and \href{https://www.ros.org/reps/rep-0105.html}{105}, which deal with the units data are measured in and the coordinate systems used in mobile platforms, respectively.
+If these standards are not conformed to, ROS and RVIZ will start producing errors.
+
+\newpage
