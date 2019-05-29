@@ -11,9 +11,31 @@
 #include <iostream>
 #include <math.h>
 
-
 bool zero_orientation_set = false;
 const uint8_t kBytesToReceive = 46;
+const float kHalfCircle = 180.0f;
+const float kAdjustGyroBits = 131.0f / 65536.0f;
+const float kGravity = 9.81f;
+const float kAdjustAccelBits = 4.0f / 65536.0f;
+
+
+//
+const uint8_t kQuaternionMultFact = 100;
+const uint8_t kBytesPerVar = 4;
+const uint8_t kQuatWPos = 2;
+const uint8_t kQuatXPos = 3;
+const uint8_t kQuatYPos = 4;
+const uint8_t kQuatZPos = 5;
+const uint8_t kAccelXIn = 6;
+const uint8_t kAccelYIn = kAccelXIn + kBytesPerVar;
+const uint8_t kAccelZIn = kAccelYIn + kBytesPerVar;
+const uint8_t kGyroXIn = kAccelZIn + kBytesPerVar;
+const uint8_t kGyroYIn = kGyroXIn + kBytesPerVar;
+const uint8_t kGyroZIn = kGyroYIn + kBytesPerVar;
+const uint8_t kMagXIn = kGyroZIn + kBytesPerVar;
+const uint8_t KMagYIn = kMagXIn + kBytesPerVar;
+const uint8_t kMagZIN = KMagYIn + kBytesPerVar;
+
 bool allow_store = false;
 bool allow_read = false;
 
@@ -25,7 +47,7 @@ bool set_zero_orientation(std_srvs::Empty::Request &,
 }
 
 union c_float {
-    uint8_t input_data[4];
+    uint8_t input_data[kBytesPerVar];
     float output_data;
 };
 
@@ -100,6 +122,7 @@ int main(int argc, char **argv) {
                 if (ser.available()) {
                     read = ser.read(ser.available());
                     input += read;
+                    //std::cout << read;
                     ROS_DEBUG("read %i new characters from serial port, adding to %i characters of old input.",
                               (int) read.size(), (int) input.size());
                     while ((input.length() >=
@@ -107,74 +130,88 @@ int main(int argc, char **argv) {
                         // parse for data packets
                         std::cout << "reached while allow_read\n";
                         data_packet_start = input.find("$\x03");
-                        std::cout << "found start of data packet" << data_packet_start << "\n";
+                        if(data_packet_start == -1) {
+                            std::cout << "start not found\r\n";
+                        } else {
+                            std::cout << "found start of data packet: " << data_packet_start << "\n";
+                        }
                         if (data_packet_start != std::string::npos) {
                             std::cout << "found start of data packet: " << data_packet_start << "\n";
                             ROS_DEBUG("found possible start of data packet at position %d", data_packet_start);
                             if ((input.length() >= (data_packet_start + kBytesToReceive)) &&
                                 (input.compare((data_packet_start + kBytesToReceive - 1), 2, "\r\n") >=
-                                 0))  //check if positions 26,27 exist, then test values
-                            {
+                                 0)) {  //check if positions 26,27 exist, then test values
                                 std::cout << "reached processing stage" << "\n";
                                 ROS_DEBUG("seems to be a real data package: long enough and found end characters");
                                 // get quaternion values
-                                int8_t w = (char) input[data_packet_start + 2];
-                                int8_t x = (char) input[data_packet_start + 3];
-                                int8_t y = (char) input[data_packet_start + 4];
-                                int8_t z = (char) input[data_packet_start + 5];
+                                int8_t w = (char) input[data_packet_start + kQuatWPos];
+                                int8_t x = (char) input[data_packet_start + kQuatXPos];
+                                int8_t y = (char) input[data_packet_start + kQuatYPos];
+                                int8_t z = (char) input[data_packet_start + kQuatZPos];
                                 double wf = w;
-                                wf = wf / 100;
-                                std::cout << wf << "\r\n";
+                                wf = wf / kQuaternionMultFact;
+                                std::cout << "Raw: \r\n";
+                                std::cout << "W: " << wf << "\r\n";
                                 double xf = x;
-                                xf = xf / 100;
-                                std::cout << xf << "\r\n";
+                                xf = xf / kQuaternionMultFact;
+                                std::cout << "X: " << xf << "\r\n";
                                 double yf = y;
-                                yf = yf / 100;
-                                std::cout << yf << "\r\n";
+                                yf = yf / kQuaternionMultFact;
+                                std::cout << "Y: " << yf << "\r\n";
                                 double zf = z;
-                                zf = zf / 100;
-                                std::cout << zf << "\r\n";
+                                zf = zf / kQuaternionMultFact;
+                                std::cout << "Z: " << zf << "\r\n";
 
                                 tf::Quaternion orientation(xf, yf, zf, wf);
 
-                                orientation.normalize();
-
+                                orientation = orientation.normalize();
+                                std::cout << "Normalized: ";
+                                std::cout << "\r\nW: " << orientation.w() << "\r\nX: " << orientation.x();
+                                std::cout << "\r\nY: " << orientation.y() << "\r\nZ: " << orientation.z();
                                 if (!zero_orientation_set) {
                                     zero_orientation = orientation;
                                     zero_orientation_set = true;
                                 }
-
                                 //http://answers.ros.org/question/10124/relative-rotation-between-two-quaternions/
-                                tf::Quaternion differential_rotation;
-                                differential_rotation = zero_orientation.inverse() * orientation;
+//                                tf::Quaternion differential_rotation;
+//                                differential_rotation = zero_orientation.inverse() * orientation;
 
                                 union c_float accel_x, accel_y, accel_z, gyro_x, gyro_y, gyro_z, mag_x, mag_y, mag_z;
 
+                                // loop through input buffer and assign data to correct inputs
                                 for (uint8_t i = 0; i < 4; i++) {
-                                    accel_x.input_data[i] = static_cast<uint8_t>(input[data_packet_start + 6 + i]);
-                                    accel_y.input_data[i] = static_cast<uint8_t>(input[data_packet_start + 10 + i]);
-                                    accel_z.input_data[i] = static_cast<uint8_t>(input[data_packet_start + 14 + i]);
+                                    accel_x.input_data[i] = static_cast<uint8_t>(input[data_packet_start + kAccelXIn +
+                                                                                       i]);
+                                    accel_y.input_data[i] = static_cast<uint8_t>(input[data_packet_start + kAccelYIn +
+                                                                                       i]);
+                                    accel_z.input_data[i] = static_cast<uint8_t>(input[data_packet_start + kAccelZIn +
+                                                                                       i]);
 
-                                    gyro_x.input_data[i] = static_cast<uint8_t>(input[data_packet_start + 18 + i]);
-                                    gyro_y.input_data[i] = static_cast<uint8_t>(input[data_packet_start + 22 + i]);
-                                    gyro_z.input_data[i] = static_cast<uint8_t>(input[data_packet_start + 26 + i]);
+                                    gyro_x.input_data[i] = static_cast<uint8_t>(input[data_packet_start + kGyroXIn +
+                                                                                      i]);
+                                    gyro_y.input_data[i] = static_cast<uint8_t>(input[data_packet_start + kGyroYIn +
+                                                                                      i]);
+                                    gyro_z.input_data[i] = static_cast<uint8_t>(input[data_packet_start + kGyroZIn +
+                                                                                      i]);
 
-                                    mag_x.input_data[i] = static_cast<uint8_t>(input[data_packet_start + 30 + i]);
-                                    mag_y.input_data[i] = static_cast<uint8_t>(input[data_packet_start + 34 + i]);
-                                    mag_z.input_data[i] = static_cast<uint8_t>(input[data_packet_start + 38 + i]);
+                                    mag_x.input_data[i] = static_cast<uint8_t>(input[data_packet_start + kMagXIn + i]);
+                                    mag_y.input_data[i] = static_cast<uint8_t>(input[data_packet_start + KMagYIn + i]);
+                                    mag_z.input_data[i] = static_cast<uint8_t>(input[data_packet_start + kMagZIN + i]);
                                 }
                                 // calculate rotational velocities in rad/s
                                 // http://www.i2cdevlib.com/forums/topic/106-get-angular-velocity-from-mpu-6050/
                                 // FIFO frequency 100 Hz -> factor 10 ?
                                 //TODO: check / test if rotational velocities are correct
-                                double gxf = gyro_x.output_data * (M_PI / 180.0) * (131.0f / 65536.0f);
-                                double gyf = gyro_y.output_data * (M_PI / 180.0) * (131.0f / 65536.0f);
-                                double gzf = gyro_z.output_data * (M_PI / 180.0) * (131.0f / 65536.0f);
+
+                                double gxf = gyro_x.output_data * (M_PI / kHalfCircle) * (kAdjustGyroBits);
+                                double gyf = gyro_y.output_data * (M_PI / kHalfCircle) * (kAdjustGyroBits);
+                                double gzf = gyro_z.output_data * (M_PI / kHalfCircle) * (kAdjustGyroBits);
+
 
                                 // calculate accelerations in m/s²
-                                double axf = (accel_x.output_data * 9.81 * (4.0f / 65536.0f));
-                                double ayf = (accel_y.output_data * 9.81 * (4.0f / 65536.0f));// convert to ms^-2
-                                double azf = (accel_z.output_data * 9.81 * (4.0f / 65536.0f));
+                                double axf = (accel_x.output_data * kGravity * (kAdjustAccelBits));
+                                double ayf = (accel_y.output_data * kGravity * (kAdjustAccelBits));
+                                double azf = (accel_z.output_data * kGravity * (kAdjustAccelBits));
 
                                 double gmx = mag_x.output_data *
                                              pow(10, -7); // convert from milligauss to Tesla for the sake of ROS
@@ -205,7 +242,7 @@ int main(int argc, char **argv) {
 
                                 // calculate measurement time
                                 ros::Time measurement_time = ros::Time::now() + ros::Duration(time_offset_in_seconds);
-                                std::cout << "measurement time is: " << measurement_time << "\n";
+                                //std::cout << "measurement time is: " << measurement_time << "\n";
 
                                 // publish imu message
                                 imu.header.stamp = measurement_time;
@@ -214,7 +251,8 @@ int main(int argc, char **argv) {
                                 magfield.header.stamp = measurement_time;
                                 magfield.header.frame_id = frame_id;
 
-                                quaternionTFToMsg(differential_rotation, imu.orientation);
+                                quaternionTFToMsg(orientation, imu.orientation);
+
 
                                 imu.angular_velocity.x = gxf;
                                 imu.angular_velocity.y = gyf;
@@ -227,72 +265,71 @@ int main(int argc, char **argv) {
                                 magfield.magnetic_field.x = gmx;
                                 magfield.magnetic_field.y = gmy;
                                 magfield.magnetic_field.z = gmz;
-                            }
-                            magfield.magnetic_field_covariance[0] = 0;
-                            magfield.magnetic_field_covariance[4] = 0;
-                            magfield.magnetic_field_covariance[8] = 0;
-                            //magnetic covariance is unknown, so a 0 is sent in accordance with the MagneticField message documentation.
-                            imu_pub.publish(imu);
-                            mag_pub.publish(magfield);
 
-                            // publish tf transform
-                            if (broadcast_tf) {
-                                transform.setRotation(differential_rotation);
-                                tf_br.sendTransform(
-                                        tf::StampedTransform(transform, measurement_time, tf_parent_frame_id,
-                                                             tf_frame_id));
-                            }
-                            input.erase(0, data_packet_start + kBytesToReceive -
-                                           1); // delete everything up to and including the processed packet
-                        } else {
-                            if (input.length() >= data_packet_start + kBytesToReceive) {
-                                std::cout << "input erase on false packet";
-                                input.erase(0, data_packet_start +
-                                               1); // delete up to false data_packet_start character so it is not found again
+                                magfield.magnetic_field_covariance[0] = 0.0025;
+                                magfield.magnetic_field_covariance[4] = 0.0025;
+                                magfield.magnetic_field_covariance[8] = 0.0025;
+
+                                // set element 0 of covariance to -1 to disable measurement.
+                                imu.angular_velocity_covariance[0] = -1;
+                                imu.linear_acceleration_covariance[0] = -1;
+                                magfield.magnetic_field_covariance[0] = -1;
+
+                                imu_pub.publish(imu);
+                                //mag_pub.publish(magfield);
+//                                // publish tf transform
+//                                if (broadcast_tf) {
+//                                    transform.setRotation(differential_rotation);
+//                                    tf_br.sendTransform(
+//                                            tf::StampedTransform(transform, measurement_time, tf_parent_frame_id,
+//                                                                 tf_frame_id));
+//                                }
+                                input.erase(0, data_packet_start + kBytesToReceive -
+                                               1); // delete everything up to and including the processed packet
                             } else {
-                                std::cout << "input erase on incomplete package";
-                                // do not delete start character, maybe complete package has not arrived yet
-                                input.erase(0, data_packet_start);
+                                if (input.length() >= data_packet_start + kBytesToReceive) {
+                                    std::cout << "input erase on false packet";
+                                    input.erase(0, data_packet_start +
+                                                   1); // delete up to false data_packet_start character so it is not found again
+                                } else {
+                                    std::cout << "input erase on incomplete package";
+                                    // do not delete start character, maybe complete package has not arrived yet
+                                    input.erase(0, data_packet_start);
+                                }
                             }
+                        } else {
+                            std::cout << "input cleared: possibly no start character found.";
+                            // no start character found in input, so delete everything
+                            input.clear();
                         }
                     }
-                    else
-                    {
-                        std::cout << "input cleared: possibly no start character found.";
-                        // no start character found in input, so delete everything
-                        input.clear();
-                    }
+                }
+            } else {
+                // try and open the serial port
+                try {
+                    ser.setPort(port);
+                    ser.setBaudrate(38400);
+                    serial::Timeout to = serial::Timeout::simpleTimeout(1000);
+                    ser.setTimeout(to);
+                    ser.open();
+                }
+                catch (serial::IOException &e) {
+                    ROS_ERROR_STREAM("Unable to open serial port " << ser.getPort() << ". Trying again in 5 seconds.");
+                    ros::Duration(5).sleep();
+                }
+
+                if (ser.isOpen()) {
+                    ROS_DEBUG_STREAM("Serial port " << ser.getPort() << " initialized and opened.");
                 }
             }
         }
-        else
-        {
-            // try and open the serial port
-            try {
-                ser.setPort(port);
-                ser.setBaudrate(38400);
-                serial::Timeout to = serial::Timeout::simpleTimeout(1000);
-                ser.setTimeout(to);
-                ser.open();
-            }
-            catch (serial::IOException &e) {
-                ROS_ERROR_STREAM("Unable to open serial port " << ser.getPort() << ". Trying again in 5 seconds.");
-                ros::Duration(5).sleep();
-            }
-
-            if (ser.isOpen()) {
-                ROS_DEBUG_STREAM("Serial port " << ser.getPort() << " initialized and opened.");
-            }
+        catch (serial::IOException &e) {
+            ROS_ERROR_STREAM("Error reading from the serial port " << ser.getPort() << ". Closing connection.");
+            ser.close();
         }
+        ros::spinOnce();
+        r.sleep();
     }
-    catch (serial::IOException & e)
-    {
-        ROS_ERROR_STREAM("Error reading from the serial port " << ser.getPort() << ". Closing connection.");
-        ser.close();
-    }
-    ros::spinOnce();
-    r.sleep();
-}
 
 }
 
